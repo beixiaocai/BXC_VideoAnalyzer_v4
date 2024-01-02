@@ -1,0 +1,152 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} 播放器 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+<style>
+    #video_player{
+        /*background-color: rgba(0,0,00,0.6);*/
+        width: 100%;
+        height: 100%;
+        max-height: 520px;
+        /*object-fit: fill;*/
+        border-radius: 5px;
+        border: 1px solid #f0f0f0;
+
+    }
+    #video_player:focus {
+        outline: -webkit-focus-ring-color auto 0px;
+    }
+
+</style>
+
+
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>播放器</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+              <div class="col-md-8 col-sm-8 col-xs-12">
+                <div class="product-image">
+                   <video id="video_player"  muted controls autoplay>
+                        Your browser is too old which doesn't support HTML5 video.
+                    </video>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-4 col-xs-12" >
+
+                <h3 class="prod_title"></h3>
+
+                <p style="margin-left:12px;">播放器只支持WS-FMP4协议的视频流</p>
+                <br />
+
+                 <div class="form-horizontal form-label-left">
+
+                    <div class="form-group">
+                     <div class="col-md-9 col-sm-9 col-xs-12">
+                          <textarea id="url"  name="textarea" class="form-control col-md-7 col-xs-12">{% if hasAddress %}{{ wsMp4Url }}{% endif %}</textarea>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                       <div class="col-md-9 col-sm-9 col-xs-12">
+                            <button id="play" type="button" class="btn btn-success btn-sm"><i class="fa fa-play"></i> 播放视频 </button>
+                            <button id="stop" type="button" class="btn btn-danger btn-sm"><i class="fa fa-stop"></i> 停止播放 </button>
+                      </div>
+                    </div>
+
+<div class="ln_solid"></div>
+
+              {% if hasAddress %}
+                <p style="margin-left:12px;">流媒体支持的转发协议 <i class="bxc_introduce fa fa-info-circle" title="可以复制下面的地址在VLC中播放"></i></p>
+              <div class="form-group">
+                     <div class="col-md-9 col-sm-9 col-xs-12">
+                         {{ rtspUrl }}
+                      </div>
+                    </div>
+
+                  <div class="form-group">
+                     <div class="col-md-9 col-sm-9 col-xs-12">
+                         {{ wsMp4Url }}
+                      </div>
+                    </div>
+
+                  <div class="form-group">
+                     <div class="col-md-9 col-sm-9 col-xs-12">
+                         {{ httpMp4Url }}
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                     <div class="col-md-9 col-sm-9 col-xs-12">
+                         {{ flvUrl }}
+                      </div>
+                    </div>
+                 {% endif %}
+ <div class="ln_solid"></div>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+<script src="/static/lib/wsPlayer/mp4box.all.min.js"></script>
+<script src="/static/lib/wsPlayer/wsPlayer.js"></script>
+<script>
+    let player = null;
+    let eleUrl= $("#url");
+    let eleBtnPlay = $("#play");
+    let eleBtnStop = $("#stop");
+
+    eleBtnPlay.click(function () {
+        f_playStart(eleUrl.val().trim());
+    });
+    eleBtnStop.click(function (){
+        f_playStop();
+    });
+
+    function f_playStart(videoUrl){
+        console.log(videoUrl);
+        if(typeof videoUrl === "undefined" || !videoUrl.endsWith(".mp4")){
+            myAlert("视频流地址格式不正确！","error");
+            return;
+        }
+	    player = new wsPlayer("video_player", videoUrl);
+        player.open();
+
+    }
+    function f_playStop(){
+        if(player){
+            player.close();
+            player = null;
+        }else{
+            myAlert("播放器未启动！","error");
+        }
+    }
+    if("True" === '{{ hasAddress }}'){
+        eleBtnPlay.click();
+    }
+
+
+</script>
+
+{% endblock javascripts %}

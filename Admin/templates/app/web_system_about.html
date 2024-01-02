@@ -1,0 +1,163 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} 关于系统 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+
+
+{% block content %}
+
+  <div class="right_col" role="main">
+    <div class="">
+
+        <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+             <h2>关于系统
+                 <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
+                 <span id="top_msg">{{top_msg}}</span>
+              </h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                <h3>视频行为分析系统</h3>
+                        <div style="margin-top: 6px;"  class="col-md-12 col-sm-12">
+                          <span>软件版本：</span><span style="color: green;font-size: 15px ;margin-right: 10px;">{{ project_version }}</span>
+                      </div>
+                     <div style="margin-top: 4px;" class="col-md-12 col-sm-12">
+                          <span>软件标记：</span><span style="color: green;font-size: 15px ;margin-right: 10px;">{{ project_flag }}</span>
+                      </div>
+                    <div style="margin-top: 4px;"  class="col-md-12 col-sm-12">
+                        <a href="https://space.bilibili.com/487906612" target="_blank">联系作者</a>
+                    </div>
+
+              </div>
+              <div class="col-md-9 col-sm-9 col-xs-12">
+
+                <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                  <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">发布版本</a>
+                    </li>
+
+                  </ul>
+                  <div id="myTabContent" class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                      <ul class="messages" id="data">
+                       <!--
+                        <li>
+                          <img src="/static/images/img.jpg" class="avatar" alt="Avatar">
+                          <div class="message_date">
+                            <h3 class="date text-info">24</h3>
+                            <p class="month">May</p>
+                          </div>
+                          <div class="message_wrapper">
+                            <h4 class="heading">Desmond Davison</h4>
+                            <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
+                            <br>
+                            <p class="url">
+                              <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                              <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
+                            </p>
+                          </div>
+                        </li>
+                      -->
+
+                      </ul>
+
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+<script>
+    let eleData = $("#data");
+    let ele_top_loading = $("#top_loading");
+    let ele_top_msg= $("#top_msg");
+
+    function f_getUpgrade() {
+        ele_top_loading.show();
+        $.ajax({
+               url: '/system/getUpgrade',
+               type: "get",
+               async: true,
+               data: {},
+               dataType: "json",
+               timeout: 0,
+               error: function () {
+                   ele_top_loading.hide();
+                   myAlert("网络异常，请确定网络正常！","error");
+               },
+               success: function (res) {
+                   ele_top_loading.hide();
+                   let top_msg = res.top_msg;
+                   ele_top_msg.html(top_msg);
+
+                   if(1000 === res.code){
+                       eleData.html("");
+                       let data = res.data;
+                       let data_length = data.length;
+
+                       let item_html = "";
+
+                       if(0===data_length){
+                          item_html += "<span>暂无数据</span>";
+                       }else{
+                            for (let i = 0; i < data_length; i++) {
+                               let d = data[i];
+
+                              item_html += "<li>";
+                              item_html += "<img src=\"/static/images/logo.png\" class=\"avatar\" alt=\"logo\">";
+                              item_html += "<div class=\"message_date\">";
+                               item_html += " <h3 class=\"date text-error\"></h3><p class=\"month\">"+d["update_time_str"]+"</p>";
+                              item_html += "</div>";
+                              item_html += "<div class=\"message_wrapper\">";
+                                item_html += "<h4 class=\"heading\">视频行为分析系统 v"+d["version"]+"</h4>";
+                                  item_html += "<blockquote class=\"sun-state-success\">"+d["source"]+"</blockquote>";
+                                    if(d["is_cur_version"]===1){
+                                        item_html += "<blockquote class=\"sun-state-success\">当前版本</blockquote>";
+                                    }else{
+                                        item_html += "<blockquote class=\"sun-state-error\">非当前版本</blockquote>";
+                                    }
+                                //item_html += "<br>";
+                                item_html += "<p style='margin-top: 5px;' class=\"url\"><i class=\"fa fa-download\"></i> <a href=\""+d["url"]+"\" target='_blank'>下载</a></p>";
+                              item_html += "</div>";
+                            item_html += "</li>";
+                           }
+                        }
+                        eleData.append(item_html);
+
+                        //setTimeout(function () {f_getStreams();}, 6000);
+
+                   }else{
+                        myAlert(res.msg,"error");
+                   }
+               }
+            });
+
+    }
+    window.onload = function (){
+        f_getUpgrade();
+    };
+
+</script>
+{% endblock javascripts %}
+
+

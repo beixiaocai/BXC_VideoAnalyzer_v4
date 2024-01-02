@@ -1,0 +1,144 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} 查看报警视频 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+    <link rel="stylesheet" href="/static/lib/jquery/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <!-- bootstrap-wysiwyg -->
+    <link href="/static/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+    <style>
+    .bxc_line_b{
+        font-size: 15px;
+        font-weight: 300;
+    }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+
+    <div class="">
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>查看报警视频
+                  <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
+                  <span id="top_msg"></span>
+              </h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="row">
+
+                <div class="col-sm-9 mail_view">
+                  <div class="inbox-body">
+
+                    <div class="sender-info">
+                      <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-sm-4 invoice-col">
+                            <b class="bxc_line_b">分组编号:</b> {{ alarm.flag }}
+                            <br>
+                            <b class="bxc_line_b">报警编号:</b> {{ alarm.code }}
+                            <br>
+                            <b class="bxc_line_b">报警时间:</b> {{ alarm.create_time }}
+                             <br>
+                            <b class="bxc_line_b">关联布控:</b> <a href="javascript:f_control_edit('{{ alarm.control_code }}')">{{ alarm.control_code }}</a>
+                             <br>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  {% if alarm.video_count > 0 %}
+                   <div style="margin: 10px 0;">
+                       <video controls muted loop preload="none" style="width: 100%; display: block;"
+                              poster="{{ alarm.imageUrl }}" src="{{ alarm.videoUrl }}" ></video>
+                    </div>
+    {% endif %}
+
+                    <div class="attachment">
+                      <p>
+                        <span><i class="fa fa-paperclip"></i> {{ alarm.image_count }} image </span>
+                      </p>
+                      <ul>
+
+                        {%  for imageUrl  in alarm.image_path_array %}
+                            <li>
+                              <a href="#" class="atch-thumb">
+                                <img style="width: 150px;height: 100%;" src="{{imageUrl}}" alt="img" />
+                              </a>
+
+                        <div class="links">
+                            <a style="margin-left: 10px;margin-right: 5px;font-size: 13px;color:#23527c;" href="javascript:;">第{{forloop.counter}}张</a>
+                            <i class="fa fa-download"></i><a style="color:#23527c;" href="{{imageUrl}}" target="_blank">下载</a>
+                          </div>
+
+
+                            </li>
+                        {% endfor %}
+
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <div class="col-sm-3 mail_list_column">
+                  <button style="margin-bottom: 20px;" class="btn btn-success btn-block" type="button">同组报警视频</button>
+
+                   {%  for d  in alarm_related_data %}
+
+                        <div class="mail_list">
+                          <div class="left">
+                            <i class="fa fa-star"></i>
+                          </div>
+                          <div class="right">
+                                {% if d.draw_type == 1 %}
+                                    <h3>画框 <small>{{ d.create_time }}</small></h3>
+                                {% else %}
+                                    <h3>不画框 <small>{{ d.create_time }}</small></h3>
+                                {% endif %}
+                            <a href="javascript:f_show('{{ d.code }}')">{{ d.code }}</a>
+                          </div>
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+<script src="/static/lib/jquery/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+<script>
+    function f_show(code){
+        let url = "/alarm/show?code="+code;
+        window.location.href = url;
+    }
+    function f_control_edit(controlCode) {
+        let url = "/control/edit?code="+controlCode;
+        window.location.href = url;
+    }
+
+    $('img').click(function() {
+        $.fancybox.open({
+            src  : $(this).attr('src'),
+            type : 'image'
+        });
+    });
+</script>
+{% endblock javascripts %}

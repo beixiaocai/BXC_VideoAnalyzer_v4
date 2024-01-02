@@ -1,0 +1,341 @@
+{% extends "app/base_site.html" %}
+{% block title %} 摄像头管理 {% endblock title %}
+{% block stylesheets %}
+  {{ block.super }}
+<style>
+    input[type="file"]{
+      color: #8d2f2f;
+      font-size: 12px;
+    }
+    ::file-selector-button{
+      font-size: 12px;
+      color: #fff;
+      border-radius: 4px;
+      border: 1px solid #2a80eb;
+      padding: 2px 4px;
+      background-color: #2a80eb;
+      cursor: pointer;
+    }
+
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="">
+
+     <div class="row">
+
+        <!--add history start-->
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title">
+                 <h2>摄像头管理
+                    <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
+                    <span id="top_msg">{{top_msg}}</span>
+               </h2>
+
+                    <button style="margin-left:10px;" onclick="f_getAllUpdateForwardState()" class="btn btn-success btn-sm">全部更新状态</button>
+                    <button onclick="f_getAllStartForward()" class="btn btn-primary btn-sm"><i class="fa fa-paper-plane"></i> 全部开启转发</button>
+                    <button data-toggle="modal" data-target="#ImportFileDialog"  class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-plus"></i> 批量导入</button>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>摄像头编号</th>
+                        <th>摄像头视频流地址</th>
+                        <th>摄像头名称</th>
+                        <th>转发状态</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {%  for d  in data%}
+                          <tr>
+                            <th scope="row">{{ d.id }}</th><!-- {{forloop.counter}} -->
+                            <td>{{ d.code }}</td>
+                            <td>{{ d.pull_stream_url }}</td>
+                            <td>{{ d.nickname }}</td>
+                            <td>
+                                    {% if  1 == d.forward_state %}
+                                    <span class="sun-state-success">转发中</span>
+                                        <a href="javascript:f_postHandleForward('{{ d.code }}','del')" class="sun-a-label"><i class="fa fa-close"></i> 停止</a>
+                                        <a href="javascript:f_open_player('{{ d.app }}','{{ d.name }}')" class="sun-a-label"><i class="fa fa-play-circle"></i> 播放</a>
+                                  {% else %}
+                                    <span class="sun-state-error">转发未开启</span>
+                                       <a href="javascript:f_postHandleForward('{{ d.code }}','add')" class="sun-a-label"><i class="fa fa-paper-plane"></i> 开启</a>
+                                  {% endif %}
+                            </td>
+                           <td>
+                                <a href="javascript:f_edit('{{ d.code }}')"  class='sun-a-label' style='margin-right: 8px;' ><i class="fa fa-edit"></i>编辑</a>
+                                <a href="javascript:f_del('{{ d.code }}')"  class='sun-a-label' style='margin-right: 8px;' ><i class="fa fa-remove"></i>删除</a>
+                            </td>
+                          </tr>
+                      {% endfor %}
+
+                    </tbody>
+                  </table>
+
+                </div>
+
+              <!--批量导入弹窗start -->
+                  <div id="ImportFileDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" >批量导入摄像头</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div style="padding: 5px 20px;">
+                          <form class="form-horizontal calender" role="form">
+
+                              <div class="form-group">
+                              <label class="col-sm-3 control-label">文件模板</label>
+                              <div class="col-sm-9">
+                                  <button onclick="f_downloadCameraTemplate()" class="btn btn-default"><i class="fa fa-download"></i> 下载模板</button>
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label class="col-sm-3 control-label">导入文件</label>
+                              <div class="col-sm-9">
+                                <input type="file" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="file"  >
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-sm-3 control-label">导入备注</label>
+                              <div class="col-sm-9">
+                                <textarea class="form-control" style="height:55px;" name="import_remark"></textarea>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" onclick="f_postImportFile()" class="btn btn-primary">提交</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <!--批量导入弹窗end -->
+              </div>
+            </div>
+      <!--add history end-->
+        </div>
+
+<div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <ul class="pagination">
+                <li>
+                    <span style="margin-right:10px;color:#000;">共<span>{{ pageData.page_num}}</span>页 / <span>{{pageData.count}}</span >条</span>
+                </li>
+
+                {%  for d  in pageData.pageLabels%}
+                  {% if d.cur == 1 %}
+                    <li class="paginate_button active"><a href="#"  >{{ d.name }}</a></li>
+                  {% else %}
+                    <li class="paginate_button "><a href="/stream/index?p={{d.page}}&ps={{pageData.page_size}}" >{{ d.name }}</a></li>
+                  {% endif %}
+                {% endfor %}
+            </ul>
+          </div>
+</div>
+
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+<script>
+    let ele_top_loading = $("#top_loading");
+    let ele_top_msg= $("#top_msg");
+    let eleFile = $("input[name='file']");
+    let eleTextareaImportRemark= $("textarea[name='import_remark']");
+
+
+    function f_open_player(stream_app,stream_name){
+        window.open("/stream/player?app="+stream_app+"&name="+stream_name);
+    }
+    function f_downloadCameraTemplate() {
+        let url= "/static/upload/temp/cameraTemplate.xlsx"
+        window.open(url);
+    }
+    function f_edit(code) {
+        let url = "/stream/edit?code="+code;
+        window.location.href = url;
+    }
+    function f_del(code){
+        ele_top_loading.show();
+        $.ajax({
+               url: '/stream/postDel',
+               type: "post",
+               async: true,
+               data: {"code":code},
+               dataType: "json",
+               timeout: 0,
+               error: function () {
+                   ele_top_loading.hide();
+                   myAlert("网络异常，请确定网络正常！","error");
+               },
+               success: function (res) {
+                      ele_top_loading.hide();
+                   if(1000 === res.code){
+                        window.location.reload();
+                   }else{
+                        myAlert(res.msg,"error");
+                   }
+               }
+            });
+
+    }
+    function f_postImportFile() {
+
+        if (eleFile[0].files.length > 0){
+
+          let file = eleFile[0].files[0];
+          console.log("file",file)
+           let importRemark = eleTextareaImportRemark.val().trim();
+            if(importRemark === ""){
+                myAlert("请输入导入备注！","error");
+                return false;
+            }
+
+          let fs_name = file.name;
+          let fs_size = file.size;//文件字节大小
+          let fs_size_m = parseInt(fs_size / 1024 / 1024); //换算成M单位
+
+          if (fs_size_m <= 10){
+                let formData = new FormData();
+                formData.append('file',file)
+                formData.append('importRemark',importRemark)
+
+                $.ajax({
+                  url:'/stream/postImportFile',
+                  type:'post',
+                  async: true,
+                  contentType:false,
+                  processData:false,
+                  data:formData,
+                  dataType: "json",
+                  timeout: 0,
+                  error: function () {
+                    myAlert("网络异常，请确定网络正常！","error");
+                  },
+                  success: function (res) {
+                    if (1000 === res.code) {
+                        myAlert(res.msg,"success");
+                        // data-toggle="modal" data-target="#ImportFileDialog"
+                        //$("#ImportFileDialog").modal("show");
+                        $("#ImportFileDialog").modal("hide");
+
+                        setTimeout(function () {
+                            window.location.reload();
+                         }, 1000);
+
+                    }else{
+                        myAlert(res.msg,"error");
+                    }
+                  }
+                });
+          }else{
+               myAlert("上传文件大小不能超过10M！","error");
+          }
+        }else{
+            myAlert("未选择上传文件！","error");
+        }
+        return false;
+    }
+    function f_postHandleForward(code,handle){
+        ele_top_loading.show();
+        $.ajax({
+               url: '/stream/postHandleForward',
+               type: "post",
+               async: true,
+               data: {"code":code,"handle":handle},
+               dataType: "json",
+               timeout: 0,
+               error: function () {
+                   ele_top_loading.hide();
+                   myAlert("网络异常，请确定网络正常！","error");
+               },
+               success: function (res) {
+                      ele_top_loading.hide();
+                    if(1000 === res.code){
+                        window.location.reload();
+                   }else{
+                        myAlert(res.msg,"error");
+                   }
+               }
+            });
+
+    }
+    function f_getAllStartForward() {
+        //全部开启转发
+                ele_top_loading.show();
+        $.ajax({
+               url: '/stream/getAllStartForward',
+               type: "get",
+               async: true,
+               data: {},
+               dataType: "json",
+               timeout: 0,
+               error: function () {
+                   ele_top_loading.hide();
+                   myAlert("网络异常，请确定网络正常！","error");
+               },
+               success: function (res) {
+                      ele_top_loading.hide();
+                    if(1000 === res.code){
+                        myAlert(res.msg,"success");
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000);
+                   }else{
+                        myAlert(res.msg,"error");
+                   }
+               }
+            });
+
+    }
+    function f_getAllUpdateForwardState() {
+        //全部更新转发状态
+                ele_top_loading.show();
+        $.ajax({
+               url: '/stream/getAllUpdateForwardState',
+               type: "get",
+               async: true,
+               data: {},
+               dataType: "json",
+               timeout: 0,
+               error: function () {
+                   ele_top_loading.hide();
+                   myAlert("网络异常，请确定网络正常！","error");
+               },
+               success: function (res) {
+                      ele_top_loading.hide();
+                    if(1000 === res.code){
+                        myAlert(res.msg,"success");
+                   }else{
+                        myAlert(res.msg,"error");
+                   }
+
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+
+               }
+            });
+
+    }
+</script>
+
+{% endblock javascripts %}

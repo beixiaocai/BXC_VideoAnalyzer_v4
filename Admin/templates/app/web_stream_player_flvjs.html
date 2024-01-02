@@ -1,0 +1,184 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} 播放器 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+<style>
+    #video_player{
+        /*background-color: rgba(0,0,00,0.6);*/
+        width: 100%;
+        height: 100%;
+        max-height: 520px;
+        /*object-fit: fill;*/
+        border-radius: 5px;
+        border: 1px solid #f0f0f0;
+
+    }
+    #video_player:focus {
+        outline: -webkit-focus-ring-color auto 0px;
+    }
+
+</style>
+
+
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>播放器</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+              <div class="col-md-8 col-sm-8 col-xs-12">
+                <div class="product-image">
+                   <video id="video_player"  controls autoplay>
+                        Your browser is too old which doesn't support HTML5 video.
+                    </video>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-4 col-xs-12" >
+
+                <h3 class="prod_title"></h3>
+
+                <p style="margin-left:12px;">播放器只支持HTTP-FLV协议的视频流</p>
+                <br />
+
+                 <div class="form-horizontal form-label-left">
+
+                    <div class="form-group">
+                     <div class="col-md-9 col-sm-9 col-xs-12">
+                          <textarea id="url"  name="textarea" class="form-control col-md-7 col-xs-12">{% if hasAddress %}{{ url }}{% endif %}</textarea>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                       <div class="col-md-9 col-sm-9 col-xs-12">
+                            <button id="play" type="button" class="btn btn-default btn-sm"><i class="fa fa-play"></i> 播放视频 </button>
+                            <button id="stop" type="button" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> 停止播放 </button>
+                      </div>
+                    </div>
+
+<div class="ln_solid"></div>
+
+              {% if hasAddress %}
+                <p style="margin-left:12px;">视频流转发地址</p>
+                  <div class="form-group">
+                     <div class="col-md-9 col-sm-9 col-xs-12">
+                         {{ flvUrl }}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                     <div class="col-md-9 col-sm-9 col-xs-12">
+                         {{ rtspUrl }}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                     <div class="col-md-9 col-sm-9 col-xs-12">
+                         {{ hlsUrl }}
+                      </div>
+                    </div>
+                 {% endif %}
+ <div class="ln_solid"></div>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+<script src="/static/lib/flv/flv.min.js"></script>
+<script>
+
+    let eleVideoPlayer= document.getElementById("video_player");
+
+    let eleUrl= $("#url");
+    let eleBtnPlay = $("#play");
+    let eleBtnStop = $("#stop");
+
+    eleBtnPlay.click(function () {
+       f_playStart(eleUrl.val().trim());
+    });
+    eleBtnStop.click(function (){
+        f_playStop();
+    });
+
+    function f_playStart(flvUrl){
+
+        console.log(flvUrl);
+
+        if(!flvjs.isSupported()){
+            myAlert("浏览器不支持flv.js！","error");
+            return;
+        }
+        if(typeof flvUrl === "undefined" || !flvUrl.endsWith(".flv")){
+            myAlert("视频地址格式不正确！","error");
+            return;
+        }
+
+
+        let mediaDataSource = {
+            type: 'flv',
+            enableStashBuffer:true,
+            isLive:true,
+            withCredentials:false,
+            hasAudio:true,
+            hasVideo:true,
+            url:flvUrl
+        };
+        //console.log('MediaDataSource', mediaDataSource);
+        //eleVideoPlayer.setAttribute('poster',"/static/images/media.jpg")
+
+        if (typeof player !== "undefined") {
+            if (player != null) {
+                player.unload();
+                player.detachMediaElement();
+                player.destroy();
+                player = null;
+            }
+        }
+        player = flvjs.createPlayer(mediaDataSource, {
+            enableWorker: false,
+            lazyLoadMaxDuration: 3 * 60,
+            seekType: 'range',
+        });
+        player.attachMediaElement(eleVideoPlayer);
+        player.load();
+        player.play();
+    }
+    function f_playStop(){
+        if (typeof player === "undefined" || player === null) {
+            myAlert("播放器暂未启动！","error");
+            return;
+        }
+        player.pause();
+        player.unload();
+        player.detachMediaElement();
+        player.destroy();
+        player = null;
+
+    }
+    if("True" === '{{ hasAddress }}'){
+        eleBtnPlay.click();
+    }else{
+        myAlert("请输入正确的视频地址！","info",3000);
+    }
+
+
+</script>
+
+{% endblock javascripts %}

@@ -1,0 +1,9 @@
+如需自定义算法，需要制作成与 YOLOV8N_public.tar格式一致的tar压缩包，具体操作方式比较简单：
+制作过程：
+（1）首先解压 YOLOV8N_public.tar，会包含model.json 和 yolov8n.bin 以及 yolov8n.xml 共3个文件
+（2）model.json 是一个json文件，格式一定要是标准的json文件，此外该文件名称不能修改，必须是model.json
+（3）yolov8n.bin 和 yolov8n.xml 是yolov8n的模型经过openvino转换工具转换而来，两个文件的名称一定要保持一致（注意：后缀不同）
+（4）model.json文件中的，name字段为 yolov8n，表示yolov8n.bin 和 yolov8n.xml，这两个名称可以随意定义，但一定要与name字段保持一致
+（5）model.json文件中的，inference字段为 推理平台，仅支持OpenVINO和TensorRT
+（6）model.json文件中的，class_names字段为模型支持的识别分类
+（7）model.json文件中的，remark字段为模型备注，在成功导入模型后，可以看到该备注

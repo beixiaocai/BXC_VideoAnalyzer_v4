@@ -1,0 +1,12 @@
+﻿# clion
+.idea/
+log/*
+Admin/static/upload/alarm/*
+
+MediaServer/log/*
+MediaServer/www/*
+
+# vs
+.vs
+
+

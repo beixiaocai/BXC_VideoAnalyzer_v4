@@ -1,0 +1,14 @@
+{
+  "host": "127.0.0.1",
+  "adminPort": 9001,
+  "analyzerPort": 9002,
+  "videoAnalyzerPort": 9004,
+  "mediaHttpPort": 9003,
+  "mediaRtspPort": 9554,
+  "mediaSecret": "aqxY9ps21fyhyKNRyYpGvJCTp1JBeGOM",
+  "mediaRootDir": "MediaServer/www",
+  "uploadDir": "Admin\\static\\upload",
+  "workerConcurrency": 20,
+  "supportHardwareVideoDecode": false,
+  "supportHardwareVideoEncode": false
+}
