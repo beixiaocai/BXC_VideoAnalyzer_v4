@@ -19,13 +19,13 @@
 ### Windows版本使用说明
 * 第一步下载程序：下载master分支对应的程序就是Windows版程序
 * 第二步运行程序：可以双击运行 VideoAnalyzer.exe启动程序，观察窗口提示如果没有报错，即表示启动成功
-* 第三步打开程序：在浏览器输入 http://127.0.0.1:9001，系统默认账号 用户名：admin 密码：admin888
+* 第三步打开程序：在浏览器输入 http://127.0.0.1:9001 ，系统默认账号 用户名：admin 密码：admin888
 * 第四步停止程序：关闭启动程序窗口即可
 
 ### Ubuntu版本使用说明
 * 第一步下载程序：下载Ubuntu20分支对应的程序就是Ubuntu版程序（https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/tree/Ubuntu20）
 * 第二步运行程序：可以执行./VideoAnalyzer或者执行./start.sh启动程序，观察窗口提示如果没有报错，即表示启动成功
-* 第三步打开程序：在浏览器输入 http://127.0.0.1:9001，系统默认账号 用户名：admin 密码：admin888
+* 第三步打开程序：在浏览器输入 http://127.0.0.1:9001 ，系统默认账号 用户名：admin 密码：admin888
 * 第四步停止程序：执行./stop.sh即可
 
 ##### Ubuntu版本注意事项
