@@ -8,20 +8,38 @@
 
 {% block content %}
 <style>
-    #video_player{
-        /*background-color: rgba(0,0,00,0.6);*/
+    video{
         width: 100%;
         height: 100%;
-        max-height: 520px;
-        /*object-fit: fill;*/
+        max-height: 550px;
+        background-color: rgba(0,0,00,1.0);
+        /*object-fit: fill;*/ /*伸缩*/
         border-radius: 5px;
-        border: 1px solid #f0f0f0;
-
-    }
-    #video_player:focus {
-        outline: -webkit-focus-ring-color auto 0px;
+        /*border: 1px solid #f0f0f0;*/
     }
 
+    video:focus {
+        outline: -webkit-focus-ring-color auto 0;
+    }
+
+      #input_address {
+        -webkit-appearance: none;
+        background-color: #fff;
+        background-image: none;
+        border-radius: 4px;
+        border: 1px solid #dcdfe6;
+        box-sizing: border-box;
+        font-size: 13px;
+          font-weight: normal;
+        height: 35px;
+        line-height: 35px;
+          width: 400px;
+
+          margin-left: 15px;
+        padding: 1px 10px;
+        transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+
+      }
 </style>
 
 
@@ -30,71 +48,31 @@
       <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="x_panel">
-            <div class="x_title">
-              <h2>播放器</h2>
-              <div class="clearfix"></div>
+            <div>
+                  <label>
+                      <input id="input_address" type="text" placeholder="请输入播放地址（支持ws-fmp4/http-fmp4）">
+                  </label>
+                  <button style="margin-left: 10px;"  type="button" class="btn btn-success btn-sm" onclick="f_clickPlayStart()">播放</button>
+                  <button type="button" class="btn btn-default btn-sm" onclick="f_clickPlayStop()">停止</button>
+
             </div>
             <div class="x_content">
-
-              <div class="col-md-8 col-sm-8 col-xs-12">
-                <div class="product-image">
-                   <video id="video_player"  muted controls autoplay>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                   <video id="video_player" poster="/static/images/player_poster.jpg" muted controls autoplay>
                         Your browser is too old which doesn't support HTML5 video.
                     </video>
-                </div>
               </div>
 
-              <div class="col-md-4 col-sm-4 col-xs-12" >
-
-                <h3 class="prod_title"></h3>
-
-                <p style="margin-left:12px;">播放器只支持WS-FMP4协议的视频流</p>
-                <br />
+              <div class="col-md-12 col-sm-12 col-xs-12">
 
                  <div class="form-horizontal form-label-left">
 
-                    <div class="form-group">
-                     <div class="col-md-9 col-sm-9 col-xs-12">
-                          <textarea id="url"  name="textarea" class="form-control col-md-7 col-xs-12">{% if hasAddress %}{{ wsMp4Url }}{% endif %}</textarea>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                       <div class="col-md-9 col-sm-9 col-xs-12">
-                            <button id="play" type="button" class="btn btn-success btn-sm"><i class="fa fa-play"></i> 播放视频 </button>
-                            <button id="stop" type="button" class="btn btn-danger btn-sm"><i class="fa fa-stop"></i> 停止播放 </button>
-                      </div>
-                    </div>
-
-<div class="ln_solid"></div>
-
-              {% if hasAddress %}
-                <p style="margin-left:12px;">流媒体支持的转发协议 <i class="bxc_introduce fa fa-info-circle" title="可以复制下面的地址在VLC中播放"></i></p>
-              <div class="form-group">
-                     <div class="col-md-9 col-sm-9 col-xs-12">
-                         {{ rtspUrl }}
-                      </div>
-                    </div>
-
-                  <div class="form-group">
-                     <div class="col-md-9 col-sm-9 col-xs-12">
-                         {{ wsMp4Url }}
-                      </div>
-                    </div>
-
-                  <div class="form-group">
-                     <div class="col-md-9 col-sm-9 col-xs-12">
-                         {{ httpMp4Url }}
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                     <div class="col-md-9 col-sm-9 col-xs-12">
-                         {{ flvUrl }}
-                      </div>
-                    </div>
-                 {% endif %}
- <div class="ln_solid"></div>
+                    {% if is_exist_params %}
+                        <p style="margin-top:10px;font-size: 16px;">视频流支持的所有转发协议</p>
+                        <p>{{ stream.wsMp4Url }}</p>
+                        <p>{{ stream.httpMp4Url }}</p>
+                        <p>{{ stream.rtspUrl }}</p>
+                     {% endif %}
                   </div>
 
               </div>
@@ -112,41 +90,92 @@
 <script src="/static/lib/wsPlayer/mp4box.all.min.js"></script>
 <script src="/static/lib/wsPlayer/wsPlayer.js"></script>
 <script>
-    let player = null;
-    let eleUrl= $("#url");
-    let eleBtnPlay = $("#play");
-    let eleBtnStop = $("#stop");
+    let mWsVideoPlayer = null;
+    let eleVideoPlayerJqueryObj = $("#video_player");
+    let eleInputAddress= $("#input_address");
+    let mVideoUrl = null;
+    function f_playStart(video_url) {
+        mVideoUrl = video_url;
+        if(mVideoUrl.startsWith("ws://")){
+            if(mWsVideoPlayer){
+                try {
+                    mWsVideoPlayer.close();
+                }catch (e) {
+                    console.log("f_playStart() err:",e);
+                }
+            }
+            mWsVideoPlayer = new wsPlayer("video_player", mVideoUrl);
+            mWsVideoPlayer.open();
+        }else if(mVideoUrl.startsWith("http://")){
+            eleVideoPlayerJqueryObj.attr("src",mVideoUrl);
+        }
+    }
+    function f_playStop() {
+        if(mVideoUrl.startsWith("ws://")){
+            if(mWsVideoPlayer){
+                mWsVideoPlayer.close();
+                mWsVideoPlayer = null;
+                eleVideoPlayerJqueryObj.removeAttr("src");
+                eleVideoPlayerJqueryObj.load();
+            }
+        }else if(mVideoUrl.startsWith("http://")){
+            eleVideoPlayerJqueryObj.removeAttr("src");
+            eleVideoPlayerJqueryObj.load();
+        }
+    }
+    function f_clickPlayStart() {
+        let video_url = eleInputAddress.val().trim();
 
-    eleBtnPlay.click(function () {
-        f_playStart(eleUrl.val().trim());
-    });
-    eleBtnStop.click(function (){
-        f_playStop();
-    });
+        if(video_url === "" || typeof video_url === "undefined"){
+            myAlert("请输入播放地址（支持ws-fmp4/http-fmp4）！","error");
+            return false;
+        }
 
-    function f_playStart(videoUrl){
-        console.log(videoUrl);
-        if(typeof videoUrl === "undefined" || !videoUrl.endsWith(".mp4")){
+        if(!video_url.endsWith(".mp4")){
             myAlert("视频流地址格式不正确！","error");
-            return;
+            return false;
         }
-	    player = new wsPlayer("video_player", videoUrl);
-        player.open();
-
-    }
-    function f_playStop(){
-        if(player){
-            player.close();
-            player = null;
+        if(video_url.startsWith("ws://") || video_url.startsWith("http://")){
+            f_playStart(video_url);
         }else{
-            myAlert("播放器未启动！","error");
+             myAlert("视频流地址格式不正确！","error");
+             return false;
         }
+
     }
-    if("True" === '{{ hasAddress }}'){
-        eleBtnPlay.click();
+	function f_clickPlayStop() {
+        f_playStop();
     }
 
+    $(function() {
+        let is_exist_params = parseInt("{{ is_exist_params }}");
+        if(is_exist_params){
+            let is_online = parseInt("{{ stream.is_online }}");
+            let video_codec_name = "{{ stream.video_codec_name }}";
+            let video_width = parseInt("{{ stream.video_width }}");
+            let video_height = parseInt("{{ stream.video_height }}");
+            let app = "{{ stream.app }}";
+            let name = "{{ stream.name }}";
+            let wsHost = "{{ stream.wsHost }}";
+            let wsMp4Url = "{{ stream.wsMp4Url }}";
+            //let httpMp4Url = "{{ stream.httpMp4Url }}";
+            //let rtspUrl = "{{ stream.rtspUrl }}";
 
+            let video_url;
+            if(is_online){
+                let target_video_width = 1280;
+                let target_video_height = 720;
+                video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height);
+            }else{
+                video_url  = wsMp4Url;//不在线，就用默认地址
+            }
+
+            //let video_url = "http://127.0.0.1:9003/live/test.live.mp4";
+            //let video_url = "ws://127.0.0.1:9003/live/test.live.mp4";
+            eleInputAddress.val(video_url);
+            f_playStart(video_url);
+        }
+    });
 </script>
 
 {% endblock javascripts %}

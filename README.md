@@ -23,7 +23,7 @@
 * 第四步停止程序：关闭启动程序窗口即可
 
 ### Ubuntu版本使用说明
-* 第一步下载程序：下载Ubuntu20分支对应的程序就是Ubuntu版程序（https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/tree/Ubuntu20）
+* 第一步下载程序：Ubuntu版程序下载地址 https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/tree/Ubuntu20
 * 第二步运行程序：可以执行./VideoAnalyzer或者执行./start.sh启动程序，观察窗口提示如果没有报错，即表示启动成功
 * 第三步打开程序：在浏览器输入 http://127.0.0.1:9001 ，系统默认账号 用户名：admin 密码：admin888
 * 第四步停止程序：执行./stop.sh即可
@@ -65,6 +65,14 @@ VideoAnalyzer.conf 写入 xxx/BXC_VideoAnalyzer_v4/Analyzer 的绝对路径
 }
 
 ~~~
+## v4.3
+* 发布时间 2024.01.07
+* （1）支持h265视频流播放
+* （2）支持分屏功能，1分屏，4分屏，9分屏，16分屏，并支持全屏播放
+* （3）支持在单屏或多分屏播放时，自适应转码视频分辨率，提升播放体验效果
+* （4）优化后台管理功能逻辑
+* （5）优化转码逻辑，提升性能
+* （6）优化分析器调度逻辑
 
 #### v4.25
 * 发布时间 2023.12.30

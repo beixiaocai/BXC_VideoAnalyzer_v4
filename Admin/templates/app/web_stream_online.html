@@ -19,11 +19,7 @@
             <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
             <span id="top_msg"></span>
           </h2>
-
-        <div class="pull-right" >
-          <button type="button" onclick="reload()"  class="btn btn-success btn-sm">刷新</button>
-        </div>
-
+          <button style="margin-left:10px;"  type="button" onclick="reload()"  class="btn btn-default btn-sm">刷新</button>
           <div class="clearfix"></div>
         </div>
 
@@ -35,16 +31,16 @@
               <thead>
                 <tr class="headings">
                   <th class="column-title"># </th>
-                  <th class="column-title">视频流名称 </th>
-                  <th class="column-title">视频流来源 </th>
+                    <th class="column-title">视频来源 </th>
+
+                  <th class="column-title">视频流 </th>
+
                   <th class="column-title">在线人数 </th>
                   <th class="column-title">入口带宽 </th>
                   <th class="column-title">视频信息 </th>
-                  <th class="column-title">音频信息 </th>
-                  <th class="column-title last"><span class="nobr">操作</span></th>
+                  <th class="column-title last">音频信息 </th>
                 </tr>
               </thead>
-
               <tbody id="data">
               </tbody>
             </table>
@@ -117,18 +113,17 @@
                                let d = data[i];
                                item_html += "<tr class=\"even pointer\">";
                                item_html += "<td>"+String(i+1)+"</td>";
-                                item_html += "<td>"+d["app"]+"/"+d["name"]+"</td>";
 
                                 if(d["source_type"] === 1){
                                      item_html += "<td><a class='sun-a-label'  href=\"javascript:f_edit('"+d["source"]["code"]+"')\" >"+d["source_nickname"]+"</a></td>";
                                 }else{
-                                      item_html += "<td>"+d["source_nickname"]+"（用户推流）</td>";
+                                      item_html += "<td>（用户推流）</td>";
                                 }
+                                item_html += "<td><a class='sun-a-label' href=\"javascript:f_open_player('"+d["app"]+"','"+d["name"]+"')\" ><i class=\"fa fa-play\"></i> "+d["app"]+"/"+d["name"]+"</a></td>";
                                item_html += "<td>"+d["clients"]+"</td>";
                                item_html += "<td>"+d["produce_speed"]+"</td>";
                                item_html += "<td>"+d["video"]+"</td>";
                                item_html += "<td>"+d["audio"]+"</td>";
-                               item_html += "<td><a class='sun-a-label'  href=\"javascript:f_open_player('"+d["app"]+"','"+d["name"]+"')\" ><i class=\"fa fa-play-circle\"></i> 播放</a></td>";
                                item_html += "</tr>";
 
                                eleData.append(item_html);

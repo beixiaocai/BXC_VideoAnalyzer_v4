@@ -26,7 +26,7 @@ __Example__
 ```js
 var zip = new JSZip();
 zip.file("Hello.txt", "Hello World\n");
-zip.file("temp.txt", "nothing").remove("temp.txt");
+zip.file("deleteAlarm.txt", "nothing").remove("deleteAlarm.txt");
 // result : Hello.txt
 
 zip.folder("css").file("style.css", "body {background: #FF0000}");

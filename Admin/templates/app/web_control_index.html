@@ -19,7 +19,7 @@
              <span id="top_msg">{{top_msg}}</span>
           </h2>
 
-            <button style="margin-left:10px;"  onclick="f_postAllStart()" class="btn btn-primary btn-sm"><i class="fa fa-hand-o-right"></i> 全部执行布控</button>
+            <button style="margin-left:10px;"  onclick="f_postAddAllControl()" class="btn btn-primary btn-sm"><i class="fa fa-hand-o-right"></i> 全部执行布控</button>
 
           <div class="clearfix"></div>
         </div>
@@ -336,10 +336,10 @@
                                item_html += "<td>";
 
                                 if(1===d["cur_state"]) {
-                                    item_html += "<button data-code='" + d["code"] + "'  data-handle='cancel' onclick=\"f_postHandleAnalyzer(this)\" class=\"btn btn-dark btn-xs\"><i class=\"fa fa-close\"></i> 取消布控</button>";
+                                    item_html += "<button data-code='" + d["code"] + "'  data-handle='cancel' onclick=\"f_postHandleControl(this)\" class=\"btn btn-dark btn-xs\"><i class=\"fa fa-close\"></i> 取消布控</button>";
                                     item_html += "<span style='display: none;' class='menu_" + d["code"] + "'>";
                                 }else{
-                                    item_html += "<button data-code='" + d["code"] + "'  data-handle='add'onclick=\"f_postHandleAnalyzer(this)\"class=\"btn btn-primary btn-xs\"><i class=\"fa fa-hand-o-right\"></i> 执行布控</button>";
+                                    item_html += "<button data-code='" + d["code"] + "'  data-handle='add'onclick=\"f_postHandleControl(this)\"class=\"btn btn-primary btn-xs\"><i class=\"fa fa-hand-o-right\"></i> 执行布控</button>";
                                     item_html += "<span class='menu_" + d["code"] + "'>";
                                 }
 
@@ -370,11 +370,11 @@
             });
 
     }
-    function f_postAllStart() {
+    function f_postAddAllControl() {
                 //全部执行布控
         ele_top_loading.show();
         $.ajax({
-               url: '/analyzer/postAllStart',
+               url: '/control/postAddAllControl',
                type: "post",
                async: true,
                data: {"batch_state":10},
@@ -387,7 +387,7 @@
                success: function (res) {
                       ele_top_loading.hide();
                     if(1000 === res.code){
-                        myAlert(res.msg,"success");
+                        myAlert(res.msg,"success",1000);
                         setTimeout(function () {
                             f_getIndex(false);
                         }, 1000);
@@ -397,7 +397,7 @@
                }
             });
     }
-    function f_postHandleAnalyzer(obj) {
+    function f_postHandleControl(obj) {
         //obj.getAttribute("data-handle"); // js 获取 data-handle属性
         //obj.setAttribute("data-handle","123") // js 修改 data-handle属性
         let jqueryObj = $(obj);
@@ -407,9 +407,9 @@
 
         let handleUrl;
         if ('add'===handle){
-            handleUrl = '/analyzer/postAdd';
+            handleUrl = '/control/postAddControl';
         }else if('cancel'===handle){
-            handleUrl = '/analyzer/postCancel';
+            handleUrl = '/control/postCancelControl';
         }else{
             return;
         }

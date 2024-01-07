@@ -34,18 +34,18 @@
                  <h2>摄像头管理
                     <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
                     <span id="top_msg">{{top_msg}}</span>
-               </h2>
+                 </h2>
 
-                    <button style="margin-left:10px;" onclick="f_getAllUpdateForwardState()" class="btn btn-success btn-sm">全部更新状态</button>
+                    <button style="margin-left:10px;" onclick="f_getAllUpdateForwardState(1,1)" class="btn btn-default btn-sm">刷新转发状态</button>
                     <button onclick="f_getAllStartForward()" class="btn btn-primary btn-sm"><i class="fa fa-paper-plane"></i> 全部开启转发</button>
                     <button data-toggle="modal" data-target="#ImportFileDialog"  class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-plus"></i> 批量导入</button>
 
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                  <table class="table table-hover">
+                <table class="table table-bordered">
                     <thead>
-                      <tr>
+                        <tr class="headings">
                         <th>ID</th>
                         <th>摄像头编号</th>
                         <th>摄像头视频流地址</th>
@@ -55,8 +55,8 @@
                       </tr>
                     </thead>
                     <tbody>
-                      {%  for d  in data%}
-                          <tr>
+                      {%  for d  in data %}
+                          <tr class="even pointer">
                             <th scope="row">{{ d.id }}</th><!-- {{forloop.counter}} -->
                             <td>{{ d.code }}</td>
                             <td>{{ d.pull_stream_url }}</td>
@@ -306,9 +306,11 @@
             });
 
     }
-    function f_getAllUpdateForwardState() {
+    function f_getAllUpdateForwardState(is_reload=0,is_show_msg=0) {
         //全部更新转发状态
-                ele_top_loading.show();
+        if(is_show_msg){
+            ele_top_loading.show();
+        }
         $.ajax({
                url: '/stream/getAllUpdateForwardState',
                type: "get",
@@ -317,25 +319,35 @@
                dataType: "json",
                timeout: 0,
                error: function () {
-                   ele_top_loading.hide();
-                   myAlert("网络异常，请确定网络正常！","error");
+                     if(is_show_msg) {
+                         ele_top_loading.hide();
+                         myAlert("网络异常，请确定网络正常！", "error");
+                     }
                },
                success: function (res) {
-                      ele_top_loading.hide();
-                    if(1000 === res.code){
-                        myAlert(res.msg,"success");
-                   }else{
-                        myAlert(res.msg,"error");
+                   if(is_show_msg){
+                       ele_top_loading.hide();
+                        if(1000 === res.code){
+                            myAlert(res.msg,"success");
+                       }else{
+                            myAlert(res.msg,"error");
+                       }
                    }
-
-                    setTimeout(function () {
-                        window.location.reload();
-                    }, 1000);
-
+                    if(is_reload){
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000);
+                    }
                }
             });
-
     }
+
+    $(function() {
+        setTimeout(function () {
+            f_getAllUpdateForwardState(0,0);
+        }, 1000);
+    });
+
 </script>
 
 {% endblock javascripts %}

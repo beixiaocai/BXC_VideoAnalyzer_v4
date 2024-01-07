@@ -76,7 +76,7 @@
               <div class="col-md-8 col-sm-8 col-xs-12">
                   
                 <div class="div_canvas_box">
-                   <video id="video_player" controls autoplay>
+                    <video id="video_player" poster="/static/images/player_poster.jpg" muted controls autoplay>
                         Your browser is too old which doesn't support h5 video
                    </video>
                    <canvas id="canvas" width="0" height="0">
@@ -85,10 +85,10 @@
                 </div>
 
                 <div class="div_canvas_menu">
-                  <button id="play" type="button" class="btn btn-success btn-sm"><i class="fa fa-play"></i> 播放视频 </button>
-                  <button id="stop" type="button" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> 停止播放 </button>
-                  <button id="btn_adjust" type="button" class="btn btn-default btn-sm"><i class="fa fa-adjust"></i> 识别区域与播放器对齐</button>
-                  <button id="btn_clear" type="button" class="btn btn-default btn-sm"><i class="fa fa-paint-brush"></i> 清空算法识别区域</button>
+                  <button type="button" onclick="f_clickPlayStart()" class="btn btn-success btn-sm"><i class="fa fa-play"></i> 播放视频 </button>
+                  <button type="button" onclick="f_clickPlayStop()" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> 停止播放 </button>
+                  <button type="button" onclick="f_adjustVideoCanvas()" class="btn btn-default btn-sm"><i class="fa fa-adjust"></i> 识别区域与播放器对齐</button>
+                  <button type="button" onclick="f_clearVideoCanvas()" class="btn btn-default btn-sm"><i class="fa fa-paint-brush"></i> 清空算法识别区域</button>
                 </div>
 
               </div>
@@ -121,8 +121,13 @@
                                                 "app":'{{ stream.app }}',
                                                 "name":'{{ stream.name }}',
                                                 "video":'{{ stream.video }}',
+                                                "video_codec_name":'{{ stream.video_codec_name }}',
+                                                "video_width":parseInt('{{ stream.video_width }}'),
+                                                "video_height":parseInt('{{ stream.video_height }}'),
                                                 "audio":'{{ stream.audio }}',
                                                 "videoUrl":'{{ stream.videoUrl }}',
+                                                "wsHost":'{{ stream.wsHost }}',
+                                                "wsMp4Url":'{{ stream.wsMp4Url }}',
                                                 "source_nickname":'{{ stream.source_nickname }}'
                                             }
                                         </script>
@@ -131,6 +136,7 @@
                                   {% endif %}
                               </select>
                          {% else %}
+                                <!-- 编辑 -->
                               <select id="select_stream"  disabled="disabled"  class="select2_single form-control" >
                               <!--streamCode的组成格式是 app_name -->
                                 <option selected value="{{ control.stream_app }}_{{ control.stream_name }}">{{ control_stream_nickname}}</option>
@@ -143,14 +149,14 @@
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">视频信息</label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                             <input id="video"  type="text" disabled="disabled" value="{{ control.stream_video }}" class="form-control">
+                             <input id="input_video"  type="text" disabled="disabled" value="{{ control.stream_video }}" class="form-control">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">音频信息</label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                           <input id="audio"  type="text" disabled="disabled" value="{{ control.stream_audio }}" class="form-control">
+                           <input id="input_audio"  type="text" disabled="disabled" value="{{ control.stream_audio }}" class="form-control">
                       </div>
                     </div>
 
@@ -159,7 +165,7 @@
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">播放地址</label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                           <input id="videoUrl"  type="url" disabled="disabled" value="{{ control_stream_videoUrl }}" class="form-control">
+                           <input id="input_video_url"  type="url" disabled="disabled" class="form-control">
                       </div>
                     </div>
 
@@ -346,7 +352,7 @@
                         <div class="form-group">
                           <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                             <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">取消</button>
-                            <button type="button" id="btn_submit" class="btn btn-success">提交</button>
+                            <button type="button" onclick="f_postHandleControl()" class="btn btn-success">提交</button>
                           </div>
                         </div>
 
@@ -371,13 +377,10 @@
     let old_control_polygon = '{{ control.polygon }}';// 布控多边形坐标点
     let old_control_algorithm_code = '{{ control.algorithm_code }}';// 布控原始基础算法编号
     let old_control_class_names = '{{ control.class_names }}';// 布控原始检测目标
-    let old_control_stream_videoUrl = '{{ control_stream_videoUrl }}';// 已经布控的数据才存在该地址
 
     let handle = '{{ handle }}';// 操作类型 add 或 edit
 
     let eleCanvas=document.getElementById("canvas");
-    let eleBtnAdjust = $("#btn_adjust");
-    let eleBtnClear = $("#btn_clear");
     //得到画布的上下文,上下文有两个 2d和3d
     //所有的图形绘制都是通过ctx属性或者方法进行设置的，和canvas标签没有关系了
     let ctx = eleCanvas.getContext("2d");
@@ -385,15 +388,15 @@
     let recognitionRegionLineMaxCount = 4;//多边形的边数
     let tempPolygonLine = null;//多边形的边，临时变量
 
-    let player = null;
-    let eleVideoPlayer= document.getElementById("video_player");
-    let eleSelectStream = $("#select_stream");// select  选择视频流
-    let eleVideoUrl= $("#videoUrl");// input
-    let eleVideo = $("#video");// input
-    let eleAudio = $("#audio");// input
-    let eleBtnPlay = $("#play");//button
-    let eleBtnStop = $("#stop");//button
+    let mWsVideoPlayer = null;
+    let eleVideoPlayerJqueryObj = $("#video_player");
+    let eleVideoPlayerJsObj= document.getElementById("video_player");
+    let mVideoUrl = null;
 
+    let eleSelectStream = $("#select_stream");// select  选择视频流
+    let eleInputVideoUrl= $("#input_video_url");// input
+    let eleInputVideo = $("#input_video");// input
+    let eleInputAudio = $("#input_audio");// input
     let eleSelectAlgorithm = $("#select_algorithm");// select 基础算法
     let selected_algorithm_way_code = "";
 
@@ -418,7 +421,6 @@
     let eleTextarea_remark = $("textarea[name='remark']");
     let eleTextarea_extend_params = $("textarea[name='extend_params']");
 
-    let eleBtnSubmit = $("#btn_submit");//添加或更新布控数据
 
     class MyPoint{
         constructor(x,y) {
@@ -465,8 +467,8 @@
     //窗口对齐->清空绘制区域数据
     function f_adjustVideoCanvas() {
         //执行窗口对齐以后，此前的绘制区域数据，可能不在对应，因此需要删除
-        let w = eleVideoPlayer.offsetWidth;
-        let h = eleVideoPlayer.offsetHeight;
+        let w = eleVideoPlayerJsObj.offsetWidth;
+        let h = eleVideoPlayerJsObj.offsetHeight;
         console.log("f_adjustVideoCanvas",w,h)
         w = w - 1.8;
         h = h - 2.2;
@@ -529,13 +531,7 @@
             }
         }
     })
-    //绘制区域与视频窗口对齐
-    eleBtnAdjust.click(function () {
-        f_adjustVideoCanvas();
-    })
-    eleBtnClear.click(function () {
-        f_clearVideoCanvas();
-    })
+
     function f_showSettings(algorithm_code,selected_class_names) {
 
         let html = "<option value=\"0\">---请选择识别目标(可多选)---</option>";
@@ -570,8 +566,6 @@
         }else{
             //预留
 
-
-
         }
 
         eleSelectClassName.html(html);
@@ -580,15 +574,27 @@
         streamCode = $(this).val();
         let stream = streamCodeDict[streamCode];
         if (stream) {
-            let videoUrl = stream["videoUrl"]
-            eleVideoUrl.val(videoUrl)
-            eleVideo.val(stream["video"])
-            eleAudio.val(stream["audio"])
-            f_playStart(videoUrl);
+
+            let wsHost = stream["wsHost"];
+            let video_codec_name = stream["video_codec_name"];
+            let video_width = stream["video_width"];
+            let video_height = stream["video_height"];
+            let app = stream["app"];
+            let name = stream["name"];
+            let target_video_width = 1280;
+            let target_video_height = 720;
+            let video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height);
+            mVideoUrl = video_url;
+
+            eleInputVideoUrl.val(video_url)
+            eleInputVideo.val(stream["video"])
+            eleInputAudio.val(stream["audio"])
+
+            f_playStart(video_url);
         }else{
-            eleVideoUrl.val("")
-            eleVideo.val("")
-            eleAudio.val("")
+            eleInputVideoUrl.val("")
+            eleInputVideo.val("")
+            eleInputAudio.val("")
             f_playStop();
         }
 
@@ -608,12 +614,6 @@
         }
 
     });
-    eleBtnPlay.click(function () {
-        f_playStart(eleVideoUrl.val());
-    });
-    eleBtnStop.click(function (){
-        f_playStop();
-    });
 
     eleRadioPushStream.change(function () {
         pushStream = $(this).val();
@@ -622,30 +622,50 @@
        alarmDrawType = $(this).val();
     });
 
-    window.onresize = function () {
-        f_adjustVideoCanvas();
-    }
-    function f_playStart(videoUrl){
-        console.log(videoUrl);
-        if(typeof videoUrl === "undefined" || !videoUrl.endsWith(".mp4")){
+    function f_playStart(video_url){
+        console.log("f_playStart()",video_url);
+        if(typeof video_url === "undefined" || !video_url.startsWith("ws://") || !video_url.endsWith(".mp4")){
             myAlert("视频流地址格式不正确！","error");
-            return;
+            return false;
         }
-	    player = new wsPlayer("video_player", videoUrl);
-        player.open();
+        if(mWsVideoPlayer){
+            try {
+                mWsVideoPlayer.close();
+            }catch (e) {
+                console.log("f_playStart() err:",e);
+            }
+        }
+	    mWsVideoPlayer = new wsPlayer("video_player", video_url);
+        mWsVideoPlayer.open();
     }
     function f_playStop(){
-        if(player){
-            player.close();
-            player = null;
+        if(mWsVideoPlayer){
+            mWsVideoPlayer.close();
+            mWsVideoPlayer = null;
+
+            eleVideoPlayerJqueryObj.removeAttr("src");
+            eleVideoPlayerJqueryObj.load();
         }else{
             myAlert("播放器未启动！","error");
         }
 
     }
-    eleBtnSubmit.click(function () {// 添加布控数据 或 更新布控数据
-        f_postHandleControl();
-    });
+    function f_clickPlayStart() {
+        if(mVideoUrl){
+            f_playStart(mVideoUrl);
+
+            for (let i = 0; i < 10; i++) {
+                setTimeout(function () {
+                    f_adjustVideoCanvas();
+                }, i*200);
+            }
+        }
+
+    }
+    function f_clickPlayStop() {
+        f_playStop();
+        f_adjustVideoCanvas();
+    }
     function f_postHandleControl() {
         streamCode = eleSelectStream.val().trim();//typeof string
         if(streamCode==="-1"){
@@ -850,15 +870,42 @@
         });
 
     }
-    window.onload = function () {
-        if(old_control_stream_videoUrl!==""){
-            //编辑布控
+
+    window.onresize = function () {
+        f_adjustVideoCanvas();
+    }
+
+    $(function() {
+        if(handle==="edit"){
+            //编辑 start
             f_showSettings(old_control_algorithm_code,old_control_class_names);
-            f_playStart(old_control_stream_videoUrl);
-        }else{
-            //新增布控
+            let is_online = parseInt("{{ control_stream.is_online }}");
+            let video_codec_name = "{{ control_stream.video_codec_name }}";
+            let video_width = parseInt("{{ control_stream.video_width }}");
+            let video_height = parseInt("{{ control_stream.video_height }}");
+            let app = "{{ control_stream.app }}";
+            let name = "{{ control_stream.name }}";
+            let wsHost = "{{ control_stream.wsHost }}";
+            let wsMp4Url = "{{ control_stream.wsMp4Url }}";
+            //let httpMp4Url = "{{ control_stream.httpMp4Url }}";
+            //let rtspUrl = "{{ control_stream.rtspUrl }}";
+
+            let video_url;
+            if(is_online){
+                let target_video_width = 1280;
+                let target_video_height = 720;
+                video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height);
+            }else{
+                video_url  = wsMp4Url;//不在线，就用默认地址
+            }
+            mVideoUrl = video_url;
+            eleInputVideoUrl.val(video_url);
+
+            f_playStart(video_url);
             f_adjustVideoCanvas();
+             //编辑 end
         }
+
 
         setTimeout(function () {
             if(old_control_polygon!==""){//编辑布控->绘制周界区域存在
@@ -895,7 +942,7 @@
             }
         }, 1200);
 
-    }
+    });
 </script>
 
 {% endblock javascripts %}
