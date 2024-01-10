@@ -39,7 +39,7 @@
       <div class="animate form login_form">
         <section class="login_content">
           <form>
-            <h1>视频行为分析系统</h1>
+            <h1>{{ settings.name }}</h1>
 
             <div>
               <input type="text" name="username" class="form-control" placeholder="用户名" required />
@@ -72,7 +72,7 @@
               <div class="clearfix"></div>
 
               <div>
-                <p>@2022-2023</p>
+                <p>@2023-2024</p>
               </div>
             </div>
           </form>
@@ -137,8 +137,8 @@
                     }, 1000);
 
                 }else{
-                        myAlert(res.msg,"error");
-                   }
+                    myAlert(res.msg,"error",1000);
+                }
             }
         });
     }

@@ -1,0 +1,72 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} 开放接口 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+               <h2>开放接口
+                    <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
+                    <span id="top_msg">{{top_msg}}</span>
+               </h2>
+
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <!--<p><code>说明</code> 系统支持的行为算法</p>-->
+
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr class="headings">
+                        <th class="column-title">接口名称</th>
+                        <th class="column-title">请求方式</th>
+                          <th class="column-title no-link last"><span class="nobr">接口地址</span></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                    {%  for d  in data %}
+                      <tr class="even pointer">
+                        <td>{{ d.name }}</td>
+                        <td>{{ d.request_method }}</td>
+                          <td><a href="{{ d.url }}" target="_blank" class='sun-a-label' >{{ d.url }}</a></td>
+                      </tr>
+                    {% endfor %}
+
+                    </tbody>
+                  </table>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+<script>
+    let ele_top_loading = $("#top_loading");
+    let ele_top_msg= $("#top_msg");
+
+</script>
+
+{% endblock javascripts %}
+

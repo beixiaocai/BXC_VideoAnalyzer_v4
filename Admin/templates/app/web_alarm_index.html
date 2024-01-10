@@ -113,16 +113,16 @@
               <label style="margin-left:20px;padding-top:5px;">
                 <input type="checkbox" class="check_all">
               </label>
-                <button style="margin-left:5px;" onclick="f_handleAllRead()" class="btn btn-success btn-sm"><i class="fa fa-book"></i> 已读</button>
-                <button style="margin-left:2px;" onclick="f_handleAllDelete()" class="btn btn-success btn-sm"><i class="fa fa-remove"></i> 删除</button>
-
-                <button style="margin-left:2px;" id="top_open_audio" class="btn btn-danger btn-sm">
+                <button style="margin-left:5px;" onclick="f_handle('read')" class="btn btn-primary btn-sm"><i class="fa fa-book"></i> 已读</button>
+                <button onclick="f_handle('delete')" class="btn btn-primary btn-sm"><i class="fa fa-remove"></i> 删除</button>
+                <button id="top_open_audio" class="btn btn-danger btn-sm">
                     <i class="fa fa-bell-slash-o"></i> 启动报警声音 <!-- <i class="fa fa-bell-slash-o"></i> 关闭报警声音 -->
                 </button>
 
                 <audio id="top_audio"  controls loop style="display: block;float: right; position: relative;height: 34px; "  >
                     浏览器不支持音频播放
                   </audio>
+
 
               <div class="clearfix"></div>
             </div>
@@ -269,14 +269,13 @@
     }
     function f_postHandle(handle,alarm_ids_str){
           ele_top_loading.show();
-
         $.ajax({
             url: '/alarm/postHandle',
             type: "post",
             async: true,
             data: {"handle":handle,"alarm_ids_str":alarm_ids_str},
             dataType: "json",
-            timeout: "3000",
+            timeout: 0,
             error: function () {
                    ele_top_loading.hide();
                 myAlert("网络异常，请确定网络正常！", "error");
@@ -287,7 +286,6 @@
                     eleCheckAll.prop("checked", false);
                     myAlert(res.msg,"success",1000);
                     setTimeout(function () {
-
                         f_getIndex(temp_cur_page,temp_cur_page_size);
                      }, 1000);
                 }else{
@@ -296,23 +294,18 @@
             }
         });
     }
-    function f_handleAllRead(){
-        alarm_ids_str = __f_get_alarm_ids_str();
-
-        if(""===alarm_ids_str){
-            myAlert("请至少选中一条数据","error");
+    function f_handle(handle_type){
+        if('clear' === handle_type){
+             f_postHandle(handle_type,"");
         }else{
-            f_postHandle('read',alarm_ids_str);
+            alarm_ids_str = __f_get_alarm_ids_str();
+            if(""===alarm_ids_str){
+                myAlert("请至少选中一条数据","error");
+            }else{
+                f_postHandle(handle_type,alarm_ids_str);
+            }
         }
 
-    }
-    function f_handleAllDelete(){
-        alarm_ids_str = __f_get_alarm_ids_str();
-        if(""===alarm_ids_str){
-            myAlert("请至少选中一条数据","error");
-        }else{
-            f_postHandle('delete',alarm_ids_str);
-        }
     }
     function f_getCheckNewData() {
         setTimeout(function () {

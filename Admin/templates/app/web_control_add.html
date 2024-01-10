@@ -57,7 +57,8 @@
     let behaviourCodeDict = {}; //行为算法字典
     let behaviourCode;
 
-
+    let m_alarmInterfaceCodeDict = {}; //报警接入字典
+    let m_alarmInterfaceCode;
 
 </script>
 
@@ -232,7 +233,7 @@
 
          <div class="ln_solid"></div>
 
-                 <div class="form-group">
+                        <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">选择音频 <i class="bxc_introduce fa fa-info-circle" title="触发报警时播放的音频"></i>
                           </label>
 
@@ -252,6 +253,32 @@
                                     </script>
 
                                     <option {% if audio.code == control.audio_code %} selected {% endif %} value="{{ audio.code }}">{{ audio.name }}</option>
+                                {% endfor %}
+                            </select>
+
+                          </div>
+                    </div>
+
+                      <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">报警接入
+                          </label>
+
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+
+                            <select id="select_alarm_interface"  class="select2_single form-control" required="required" >
+                                <option value="0">请选择报警接入</option>
+                                {% for alarmInterface in alarmInterfaces %}
+                                   <script>
+                                        m_alarmInterfaceCode = '{{ alarmInterface.code }}';
+
+                                        m_alarmInterfaceCodeDict[m_alarmInterfaceCode] = {
+                                            "code":m_alarmInterfaceCode,
+                                            "name":'{{ alarmInterface.name }}'
+                                        }
+
+                                    </script>
+
+                                    <option {% if alarmInterface.code == control.alarm_interface_code %} selected {% endif %} value="{{ alarmInterface.code }}">{{ alarmInterface.name }}</option>
                                 {% endfor %}
                             </select>
 
@@ -333,7 +360,7 @@
                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">扩展参数
                       </label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                        <textarea rows="2" name="extend_params" class="form-control col-md-7 col-xs-12">{{ control.extend_params }}</textarea>
+                        <textarea rows="3" name="extend_params" class="form-control col-md-7 col-xs-12">{{ control.extend_params }}</textarea>
 
                       </div>
                 </div>
@@ -402,6 +429,7 @@
 
     let eleSelectClassName = $("#select_class_name");// select 布控多选的目标
     let eleSelectAudio = $("#select_audio");// select 音频
+    let eleSelectAlarmInterface = $("#select_alarm_interface");// select 报警接入
     let eleSelectBehaviour = $("#select_behaviour");// select 行为算法
     let eleInputMinInterval = $("#min_interval");
     let eleInputOverlapThresh = $("#overlap_thresh");
@@ -722,6 +750,11 @@
             myAlert("请选择音频","error");
             return;
         }
+        m_alarmInterfaceCode = eleSelectAlarmInterface.val().trim();//typeof string
+        if(m_alarmInterfaceCode==="0"){
+            myAlert("请选择报警接入","error");
+            return;
+        }
 
         let minInterval = parseInt(eleInputMinInterval.val());
         if(isNaN(minInterval)){
@@ -820,6 +853,7 @@
             "classNames":p_classNames,
             "behaviourCode":p_behaviourCode,
             "audioCode":audioCode,
+            "alarmInterfaceCode":m_alarmInterfaceCode,
             "pushStream":pushStream,
             "polygon":polygon,
             "minInterval":minInterval,
