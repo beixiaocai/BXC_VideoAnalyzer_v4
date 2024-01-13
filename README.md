@@ -65,6 +65,13 @@ VideoAnalyzer.conf 写入 xxx/BXC_VideoAnalyzer_v4/Analyzer 的绝对路径
 }
 
 ~~~
+#### v4.32
+* 发布时间 2024.01.13
+* （1）新增支持加密狗（加密锁）授权
+* （2）优化授权逻辑，修复此前机器授权码的bug
+* （3）扩展系统前端自定义的功能范围
+*  如需Windows版支持TensorRT+OpenVINO分析器版本的程序，请到网盘下载v4.32分析器并替换到当前软件中。 网盘链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220
+
 #### v4.31
 * 发布时间 2024.01.10
 * （1）新增支持自定义报警数据接口功能

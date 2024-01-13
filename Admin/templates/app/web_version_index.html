@@ -25,7 +25,7 @@
             </div>
             <div class="x_content">
               <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
-                <h3>视频行为分析系统</h3>
+                <h3>{{ settings.name }}</h3>
                         <div style="margin-top: 6px;"  class="col-md-12 col-sm-12">
                           <span>软件版本：</span><span style="color: green;font-size: 15px ;margin-right: 10px;">{{ project_version }}</span>
                       </div>
@@ -33,7 +33,7 @@
                           <span>软件标记：</span><span style="color: green;font-size: 15px ;margin-right: 10px;">{{ project_flag }}</span>
                       </div>
                     <div style="margin-top: 4px;"  class="col-md-12 col-sm-12">
-                        <a href="https://space.bilibili.com/487906612" target="_blank">联系作者</a>
+                        <a href="{{ settings.author_link }}" target="_blank">{{ settings.author }}</a>
                     </div>
                 <div style="margin-top: 20px;"  class="col-md-12 col-sm-12">
                          <button onclick="f_getCheckVersion()" class="btn btn-primary btn">检测新版本</button>

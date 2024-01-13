@@ -8,7 +8,6 @@
   "mediaSecret": "aqxY9ps21fyhyKNRyYpGvJCTp1JBeGOM",
   "mediaRootDir": "MediaServer/www",
   "uploadDir": "Admin\\static\\upload",
-  "workerConcurrency": 20,
   "supportHardwareVideoDecode": false,
   "supportHardwareVideoEncode": false
 }

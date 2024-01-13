@@ -393,7 +393,7 @@
     let eleExpireHour= $("#active_code_expire_hour");
     let eleCreateDate= $("#active_code_create_date");
     let eleExpireDate= $("#active_code_expire_date");
-    function f_show_auth_info(state,remark,expire_hour,create_date_str,expire_date_str) {
+    function f_showMachineVerifyInfo(state,remark,expire_hour,create_date_str,expire_date_str) {
         let state_str;
         if(-2===state){
             state_str = "<span class='sun-state-error'>未授权</span";
@@ -502,20 +502,27 @@
                success: function (res) {
                    if(1000 === res.code){
                        let info = res.info;
-
-                        let state = parseInt(info["state"]);
-                        let expire_hour = parseInt(info["expire_hour"]);
-                        let remark = info["remark"];
-                        let create_date_str = info["create_date_str"];
-                        let expire_date_str = info["expire_date_str"];
-
-                        if(isNaN(state)||isNaN(expire_hour)||create_date_str===""||expire_date_str===""){
-                            f_show_auth_info(-1,-1,-1,-1,-1)
+                        let dongle_status = info.dongle_status;
+                        if(dongle_status===1){
+                            //加密锁授权通过
+                            eleStateStr.html("<span class='sun-state-success'>加密锁授权中</span>");
+                            eleExpireHour.html("永久有效");
                         }else{
-                            f_show_auth_info(state,remark,expire_hour,create_date_str,expire_date_str);
+                            let state = parseInt(info["state"]);
+                            let expire_hour = parseInt(info["expire_hour"]);
+                            let remark = info["remark"];
+                            let create_date_str = info["create_date_str"];
+                            let expire_date_str = info["expire_date_str"];
+
+                            if(isNaN(state)||isNaN(expire_hour)||create_date_str===""||expire_date_str===""){
+                                f_showMachineVerifyInfo(-1,-1,-1,-1,-1)
+                            }else{
+                                f_showMachineVerifyInfo(state,remark,expire_hour,create_date_str,expire_date_str);
+                            }
                         }
+
                    }else{
-                        f_show_auth_info(-2,-1,-1,-1,-1)
+                        f_showMachineVerifyInfo(-2,-1,-1,-1,-1)
                    }
                }
             });
