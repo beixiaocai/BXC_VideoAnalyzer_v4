@@ -1,3 +1,0 @@
-//首先要确保你安装了trtexec工具
-
-trtexec  --onnx=yolov8n.onnx --saveEngine=my.engine --fp16
