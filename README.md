@@ -34,6 +34,10 @@
 * （3）CUDA版本与英伟达显卡驱动版本关系表：[查看版本关系表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html)
 * （4）英伟达显卡驱动下载地址：[下载英伟达显卡驱动](https://www.nvidia.cn/Download/index.aspx?lang=cn)
 
+#### v4.33
+* 发布时间 2024.01.22
+* （1）新增支持算法模型加密功能
+* （2）新增支持火焰报警监测和烟雾报警监测功能
 
 #### v4.32
 * 发布时间 2024.01.13
