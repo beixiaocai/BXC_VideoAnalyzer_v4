@@ -25,14 +25,21 @@
 * [布控参数使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控参数)
 * [版本历史](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4)
 
-
-# 版本历史
-
-## 如需TensorRT版本请注意
+### 如需TensorRT版本请注意
 * （1）Windows版支持TensorRT+OpenVINO的分析器，请下载对应版本 Analyzer+library 替换到软件的Analyzer模块 网盘链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220
 * （2）软件依赖库内置CUDA库版本是12.0，所以想要运行CUDA12.0，英伟达显卡驱动必须满足最低驱动版本要求，否则无法运行
 * （3）CUDA版本与英伟达显卡驱动版本关系表：[查看版本关系表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html)
 * （4）英伟达显卡驱动下载地址：[下载英伟达显卡驱动](https://www.nvidia.cn/Download/index.aspx?lang=cn)
+
+
+# 版本历史
+
+#### v4.34
+* 发布时间 2024.01.27
+* （1）新增支持可配置模型缓存时长
+* （2）新增支持布控轮巡功能
+* （3）修复4.33版本模型加密功能的bug
+
 
 #### v4.33
 * 发布时间 2024.01.22

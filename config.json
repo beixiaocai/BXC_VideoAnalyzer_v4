@@ -8,6 +8,7 @@
   "mediaSecret": "aqxY9ps21fyhyKNRyYpGvJCTp1JBeGOM",
   "mediaRootDir": "MediaServer/www",
   "uploadDir": "Admin\\static\\upload",
+  "cacheModelMaxDuration": 120000,
   "supportHardwareVideoDecode": false,
   "supportHardwareVideoEncode": false
 }

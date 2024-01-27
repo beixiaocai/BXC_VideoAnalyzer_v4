@@ -67,7 +67,7 @@
 
                  <div class="form-horizontal form-label-left">
 
-                    {% if is_exist_params %}
+                    {% if is_exist_stream %}
                         <p style="margin-top:10px;font-size: 16px;">视频流支持的所有转发协议</p>
                         <p>{{ stream.wsMp4Url }}</p>
                         <p>{{ stream.httpMp4Url }}</p>
@@ -148,8 +148,8 @@
     }
 
     $(function() {
-        let is_exist_params = parseInt("{{ is_exist_params }}");
-        if(is_exist_params){
+        let is_exist_stream = parseInt("{{ is_exist_stream }}");
+        if(is_exist_stream){
             let is_online = parseInt("{{ stream.is_online }}");
             let video_codec_name = "{{ stream.video_codec_name }}";
             let video_width = parseInt("{{ stream.video_width }}");
