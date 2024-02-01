@@ -57,7 +57,7 @@
     let behaviourCodeDict = {}; //行为算法字典
     let behaviourCode;
 
-    let m_alarmInterfaceCodeDict = {}; //报警接入字典
+    let m_alarmInterfaceCodeDict = {}; //报警接口字典
     let m_alarmInterfaceCode;
 
 </script>
@@ -260,13 +260,13 @@
                     </div>
 
                       <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">报警接入
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">报警接口
                           </label>
 
                           <div class="col-md-9 col-sm-9 col-xs-12">
 
                             <select id="select_alarm_interface"  class="select2_single form-control" required="required" >
-                                <option value="0">请选择报警接入</option>
+                                <option value="0">请选择报警接口</option>
                                 {% for alarmInterface in alarmInterfaces %}
                                    <script>
                                         m_alarmInterfaceCode = '{{ alarmInterface.code }}';
@@ -429,7 +429,7 @@
 
     let eleSelectClassName = $("#select_class_name");// select 布控多选的目标
     let eleSelectAudio = $("#select_audio");// select 音频
-    let eleSelectAlarmInterface = $("#select_alarm_interface");// select 报警接入
+    let eleSelectAlarmInterface = $("#select_alarm_interface");// select 报警接口
     let eleSelectBehaviour = $("#select_behaviour");// select 行为算法
     let eleInputMinInterval = $("#min_interval");
     let eleInputOverlapThresh = $("#overlap_thresh");
@@ -714,7 +714,7 @@
             //选择目标判断
             let classNames_array = eleSelectClassName.val();//typeof object, array
             if(classNames_array===null){
-                myAlert("请选择至少1个目标","error");
+                myAlert("请至少选择1个目标","error");
                 return;
             }else{
                 let classNames_array_temp = [];
@@ -726,7 +726,7 @@
                 if(classNames_array_temp.length > 0){
                     p_classNames = classNames_array_temp.join(",");
                 }else{
-                    myAlert("请选择至少1个目标","error");
+                    myAlert("请至少选择1个目标","error");
                     return;
                 }
             }
@@ -752,7 +752,7 @@
         }
         m_alarmInterfaceCode = eleSelectAlarmInterface.val().trim();//typeof string
         if(m_alarmInterfaceCode==="0"){
-            myAlert("请选择报警接入","error");
+            myAlert("请选择报警接口","error");
             return;
         }
 

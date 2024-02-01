@@ -27,7 +27,6 @@
                     <thead>
                       <tr class="headings">
                         <th class="column-title">ID</th>
-                        <th class="column-title">编号</th>
                         <th class="column-title">名称</th>
                         <th class="column-title">轮巡并发</th>
                         <th class="column-title">轮巡时长</th>
@@ -41,7 +40,6 @@
                     {%  for d  in data %}
                       <tr class="even pointer">
                         <td>{{ d.id }}</td>
-                        <td>{{ d.code }}</td>
                         <td>{{ d.name }}</td>
                         <td>{{ d.control_concurrency }}</td>
                         <td>{{ d.control_duration }}</td>

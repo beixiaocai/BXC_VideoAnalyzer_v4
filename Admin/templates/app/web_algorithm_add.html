@@ -69,13 +69,6 @@
                   </div>
                 </div>
 
-                  <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">布控上限 <span class="required">*</span> <i class="bxc_introduce fa fa-info-circle" title="布控上限是指该基础模型最大支持多少个布控同时使用"></i></label></label>
-              <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input type="number" name="control_max_count" value="{{ algorithm.control_max_count }}" required="required"  class="form-control">
-                  </div>
-                </div>
-
 {% if "edit" == handle %}<input type="hidden" name="way_code" value="{{ algorithm.way_code }}">{% endif %}
 
                   <div class="form-group">
@@ -218,7 +211,6 @@ let handle = "{{ handle }}";
 let algorithm_code = "{{ algorithm.code }}";
 let algorithm_way_code = "{{ algorithm.way_code }}";
 let ele_input_name= $("input[name='name']");
-let eleInputControlMaxCount = $("input[name='control_max_count']"); //control_max_count
 let ele_select_way_code= $("select[name='way_code']");
 let ele_input_inference_device= $("input[name='inference_device']");
 let ele_input_extend_params= $("input[name='extend_params']");
@@ -271,20 +263,6 @@ $(document).ready(function () {
             return false;
         }
 
-       try {
-            let controlMaxCount = parseInt(eleInputControlMaxCount.val());
-            if(isNaN(controlMaxCount)){
-                myAlert("布控上限不能为空","error");
-                return false;
-            }
-            if(controlMaxCount<1){
-                myAlert("布控上限不能小于1","error");
-                return false;
-            }
-       }catch (e) {
-            myAlert("布控上限格式不正确","error");
-            return false;
-       }
       if("MODEL" === selectedWayCode){
         if(ele_select_framework.val().trim()==="0"){
             myAlert("请选择算法框架","error");

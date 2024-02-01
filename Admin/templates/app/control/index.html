@@ -18,9 +18,10 @@
              <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
              <span id="top_msg">{{top_msg}}</span>
           </h2>
-
-            <button style="margin-left:10px;"  onclick="f_postAddAllControl()" class="btn btn-primary btn-sm"><i class="fa fa-hand-o-right"></i> 全部执行布控</button>
-
+            <button style="margin-left:10px;" onclick="f_reload()" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
+            <button onclick="f_postHandleAllControl('add')" class="btn btn-primary btn-sm"><i class="fa fa-hand-o-right"></i> 执行全部布控</button>
+            <button onclick="f_postHandleAllControl('cancel')" class="btn btn-dark btn-sm"><i class="fa fa-close"></i> 取消全部布控</button>
+            <span id="top_info" style="float: right; font-size: 13px;color: #00A000;margin-top: 6px; margin-right: 50px;"></span>
           <div class="clearfix"></div>
         </div>
 
@@ -32,12 +33,11 @@
               <thead>
                 <tr class="headings">
                   <th class="column-title">ID </th>
-                  <th class="column-title">编号 </th>
                   <th class="column-title">视频流 </th>
                   <th class="column-title">算法流 <i class="bxc_introduce fa fa-info-circle" title="算法流在布控时才能查看（布控需勾选推流选项）"></i></th>
                   <th class="column-title">布控算法 </th>
                   <th class="column-title">计算频率 </th>
-                  <th class="column-title">状态 <i class="bxc_introduce fa fa-info-circle" title="布控实时状态"></i></th>
+                  <th class="column-title">状态 </th>
                   <th class="column-title">时间 </th>
                   <th class="column-title last"><span class="nobr">操作</span></th>
                 </tr>
@@ -50,48 +50,89 @@
 
 
         </div>
+          <!--日志弹窗start -->
+          <div id="controlLogDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
 
-
-             <!--日志弹窗start -->
-                  <div id="controlLogDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h4 class="modal-title" >布控日志</h4>
-                      </div>
-                      <div class="modal-body">
-                        <div style="padding: 5px 20px;">
-                          <table class="table table-striped">
-                            <thead>
-                              <tr>
-                                <th>ID</th>
-                                <th>日志内容</th>
-
-                                <th>时间</th>
-                              </tr>
-                            </thead>
-                            <tbody id="controlLogData">
-                            <!--
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>@mdo</td>
-                              </tr>
-                            -->
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h4 class="modal-title" >布控日志</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div style="padding: 5px 20px;">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>日志内容</th>
+                            <th>时间</th>
+                          </tr>
+                        </thead>
+                        <tbody id="controlLogData">
+                        <!--
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>@mdo</td>
+                          </tr>
+                        -->
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
-              <!--日志弹窗end -->
+              </div>
+           </div>
+          <!--日志弹窗end -->
+
+           <!--复制弹窗start -->
+          <div id="copyDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h4 class="modal-title" >复制布控</h4>
+                  </div>
+
+                  <div class="modal-body">
+                    <div style="padding: 5px 20px;">
+                      <form class="form-horizontal calender" role="form">
+
+                       <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头 <span class="required">*</span></label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select id="copySelectStreams" style="height: 200px;"  class="select2_multiple form-control" required="required"  multiple="multiple" >
+                                <option value="0">---请选择摄像头(可多选)---</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label">备注</label>
+                          <div class="col-sm-9">
+                            <textarea class="form-control" style="height:40px;" id="copyRemark"></textarea>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="f_postCopy()" class="btn btn-primary">提交</button>
+                  </div>
+                </div>
+              </div>
+           </div>
+          <!--复制弹窗end -->
+
       </div>
     </div>
 
       </div>
+      <div class="row" id="pageData"></div>
+
     </div>
   </div>
 
@@ -103,12 +144,21 @@
 <script>
 
     let eleData = $("#data");
+    let elePageData = $("#pageData");
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
+    let ele_top_info= $("#top_info");
 
-    let eleControlLogDialog = $("#controlLogDialog");
-    let eleControlLogData = $("#controlLogData");
+    let ele_div_control_log_dialog = $("#controlLogDialog");
+    let ele_div_control_data = $("#controlLogData");
 
+    let ele_div_copy_dialog = $("#copyDialog");
+    let ele_copy_select_streams= $("#copySelectStreams");
+    let ele_copy_textarea_remark= $("#copyRemark");
+    let temp_cur_control_code = null;
+    let temp_cur_page = 1;//当前页面
+    let temp_cur_page_size = 10;
+    
     function f_edit(controlCode) {
         let url = "/control/edit?code="+controlCode;
         window.location.href = url;
@@ -129,7 +179,7 @@
                success: function (res) {
                       ele_top_loading.hide();
                    if(1000 === res.code){
-                       f_getIndex(false);
+                       f_getIndex(temp_cur_page,temp_cur_page_size);
                    }else{
                         myAlert(res.msg,"error");
                    }
@@ -137,13 +187,61 @@
             });
 
     }
+
+    function f_postCopy() {
+        let temp1 = ele_copy_select_streams.val();//typeof object, array
+        if(temp1===null){
+            myAlert("请至少选择1个摄像头","error");
+            return false;
+        }else{
+            let temp2 = [];
+            for (let i = 0; i < temp1.length; i++) {
+                if("0"!==temp1[i]){
+                    temp2.push(temp1[i]);
+                }
+            }
+            if(temp2.length > 0){
+                ele_div_copy_dialog.modal("toggle");
+                let stream_codes = temp2.join(",");
+                let remark = ele_copy_textarea_remark.val();
+                ele_top_loading.show();
+                $.ajax({
+                       url: '/control/postCopy',
+                       type: "post",
+                       async: true,
+                       data: {"controlCode":temp_cur_control_code,"streamCodes":stream_codes,"remark":remark},
+                       dataType: "json",
+                       timeout: 0,
+                       error: function () {
+                           ele_top_loading.hide();
+                           myAlert("网络异常，请确定网络正常！","error");
+                       },
+                       success: function (res) {
+                           ele_top_loading.hide();
+                           if(1000 === res.code){
+                               f_getIndex(temp_cur_page,temp_cur_page_size);
+                           }else{
+                                myAlert(res.msg,"error");
+                           }
+                       }
+                    });
+            }else{
+                myAlert("请至少选择1个摄像头","error");
+                return false;
+            }
+        }
+    }
+
     function f_copy(controlCode) {
+        temp_cur_control_code = controlCode;
+        ele_copy_textarea_remark.val("copy from "+controlCode)
+        ele_div_copy_dialog.modal("toggle");
         ele_top_loading.show();
         $.ajax({
-               url: '/control/postCopy',
-               type: "post",
+               url: '/open/getAllStreamData',
+               type: "get",
                async: true,
-               data: {"controlCode":controlCode},
+               data: {},
                dataType: "json",
                timeout: 0,
                error: function () {
@@ -151,22 +249,30 @@
                    myAlert("网络异常，请确定网络正常！","error");
                },
                success: function (res) {
-                      ele_top_loading.hide();
+                   ele_top_loading.hide();
                    if(1000 === res.code){
-                       f_getIndex(false);
+                       let data = res.data;
+                       let html = "<option value=\"0\">---请选择摄像头(可多选)---</option>";
+                       for (let i = 0; i < data.length; i++) {
+                           let d = data[i];
+                           let d_code = d["code"];
+                           let d_nickname = d["nickname"];
+                           html += "<option value=\""+d_code+"\">"+d_nickname+"</option>";
+                       }
+                       ele_copy_select_streams.html(html);
                    }else{
-                        myAlert(res.msg,"error");
+                       myAlert(res.msg,"error");
                    }
-               }
+                }
             });
 
     }
+
     function f_log(controlCode) {
         // BootStrap弹窗说明：https://www.genban.org/teach/teach-28585.html
-        // data-toggle='modal' data-target='#controlLogDialog'
-        eleControlLogDialog.modal("toggle");
-        //$("#controlLogDialog").modal("show");
-        //$("#controlLogDialog").modal("hide");
+        ele_div_control_log_dialog.modal("toggle");
+        //ele_div_control_log_dialog.modal("show");
+        //ele_div_control_log_dialog.modal("hide");
 
         ele_top_loading.show();
         $.ajax({
@@ -184,7 +290,7 @@
                    ele_top_loading.hide();
 
                    let item_html;
-                    eleControlLogData.html("");
+                    ele_div_control_data.html("");
 
                    if(1000 === res.code){
 
@@ -196,7 +302,7 @@
                           item_html += "<tr>";
                           item_html += "<td colspan='3'>暂无日志</td>";
                           item_html += "</tr>";
-                          eleControlLogData.append(item_html);
+                          ele_div_control_data.append(item_html);
                        }else{
                            for (let i = 0; i < data_length; i++) {
                                let d = data[i];
@@ -206,7 +312,7 @@
                                 item_html+="<td style='max-width: 200px;'>"+d["content"]+"</td>";
                                 item_html+="<td>"+d["create_time_str"]+"</td>";
                                 item_html+="</tr>";
-                                eleControlLogData.append(item_html);
+                                ele_div_control_data.append(item_html);
                            }
                        }
                    }else{
@@ -215,8 +321,6 @@
 
                 }
             });
-
-
 
     }
 
@@ -231,13 +335,35 @@
         let url = "/behaviour/edit?code="+code;
         window.open(url);
     }
-    function f_getIndex(is_auto_refresh = false) {
+    function f_show_pageData(pageData) {
+        let page_size = pageData["page_size"];
+        let html = "";
+        html+="<div class=\"col-md-12 col-sm-12 col-xs-12\"><ul class=\"pagination\">";
+                html+="<li><span style=\"margin-right:10px;color:#000;\">共<span>"+pageData["page_num"]+"</span>页 / <span>"+pageData["count"]+"</span >条</span></li>";
+            let pageLabels = pageData["pageLabels"];
+
+            for (let i = 0; i < pageLabels.length; i++) {
+                let cur = pageLabels[i]["cur"];
+                console.log(typeof cur,cur)
+                if(cur === 1){
+                    html+="<li class=\"paginate_button active\"><a href=\"#\"  >"+pageLabels[i]["name"]+"</a></li>";
+                }else{
+                    html+="<li class=\"paginate_button \"><a href=\"javascript:f_getIndex("+pageLabels[i]["page"]+","+page_size+")\" >"+pageLabels[i]["name"]+"</a></li>";
+                }
+            }
+        html+="</ul></div>";
+
+        elePageData.html(html);
+    }
+    function f_getIndex(page,page_size) {
+        temp_cur_page = page;
+        temp_cur_page_size = page_size;
         ele_top_loading.show();
         $.ajax({
                url: '/control/getIndex',
                type: "get",
                async: true,
-               data: {},
+               data: {"p":page,"ps":page_size},
                dataType: "json",
                timeout: 0,
                error: function () {
@@ -246,31 +372,28 @@
                },
                success: function (res) {
                    ele_top_loading.hide();
-                   let top_msg = res.top_msg;
-                   ele_top_msg.html(top_msg);
 
-                     eleData.html("");
-                    let item_html;
+                   let info = res.info;
+                   ele_top_info.html("在线视频流:"+info["online_stream_len"].toString()+" 实时布控中:"+info["online_control_len"].toString());
 
+                   eleData.html("");
+                   let item_html;
                    if(1000 === res.code){
-
                        let data = res.data;
                        let data_length = data.length;
-
                        if(0===data_length){
-                           item_html = "";
-                          item_html += "<tr class=\"even pointer\">";
-                          item_html += "<td colspan='10'>暂无数据</td>";
-                          item_html += "</tr>";
-                          eleData.append(item_html);
+                            item_html = "";
+                            item_html += "<tr class=\"even pointer\">";
+                            item_html += "<td colspan='9'>暂无数据</td>";
+                            item_html += "</tr>";
+                            eleData.append(item_html);
                        }else{
-
                             for (let i = 0; i < data_length; i++) {
                                let d = data[i];
                                item_html = "";
                                item_html += "<tr class=\"even pointer\">";
                                item_html += "<td>"+d["id"]+"</td>";
-                               item_html += "<td>"+d["code"]+"</td>";
+                               //item_html += "<td>"+d["code"]+"</td>";
 
                                if(d["stream_active"]){
                                   item_html += "<td><span class='sun-state-success'>在线</span> <a class='sun-a-label' href=\"javascript:f_open_player('"+d["stream_app"]+"','"+d["stream_name"]+"')\" ><i class=\"fa fa-play\"></i> "+
@@ -329,50 +452,40 @@
 
                                item_html += "<td>"+d["last_update_time"]+"</td>";
                                item_html += "<td>";
+                                    if(1===d["cur_state"]) {
+                                        item_html += "<button data-code='" + d["code"] + "'  data-handle='cancel' onclick=\"f_postHandleControl(this)\" class=\"btn btn-dark btn-xs\"><i class=\"fa fa-close\"></i> 取消布控</button>";
+                                        item_html += "<span style='display: none;' class='menu_" + d["code"] + "'>";
+                                    }else{
+                                        item_html += "<button data-code='" + d["code"] + "'  data-handle='add'onclick=\"f_postHandleControl(this)\"class=\"btn btn-primary btn-xs\"><i class=\"fa fa-hand-o-right\"></i> 执行布控</button>";
+                                        item_html += "<span class='menu_" + d["code"] + "'>";
+                                    }
+                                        item_html += "<a href=\"javascript:f_del('"+d["code"]+"')\"  class='sun-a-label'  ><i class=\"fa fa-remove\"></i>删除</a>";
+                                        item_html += "</span>";
 
-                                if(1===d["cur_state"]) {
-                                    item_html += "<button data-code='" + d["code"] + "'  data-handle='cancel' onclick=\"f_postHandleControl(this)\" class=\"btn btn-dark btn-xs\"><i class=\"fa fa-close\"></i> 取消布控</button>";
-                                    item_html += "<span style='display: none;' class='menu_" + d["code"] + "'>";
-                                }else{
-                                    item_html += "<button data-code='" + d["code"] + "'  data-handle='add'onclick=\"f_postHandleControl(this)\"class=\"btn btn-primary btn-xs\"><i class=\"fa fa-hand-o-right\"></i> 执行布控</button>";
-                                    item_html += "<span class='menu_" + d["code"] + "'>";
-                                }
-
-                                   item_html += "<a href=\"javascript:f_del('"+d["code"]+"')\"  class='sun-a-label'  ><i class=\"fa fa-remove\"></i>删除</a>";
-                                   item_html += "</span>";
-
-                                   item_html += "<a href=\"javascript:f_edit('"+d["code"]+"')\"  class='sun-a-label' ><i class=\"fa fa-edit\"></i>编辑</a>";
-                           item_html += "<a href=\"javascript:f_copy('"+d["code"]+"')\" class='sun-a-label' ><i class=\"fa fa-copy\"></i>复制</a>";
-                           item_html += "<a href=\"javascript:f_log('"+d["code"]+"')\" class='sun-a-label' ><i class=\"fa fa-chain\"></i>日志</a>";
-
-
+                                    item_html += "<a href=\"javascript:f_edit('"+d["code"]+"')\"  class='sun-a-label' ><i class=\"fa fa-edit\"></i>编辑</a>";
+                                    item_html += "<a href=\"javascript:f_copy('"+d["code"]+"')\" class='sun-a-label' ><i class=\"fa fa-copy\"></i>复制</a>";
+                                    item_html += "<a href=\"javascript:f_log('"+d["code"]+"')\" class='sun-a-label' ><i class=\"fa fa-chain\"></i>日志</a>";
                                item_html += "</td></tr>";
 
                                eleData.append(item_html);
                            }
-                        }
-
-                        if(is_auto_refresh){
-                            setTimeout(function () {
-                                f_getIndex(is_auto_refresh);
-                            }, 3000);
-                        }
+                            f_show_pageData(res.pageData)
+                       }
                    }else{
-
                         myAlert(res.msg,"error");
                    }
                }
             });
 
     }
-    function f_postAddAllControl() {
-                //全部执行布控
+    function f_postHandleAllControl(handle) {
+        //执行全部布控 或 取消全部布控
         ele_top_loading.show();
         $.ajax({
-               url: '/control/postAddAllControl',
+               url: '/control/postHandleAllControl',
                type: "post",
                async: true,
-               data: {"batch_state":10},
+               data: {"handle":handle,"batch_state":10},
                dataType: "json",
                timeout: 0,
                error: function () {
@@ -384,7 +497,7 @@
                     if(1000 === res.code){
                         myAlert(res.msg,"success",1000);
                         setTimeout(function () {
-                            f_getIndex(false);
+                            f_getIndex(temp_cur_page,temp_cur_page_size);
                         }, 1000);
                    }else{
                         myAlert(res.msg,"error");
@@ -451,8 +564,11 @@
            }
         });
     }
+    function f_reload() {
+        f_getIndex(temp_cur_page,temp_cur_page_size);
+    }
     window.onload = function (){
-        f_getIndex(false);
+        f_getIndex(temp_cur_page,temp_cur_page_size);
     };
 
 

@@ -1,0 +1,140 @@
+{% extends "app/base_site.html" %}
+{% block title %} {% if  "add" == handle %}添加{% else %}编辑{% endif %}摄像头 {% endblock title %}
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="">
+
+     <div class="row">
+         <!--add start-->
+                 <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+                <h2>{% if  "add" == handle %}添加{% else %}编辑{% endif %}摄像头 <span id="top_msg">{{top_msg}}</span></h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <br>
+              <form class="form-horizontal form-label-left"  method="post" enctype="multipart/form-data" data-parsley-validate  >
+
+                     <input type="hidden" name="handle"  value="{{ handle }}">
+                     <input type="hidden" name="code"  value="{{ obj.code }}">
+                     <input type="hidden" name="app"  value="{{ obj.app }}">
+                     <input type="hidden" name="name"  value="{{ obj.name }}">
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">系统生成编号 </label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+                     <input type="text"  value="{{ obj.code }}" class="form-control" disabled="disabled">
+                  </div>
+                </div>
+                                 <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">ws-fmp4</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                     <input type="text" name="rtspUrl" value="{{ obj.wsMp4Url }}" readonly class="form-control">
+                   </div>
+                </div>
+
+                                    <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">http-fmp4</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                     <input type="text" name="httpMp4Url" value="{{ obj.httpMp4Url }}" readonly class="form-control">
+                   </div>
+                </div>
+
+                                 <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">rtsp</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                     <input type="text" name="rtspUrl" value="{{ obj.rtspUrl }}" readonly class="form-control">
+                   </div>
+                </div>
+
+
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">hls</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                     <input type="text" name="hlsUrl" value="{{ obj.hlsUrl }}" readonly class="form-control">
+                   </div>
+                </div>
+
+
+                  <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头视频流地址(rtsp)<span class="required">*</span>
+                      </label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea name="pull_stream_url" class="form-control" rows="4" placeholder="请输入摄像头视频流地址（rtsp）">{{ obj.pull_stream_url }}</textarea>
+                      </div>
+                </div>
+
+               <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头名称<span class="required">*</span>
+                      </label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea name="nickname" class="form-control" rows="3" placeholder="请输入摄像头名称">{{ obj.nickname }}</textarea>
+                      </div>
+                </div>
+
+
+                 <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">备注
+                      </label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea name="remark" class="form-control" rows="3" placeholder="请输入摄像头备注">{{ obj.remark }}</textarea>
+                      </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                    <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">取消</button>
+                    <button type="submit" class="btn btn-success">提交</button>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+     <!-- add end -->
+
+        </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+<script>
+
+let handle = "{{ handle }}";
+let obj_code = "{{ obj.code }}";
+let ele_textarea_pullStreamUrl= $("textarea[name='pull_stream_url']");
+let ele_textarea_nickname= $("textarea[name='nickname']");
+
+$(document).ready(function () {
+   $("form").submit(function () {
+       let pullStreamUrl = ele_textarea_pullStreamUrl.val().trim();
+        if(pullStreamUrl === ""){
+            myAlert("请输入摄像头视频流地址！","error");
+            return false;
+        }
+        if(!pullStreamUrl.startsWith("rtsp")){
+            myAlert("摄像头视频流地址格式不正确！","error");
+            return false;
+        }
+
+        if(ele_textarea_nickname.val().trim() === ""){
+            myAlert("请输入摄像头名称！","error");
+            return false;
+        }
+
+
+   });
+});
+
+</script>
+
+{% endblock javascripts %}

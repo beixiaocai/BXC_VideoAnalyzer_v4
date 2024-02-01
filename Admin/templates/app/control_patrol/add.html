@@ -119,22 +119,22 @@ $(document).ready(function () {
             return false;
         }
 
-        let control_codes_array = ele_select_control_codes.val();//typeof object, array
-        if(control_codes_array===null){
-            myAlert("请选择至少1个布控","error");
+        let temp1 = ele_select_control_codes.val();//typeof object, array
+        if(temp1===null){
+            myAlert("请至少选择1个布控","error");
             return false;
         }else{
-            let control_codes_array_temp = [];
-            for (let i = 0; i < control_codes_array.length; i++) {
-                if("0"!==control_codes_array[i]){
-                    control_codes_array_temp.push(control_codes_array[i]);
+            let temp2 = [];
+            for (let i = 0; i < temp1.length; i++) {
+                if("0"!==temp1[i]){
+                    temp2.push(temp1[i]);
                 }
             }
-            if(control_codes_array_temp.length > 0){
-                let control_codes = control_codes_array_temp.join(",");
+            if(temp2.length > 0){
+                let control_codes = temp2.join(",");
                 ele_input_control_codes.val(control_codes);
             }else{
-                myAlert("请选择至少1个布控","error");
+                myAlert("请至少选择1个布控","error");
                 return false;
             }
         }
