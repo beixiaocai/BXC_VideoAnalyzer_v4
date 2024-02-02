@@ -48,18 +48,17 @@
                         <td>
 
                             {% if d.request_server_type == 0 %}
-                                <span class="sun-state-error">不上传</span>
+                                 <span style="font-size: 20px;font-weight: 500;line-height: 40px;margin-left: 20px;">不上传</span>
                             {% elif d.request_server_type == 1 %}
-                               <span class="sun-state-success">上传http</span>
+                               <span style="font-size: 25px;font-weight: 500;line-height: 40px;margin-left: 20px;">HTTP</span>
                             {% elif d.request_server_type == 2 %}
-                                <span class="sun-state-success">上传redis</span>
+                               <img style="width: 100px;height: 53px;" src="/static/images/db_redis.png">
                             {% elif d.request_server_type == 3 %}
-                                <span class="sun-state-success">上传kafka</span>
+                                <img style="width: 100px;height: 52px;" src="/static/images/db_kafka.png">
                             {% elif d.request_server_type == 4 %}
-                                <span class="sun-state-success">上传mongodb</span>
-
+                               <img style="width: 100px;height: 53px;" src="/static/images/db_mongo.png">
                             {% else %}
-                                  <span class="sun-state-error">未定义状态</span>
+                                  未定义状态
                             {% endif %}
                         </td>
                         <td>{{ d.alarm_delay }}</td>

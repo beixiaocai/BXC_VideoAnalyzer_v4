@@ -113,7 +113,7 @@
           <div class="x_panel">
 
            <div>
-            <form class="form-horizontal form-label-left">
+            <form class="form-horizontal form-label-left" onsubmit="return false;">
                 <div class="form-group">
                   <div style="margin-left: 5px;"  class="col-md-3 col-sm-3 col-xs-12">
                     <select id="select_stream" class="select2_group form-control">
@@ -147,7 +147,7 @@
                   <button type="button" class="btn btn-success btn-sm" onclick="f_clickPlayStart()">播放</button>
                   <button type="button" class="btn btn-default btn-sm" onclick="f_clickPlayStop()">停止</button>
 
-                       <button type="button"  style="margin-left: 10px;" class="btn btn-primary btn-sm" onclick="f_createGridVideoContainer(1)">单屏</button>
+                       <button style="margin-left:10px;" type="button"  class="btn btn-primary btn-sm" onclick="f_createGridVideoContainer(1)">单屏</button>
                       <button type="button"  class="btn btn-primary btn-sm" onclick="f_createGridVideoContainer(4)">4分屏</button>
                       <button type="button"  class="btn btn-primary btn-sm" onclick="f_createGridVideoContainer(9)">9分屏</button>
                       <button type="button"  class="btn btn-primary btn-sm" onclick="f_createGridVideoContainer(16)">16分屏</button>
@@ -230,9 +230,37 @@
         }
 
     }
+    function f_rePlay(video_id){
+        let player = mSelectedVideoPlayerMap.get(video_id);
+        if(typeof player === "undefined" || player === "undefined"){
+            console.log("播放器已经停止播放");
+        }else{
+            let video_url = player.wsUrl;
+            let index = video_url.search("/transcode_");
+            if(index !== -1){
+                //存在转码的播放地址
+                console.log("重启播放器",typeof player,player,video_url);
+                player.close();
+                player = null;
+                player = new wsPlayer(video_id, video_url);
+                player.open();
+            }
+
+        }
+    }
 
     function f_createVideoId(index) {
         return "video" + mSelectedGridVideoCount.toString() + "_" + index.toString();
+    }
+    function f_reload() {
+        console.log("f_reload()",mSelectedVideoPlayerMap.keys())
+        for (let video_id of mSelectedVideoPlayerMap.keys()){
+            //f_rePlay(video_id);
+        }
+
+        setTimeout(function () {
+            f_reload();
+            }, 6000);
     }
     function f_createGridVideoContainer(gridVideoCount) {
         mSelectedGridVideoCount = gridVideoCount;
@@ -375,6 +403,7 @@
     }
     $(function() {
         f_createGridVideoContainer(9);
+        //f_reload();
     });
 
 
