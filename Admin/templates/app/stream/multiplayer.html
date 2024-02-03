@@ -112,7 +112,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="x_panel">
 
-           <div>
+        <div class="x_title">
             <form class="form-horizontal form-label-left" onsubmit="return false;">
                 <div class="form-group">
                   <div style="margin-left: 5px;"  class="col-md-3 col-sm-3 col-xs-12">
@@ -194,41 +194,43 @@
 
     function f_playStart(video_id,video_url){
         console.log("f_playStart() ",video_id,video_url);
-        let player = mSelectedVideoPlayerMap.get(video_id);
-        if(typeof player === "undefined" || player === "undefined"){
-            console.log("首次创建播放器",typeof player,player);
-            player = new wsPlayer(video_id, video_url);
-            player.open();
-            mSelectedVideoPlayerMap.set(video_id,player);
-        }else{
-            console.log("已经存在播放器，先销毁再创建",typeof player,player);
-            player.close();
-            player = new wsPlayer(video_id, video_url);
-            player.open();
-            mSelectedVideoPlayerMap.set(video_id,player);
+        try {
+            let player = mSelectedVideoPlayerMap.get(video_id);
+            if(typeof player === "undefined" || player === "undefined"){
+                //首次创建播放器
+                player = new wsPlayer(video_id, video_url);
+                player.open();
+                mSelectedVideoPlayerMap.set(video_id,player);
+            }else{
+                //已经存在播放器，先销毁再创建
+                player.close();
+                player = new wsPlayer(video_id, video_url);
+                player.open();
+                mSelectedVideoPlayerMap.set(video_id,player);
+            }
+        }catch (e) {
+            console.log("f_playStart() error:",e);
         }
+
     }
     function f_playStop(video_id){
         console.log("f_playStop() ",video_id);
-        let player = mSelectedVideoPlayerMap.get(video_id);
-        if(typeof player === "undefined" || player === "undefined"){
-            console.log("播放器已经停止播放");
-        }else{
-            console.log("停止播放成功",typeof player,player);
-            mSelectedVideoPlayerMap.delete(video_id);
-            player.close();
-            player = null;
-
-            if(mSelectedVideoJsObj){
-                try {
+        try {
+            let player = mSelectedVideoPlayerMap.get(video_id);
+            if(typeof player === "undefined" || player === "undefined"){
+                //播放器已经停止播放
+            }else{
+                //播放器停止播放成功
+                mSelectedVideoPlayerMap.delete(video_id);
+                player.close();
+                player = null;
+                if(mSelectedVideoJsObj){
                     mSelectedVideoJsObj.load();
-                }catch (e) {
-                    console.log("mSelectedVideoJsObj.load err:",e);
                 }
-
             }
+        }catch (e) {
+            console.log("f_playStop() error:",e);
         }
-
     }
     function f_rePlay(video_id){
         let player = mSelectedVideoPlayerMap.get(video_id);
@@ -251,16 +253,6 @@
 
     function f_createVideoId(index) {
         return "video" + mSelectedGridVideoCount.toString() + "_" + index.toString();
-    }
-    function f_reload() {
-        console.log("f_reload()",mSelectedVideoPlayerMap.keys())
-        for (let video_id of mSelectedVideoPlayerMap.keys()){
-            //f_rePlay(video_id);
-        }
-
-        setTimeout(function () {
-            f_reload();
-            }, 6000);
     }
     function f_createGridVideoContainer(gridVideoCount) {
         mSelectedGridVideoCount = gridVideoCount;
@@ -403,7 +395,6 @@
     }
     $(function() {
         f_createGridVideoContainer(9);
-        //f_reload();
     });
 
 
