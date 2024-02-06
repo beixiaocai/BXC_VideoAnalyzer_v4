@@ -1,6 +1,6 @@
 ### 视频行为分析系统v4
 * 作者：北小菜 
-* 个人网站：http://www.any12345.com
+* 官网：http://www.beixiaocai.com
 * 邮箱：bilibili_bxc@126.com
 * QQ：1402990689
 * 微信：bilibili_bxc
@@ -9,9 +9,7 @@
 * github安装包下载地址：https://github.com/any12345com/BXC_VideoAnalyzer_v4
 
 ### 软件介绍
-* 基于视频行为分析系统v4系列软件，可以在不用考虑音视频开发，编解码开发，界面开发等情况下，
-只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服，
-疲劳检测，交通拥堵等等。
+* 基于C++开发的视频行为分析系统v4系统，可以在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等。
 
 
 ### 使用说明
@@ -25,7 +23,7 @@
 * [布控参数使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控参数)
 * [版本历史](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4)
 
-### 如需TensorRT版本请注意
+### TensorRT版本请注意
 * （1）Windows版支持TensorRT+OpenVINO的分析器，请下载对应版本 Analyzer+library 替换到软件的Analyzer模块 网盘链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220
 * （2）软件依赖库内置CUDA库版本是12.0，所以想要运行CUDA12.0，英伟达显卡驱动必须满足最低驱动版本要求，否则无法运行
 * （3）CUDA版本与英伟达显卡驱动版本关系表：[查看版本关系表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html)
@@ -33,6 +31,13 @@
 
 
 # 版本历史
+#### v4.37
+* 发布时间 2024.02.06
+* （1）修复报警视频合成缓存清理bug
+* （2）修复启动器控制bug
+* （3）优化启动器调度性能
+* （4）修复视频转码bug
+
 #### v4.36
 * 发布时间 2024.02.03
 * （1）完善布控轮巡功能
