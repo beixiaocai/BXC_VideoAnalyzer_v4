@@ -31,6 +31,12 @@
 
 
 # 版本历史
+
+#### v4.38
+* 发布时间 2024.02.07
+* （1）算法推理引擎支持 TensorRT-yolo5，TensorRT-yolo8，OpenVINO-yolo5，OpenVINO-yolo8，OpenVINO-ResNet34
+* （2）openvino版本升级
+
 #### v4.37
 * 发布时间 2024.02.06
 * （1）修复报警视频合成缓存清理bug
