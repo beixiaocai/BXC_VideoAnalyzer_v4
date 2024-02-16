@@ -130,9 +130,22 @@
               </div>
                 </div>
 
+          <div class="form-group way_code_MODEL">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型最大并发数 <span class="required">*</span></label>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="number" name="max_concurrency" value="{{ algorithm.max_concurrency }}"  class="form-control">
+                  </div>
+                </div>
+
+          <div class="form-group way_code_MODEL">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型并发单位长度 <span class="required">*</span></label>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="number" name="concurrency_unit_length" value="{{ algorithm.concurrency_unit_length }}"  class="form-control">
+                  </div>
+                </div>
 
             <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型扩展参数 <span class="required">*</span> <i class="bxc_introduce fa fa-info-circle" title="模型扩展参数是模型运行时的一些参数"></i></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型扩展参数 <span class="required">*</span></label>
                     <div class="col-md-3 col-sm-3 col-xs-12">
                     <textarea name="extend_params" class="form-control" rows="2" placeholder="">{{ algorithm.extend_params }}</textarea>
                   </div>
