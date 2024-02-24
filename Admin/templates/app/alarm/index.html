@@ -116,6 +116,8 @@
                 <button style="margin-left:5px;" onclick="f_handle('read')" class="btn btn-primary btn-sm"><i class="fa fa-book"></i> 已读</button>
                 <button onclick="f_handle('delete')" class="btn btn-primary btn-sm"><i class="fa fa-remove"></i> 删除</button>
                 <button id="top_open_audio" class="btn btn-primary btn-sm"><i class="fa fa-bell-slash-o"></i> 启动报警声音</button>
+                <button onclick="f_handle('allDelete')" class="btn btn-default btn-sm"><i class="fa fa-remove"></i> 全部删除</button>
+                <button onclick="f_handle('clear')" class="btn btn-default btn-sm"><i class="fa fa-remove"></i> 清理报警缓存</button>
 
                 <audio id="top_audio"  controls loop style="display: block;float: right; position: relative;height: 34px; "  >
                     浏览器不支持音频播放
@@ -262,13 +264,14 @@
         let url = "/alarm/show?code="+code;
         window.open(url)
     }
-    function f_postHandle(handle,alarm_ids_str){
-          ele_top_loading.show();
+
+    function f_postHandle(handle,alarm_ids_str,is_after_reload=true){
+        ele_top_loading.show();
         $.ajax({
             url: '/alarm/postHandle',
             type: "post",
             async: true,
-            data: {"alarm_ids_str":alarm_ids_str,"handle":handle},
+            data: {"handle":handle,"alarm_ids_str":alarm_ids_str},
             dataType: "json",
             timeout: 0,
             error: function () {
@@ -278,30 +281,39 @@
             success: function (res) {
                    ele_top_loading.hide();
                 if(1000===res.code){
-                    eleCheckAll.prop("checked", false);
-                    myAlert(res.msg,"success",1000);
-                    setTimeout(function () {
-                        f_getIndex(temp_cur_page,temp_cur_page_size);
-                     }, 1000);
+                    if(is_after_reload){
+                        myAlert(res.msg,"success",1000);
+                        eleCheckAll.prop("checked", false);
+                        setTimeout(function () {
+                            f_getIndex(temp_cur_page,temp_cur_page_size);
+                         }, 1000);
+                    }else{
+                        myAlert(res.msg,"success");
+                    }
                 }else{
                     myAlert(res.msg,"error");
                 }
             }
         });
     }
+
     function f_handle(handle_type){
         if('clear' === handle_type){
-             f_postHandle(handle_type,"");
-        }else{
-            alarm_ids_str = __f_get_alarm_ids_str();
+             f_postHandle(handle_type,"",false);//清理文件换成
+        }else if("allDelete" === handle_type){
+             f_postHandle(handle_type,"",true);//全部逻辑删除
+        }
+        else if('read' === handle_type || 'delete' === handle_type){//已读处理 或 逻辑删除处理
+            let alarm_ids_str = __f_get_alarm_ids_str();
             if(""===alarm_ids_str){
                 myAlert("请至少选中一条数据","error");
             }else{
-                f_postHandle(handle_type,alarm_ids_str);
+                f_postHandle(handle_type,alarm_ids_str,true);
             }
         }
-
     }
+
+
     function f_getCheckNewData() {
         setTimeout(function () {
             __f_getCheckNewDataTimeout();

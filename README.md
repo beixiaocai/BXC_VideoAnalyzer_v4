@@ -17,10 +17,10 @@
 * [Ubuntu版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Ubuntu版本)
 * [FFmpeg推流模拟摄像头使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/FFmpeg推流模拟摄像头)
 * [支持哪些硬件使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/支持哪些硬件)
-* [二次开发算法使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发算法)
-* [二次开发报警接口使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发报警接口)
-* [启动配置使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
-* [布控参数使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控参数)
+* [二次开发算法](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发算法/二次开发算法)
+* [二次开发报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发报警接口/二次开发报警接口)
+* [启动配置](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
+* [布控扩展参数](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控扩展参数)
 * [版本历史](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4)
 
 ### TensorRT版本请注意
@@ -31,6 +31,10 @@
 
 
 # 版本历史
+### v4.393
+* 发布时间 2024.02.24
+* （1）扩展算法检测模式，在原有自由竞争模式的基础上，扩展支持可配置间隔帧检测，扩展支持可配置间隔秒检测
+* （2）修复二次开发报警接口测试功能
 
 ### v4.392
 * 发布时间 2024.02.21

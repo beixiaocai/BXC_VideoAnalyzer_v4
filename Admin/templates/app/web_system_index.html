@@ -41,7 +41,6 @@
 
                 <div class="ln_solid"></div>
 
-                <button onclick="f_clearAlarmFileCache()" class="btn btn-default btn-sm"><i class="fa fa-remove"></i> 清理报警缓存</button>
 
               </div>
           </div>
@@ -150,31 +149,6 @@
                }
             });
 
-    }
-
-
-    function f_clearAlarmFileCache(){
-          ele_top_loading.show();
-        $.ajax({
-            url: '/alarm/postHandle',
-            type: "post",
-            async: true,
-            data: {"handle":"clear","alarm_ids_str":""},
-            dataType: "json",
-            timeout: 0,
-            error: function () {
-                   ele_top_loading.hide();
-                myAlert("网络异常，请确定网络正常！", "error");
-            },
-            success: function (res) {
-                   ele_top_loading.hide();
-                if(1000===res.code){
-                    myAlert(res.msg,"success");
-                }else{
-                    myAlert(res.msg,"error");
-                }
-            }
-        });
     }
 
     window.onload = function (){
