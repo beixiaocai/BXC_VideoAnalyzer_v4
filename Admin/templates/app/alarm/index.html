@@ -357,19 +357,19 @@
 
                     //弹窗显示报警数据start
                     let alarm = info["alarm"];
-                    let image_path_array = info["image_path_array"];
-                    let image_path_array_len = image_path_array.length;
+                    let imageUrlArray = info["imageUrlArray"];
+                    let imageUrlArrayLen = imageUrlArray.length;
 
                     temp_cur_alarm_count +=1;
-                    temp_cur_alarm_image_count += image_path_array_len;
+                    temp_cur_alarm_image_count += imageUrlArrayLen;
 
-                    let show_len = image_path_array_len;
+                    let show_len = imageUrlArrayLen;
                     if(show_len > 5){
                         show_len = 5;
                     }
                     let content_list_html="";
                     for (let i = 0; i < show_len; i++) {
-                        content_list_html+="<div class=\"content_item\"><img src=\""+image_path_array[i]+"\"></div>";
+                        content_list_html+="<div class=\"content_item\"><img src=\""+imageUrlArray[i]+"\"></div>";
                     }
                     content_list_html+="<div class=\"content_item\"><span style='margin-left:1px;'>共"+temp_cur_alarm_image_count+"张</span></div>"
 
@@ -459,17 +459,19 @@
                             for (let i = 0; i < data_length; i++) {
                                let d = data[i];
                                let video_count = d["video_count"];
+                               let imageUrl = d["imageUrl"];
 
-                             html += "<div class=\"col-md-55\">";
+                                html += "<div class=\"col-md-55\">";
                                 html += "<div class=\"alarm_item\">";
 
                                   html += "<div class=\"image view view-first\">";
-                                  if(video_count > 0){
-                                      html += "<video controls muted loop preload=\"none\" style=\"height: 150px; display: block;\" poster=\""+d["imageUrl"]+"\" src=\""+d["videoUrl"]+"\" ></video>";
-                                  }else{
-                                      html += "<img style=\"margin:auto;height: 150px; display: block;\" src=\""+d["imageUrl"]+"\" />";
-                                  }
-                                    html += "</div>";
+                                      if(video_count > 0){
+                                          html += "<video controls muted loop preload=\"none\" style=\"height: 150px; display: block;\" poster=\""+imageUrl+"\" src=\""+d["videoUrl"]+"\" ></video>";
+
+                                      }else{
+                                          html += "<img style=\"margin:auto;height: 150px; display: block;\" src=\""+imageUrl+"\" />";
+                                      }
+                                 html += "</div>";
 
                                  html += "<div class=\"alarm_item_bottom\">";
                                  let state = d["state"];

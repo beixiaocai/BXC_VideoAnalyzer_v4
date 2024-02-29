@@ -53,20 +53,28 @@
                         </div>
                       </div>
                     </div>
+     <!--展示视频start -->
+                <div class="attachment">
+                  <p>
+                    <span><i class="fa fa-paperclip"></i> {{ alarm.video_count }} video </span>
+                  </p>
   {% if alarm.video_count > 0 %}
                    <div style="margin: 10px 0;">
                        <video controls muted loop preload="none" style="width: 100%; display: block;"
                               poster="{{ alarm.imageUrl }}" src="{{ alarm.videoUrl }}" ></video>
                     </div>
     {% endif %}
+                </div>
+   <!--展示视频end -->
 
+                  <!--展示图片start -->
                     <div class="attachment">
                       <p>
                         <span><i class="fa fa-paperclip"></i> {{ alarm.image_count }} image </span>
                       </p>
                       <ul>
 
-                        {%  for imageUrl  in alarm.image_path_array %}
+                        {%  for imageUrl  in alarm.imageUrlArray %}
                             <li>
                               <a href="#" class="atch-thumb">
                                 <img style="width: 150px;height: 100%;" src="{{imageUrl}}" alt="img" />
@@ -84,6 +92,7 @@
                       </ul>
                     </div>
                   </div>
+                 <!--展示图片end -->
 
                 </div>
 

@@ -355,6 +355,13 @@
                       </div>
                     </div>
 
+                  <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">OSD
+                      </label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea rows="4" name="osd_params" class="form-control col-md-7 col-xs-12">{{ control.osd_params }}</textarea>
+                      </div>
+                </div>
 
                   <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">扩展参数
@@ -446,8 +453,9 @@
     let eleRadioAlarmDrawType = $('input[type=radio][name=alarm_draw_type]');//radio
     let alarmDrawType = $('input[type=radio][name=alarm_draw_type]:checked').val();
 
-    let eleTextarea_remark = $("textarea[name='remark']");
+    let eleTextarea_osd_params = $("textarea[name='osd_params']");
     let eleTextarea_extend_params = $("textarea[name='extend_params']");
+    let eleTextarea_remark = $("textarea[name='remark']");
 
 
     class MyPoint{
@@ -811,8 +819,10 @@
             return;
         }
          //触发报警行为的时间范围（单位秒）end
-        let remark = eleTextarea_remark.val().trim();
+
+        let osd_params = eleTextarea_osd_params.val().trim();
         let extend_params = eleTextarea_extend_params.val().trim();
+        let remark = eleTextarea_remark.val().trim();
 
         let __polygon_point_array = [];// x1,y1,x2,y2,x3,y3,x4,y4 ->顺时针
         if(recognitionRegionLineArray.length === 0){
@@ -861,6 +871,7 @@
             "alarmDrawType":alarmDrawType,
             "alarmImageCount":alarmImageCount,
             "alarmMonitorDuration":alarmMonitorDuration,
+            "osd_params":osd_params,
             "extend_params":extend_params,
             "remark":remark
         }
