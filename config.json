@@ -7,6 +7,7 @@
   "mediaRtspPort": 9554,
   "mediaSecret": "aqxY9ps21fyhyKNRyYpGvJCTp1JBeGOM",
   "mediaRootDir": "MediaServer/www",
+  "fontPath": "Analyzer\\tsimhei.ttf",
   "uploadDir": "Admin\\static\\upload",
   "autoAddAllForward": true,
   "autoManagePatrolForward": false,
