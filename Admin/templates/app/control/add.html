@@ -70,6 +70,7 @@
           <div class="x_panel">
             <div class="x_title">
               <h2>{% if  "add" == handle %}添加{% else %}编辑{% endif %}布控</h2>
+             <button style="margin-left:10px;margin-top: 4px;" onclick="f_docs()" class="btn btn-primary btn-xs"><i class="fa fa-book"></i> 文档</button>
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -988,6 +989,10 @@
         }, 1200);
 
     });
+
+    function f_docs() {
+    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控参数/布控基本参数");
+}
 </script>
 
 {% endblock javascripts %}

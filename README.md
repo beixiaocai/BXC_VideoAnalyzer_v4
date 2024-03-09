@@ -13,17 +13,19 @@
 
 
 ### 使用说明
-* [Windows版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本)
-* [Ubuntu版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Ubuntu版本)
-* [FFmpeg推流模拟摄像头使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/FFmpeg推流模拟摄像头)
-* [支持哪些硬件使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/支持哪些硬件)
-* [二次开发算法](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发算法/二次开发算法)
-* [二次开发报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发报警接口/二次开发报警接口)
 * [启动配置](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
-* [布控扩展参数](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控扩展参数)
-* [版本历史](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4)
+* [支持哪些硬件](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/支持哪些硬件)
+* [Windows版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows版本)
+* [Ubuntu版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本)
+* [FFmpeg推流模拟摄像头使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
+* [二次开发算法](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发算法/二次开发算法)
+* [测试算法](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发算法/测试算法工具)
+* [二次开发报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发报警接口/二次开发报警接口)
+* [布控基本参数](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控参数/布控基本参数)
+* [布控扩展参数](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控参数/布控扩展参数)
+* [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
 
-### TensorRT版本请注意
+### 使用TensorRT推理引擎的版本请注意
 * （1）Windows版支持TensorRT+OpenVINO的分析器，请下载对应版本 Analyzer+library 替换到软件的Analyzer模块 网盘链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220
 * （2）软件依赖库内置CUDA库版本是12.0，所以想要运行CUDA12.0，英伟达显卡驱动必须满足最低驱动版本要求，否则无法运行
 * （3）CUDA版本与英伟达显卡驱动版本关系表：[查看版本关系表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html)
