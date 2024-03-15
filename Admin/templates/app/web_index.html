@@ -546,15 +546,15 @@
                         for (let i = 0; i < data.length; i++) {
                             let d = data[i];
                             //Admin
-                           let name_en = d["name_en"];
-                           if("Admin" === name_en){
+                           let process_name = d["process_name"];
+                           if(process_name === "Admin"){
                                if(d["state"]===1){
                                     ele_videoAnalyzer_admin.html("<span class='sun-state-success'>"+d["spend_date_str"]+"</span>")
                                }else{
                                     ele_videoAnalyzer_admin.html("<span class='sun-state-error'>未启动</span>")
                                }
 
-                           }else if("MediaServer" === name_en){
+                           }else if(process_name === "MediaServer"){
 
                               if(d["state"]===1){
                                     ele_videoAnalyzer_mediaserver.html("<span class='sun-state-success'>"+d["spend_date_str"]+"</span>")
@@ -562,7 +562,7 @@
                                    ele_videoAnalyzer_mediaserver.html("<span class='sun-state-error'>未启动</span>")
                                }
 
-                           }else if("Analyzer" === name_en){
+                           }else if(process_name === "Analyzer"){
 
                               if(d["state"]===1){
                                     ele_videoAnalyzer_analyzer.html("<span class='sun-state-success'>"+d["spend_date_str"]+"</span>")

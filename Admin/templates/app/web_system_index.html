@@ -28,7 +28,8 @@
               <table class="table table-striped projects">
                 <thead>
                   <tr>
-                    <th>服务名称</th>
+                    <th>进程名称</th>
+                    <th>进程端口</th>
                     <th>启动时间</th>
                     <th>启动次数</th>
                     <th>状态</th>
@@ -58,13 +59,13 @@
     let eleData = $("#data");
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
-    function f_handle(app,handle){
+    function f_handle(name,port,handle){
         ele_top_loading.show();
         $.ajax({
                url: '/system/getHandle',
                type: "get",
                async: true,
-               data: {"app":app,"handle":handle},
+               data: {"name":name,"port":port,"handle":handle},
                dataType: "json",
                timeout: 0,
                error: function () {
@@ -114,28 +115,29 @@
                        let html = "";
 
                        if(0===data_length){
-                          html += "<tr class=\"even pointer\"><td colspan='5'>暂无数据</td></tr>";
+                          html += "<tr class=\"even pointer\"><td colspan='6'>暂无数据</td></tr>";
                        }else{
                             for (let i = 0; i < data_length; i++) {
                                let d = data[i];
 
                                html += "<tr class=\"even pointer\">";
                                html += "<td>"+d["name"]+"</td>";
+                               html += "<td>"+d["process_port"]+"</td>";
                                html += "<td>"+d["create_date_str"]+"</td>";
                                html += "<td>"+d["number"]+"</td>";
 
                                 if(d["state"]===1){ //在线
                                        html += "<td><span class=\"btn-success btn-xs\">运行中</span></td>";
-                                       if("Admin" === d["name_en"]) {
+                                       if("Admin" === d["process_name"]) {
                                             html += "<td></td>";
                                        }else{
-                                           html += "'<td><a class='sun-a-label'  href=\"javascript:f_handle('" + d["name_en"] + "','restart')\" ><i class=\"fa fa-hourglass-start\"></i> 重启</a>";
+                                           html += "'<td><a class='sun-a-label'  href=\"javascript:f_handle('" + d["process_name"] +"','"+d["process_port"]+ "','restart')\" ><i class=\"fa fa-hourglass-start\"></i> 重启</a>";
                                            html += "</td>";
                                        }
-                                       //html += "<a class='sun-a-label'  href=\"javascript:f_handle('"+d["name_en"]+"','stop')\" ><i class=\"fa fa-stop\"></i> 停止</a></td>";
+                                       //html += "<a class='sun-a-label'  href=\"javascript:f_handle('"+ d["process_name"] +"','"+d["process_port"]+"','stop')\" ><i class=\"fa fa-stop\"></i> 停止</a></td>";
                                 }else{
                                        html += "<td><span class=\"btn-danger btn-xs\">未运行</span></td>";
-                                       html += "<td><a class='sun-a-label'  href=\"javascript:f_handle('"+d["name_en"]+"','start')\"  ><i class=\"fa fa-hourglass-start\"></i> 启动</a></td>";
+                                       html += "<td><a class='sun-a-label'  href=\"javascript:f_handle('"+ d["process_name"] +"','"+d["process_port"]+"','start')\"  ><i class=\"fa fa-hourglass-start\"></i> 启动</a></td>";
                                 }
 
                                html += "</tr>";

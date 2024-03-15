@@ -1,10 +1,10 @@
 {
   "host": "127.0.0.1",
   "adminPort": 9001,
-  "analyzerPort": 9002,
-  "videoAnalyzerPort": 9004,
-  "mediaHttpPort": 9003,
+  "mediaHttpPort": 9002,
+  "analyzerPort": 9003,
   "mediaRtspPort": 9554,
+  "videoAnalyzerPort": 9555,
   "mediaSecret": "aqxY9ps21fyhyKNRyYpGvJCTp1JBeGOM",
   "mediaRootDir": "MediaServer/www",
   "fontPath": "Analyzer\\fonts\\tsimhei.ttf",
@@ -12,6 +12,10 @@
   "autoAddAllForward": true,
   "autoManagePatrolForward": false,
   "cacheModelMaxDuration": 120000,
-  "supportHardwareVideoDecode": false,
-  "supportHardwareVideoEncode": false
+  "enableHardwareDecode": true,
+  "hardwareDecodeMaxCount": 2,
+  "hardwareDecoder": "nvidia",
+  "enableHardwareEncode": false,
+  "hardwareEncodeMaxCount": 0,
+  "hardwareEncoder": "nvidia"
 }
