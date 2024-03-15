@@ -13,7 +13,7 @@
   "autoManagePatrolForward": false,
   "cacheModelMaxDuration": 120000,
   "enableHardwareDecode": true,
-  "hardwareDecodeMaxCount": 2,
+  "hardwareDecodeMaxCount": 1,
   "hardwareDecoder": "nvidia",
   "enableHardwareEncode": false,
   "hardwareEncodeMaxCount": 0,
