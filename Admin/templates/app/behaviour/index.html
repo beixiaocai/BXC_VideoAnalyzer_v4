@@ -32,6 +32,7 @@
                     <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
                     <span id="top_msg">{{top_msg}}</span>
                </h2>
+                             <button style="margin-left:10px;margin-top: 4px;" onclick="f_docs()" class="btn btn-primary btn-xs"><i class="fa fa-book"></i> 文档</button>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
@@ -43,11 +44,11 @@
                     <thead>
                       <tr class="headings">
                         <th class="column-title">ID</th>
-                        <th class="column-title">算法编号</th>
-                        <th class="column-title">算法名称</th>
+                        <th class="column-title">编号</th>
+                        <th class="column-title">名称</th>
                         <th class="column-title">接入方式</th>
                         <th class="column-title">接入参数</th>
-                        <th class="column-title">更新时间</th>
+                        <th class="column-title">时间</th>
                           <th class="column-title no-link last"><span class="nobr">操作</span></th>
                       </tr>
                     </thead>
@@ -134,6 +135,9 @@
                }
             });
 
+    }
+    function f_docs() {
+        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理");
     }
     function f_edit(code) {
         let url = "/behaviour/edit?code="+code;

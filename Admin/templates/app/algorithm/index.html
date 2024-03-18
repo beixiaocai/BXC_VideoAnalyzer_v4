@@ -32,6 +32,7 @@
                     <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
                     <span id="top_msg">{{top_msg}}</span>
                </h2>
+                               <button style="margin-left:10px;margin-top: 4px;" onclick="f_docs()" class="btn btn-primary btn-xs"><i class="fa fa-book"></i> 文档</button>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
@@ -43,13 +44,13 @@
                     <thead>
                       <tr class="headings">
                         <th class="column-title">ID</th>
-                        <th class="column-title">算法编号</th>
-                        <th class="column-title">算法名称</th>
-
+                        <th class="column-title">编号</th>
+                        <th class="column-title">名称</th>
                         <th class="column-title">接入方式</th>
-                          <th class="column-title">接入参数</th>
-                          <th class="column-title">模型并发</th>
-                        <th class="column-title">更新时间</th>
+                          <th class="column-title">算法类型</th>
+                          <th class="column-title">算法框架</th>
+                          <th class="column-title">推理引擎</th>
+                        <th class="column-title">时间</th>
                           <th class="column-title no-link last"><span class="nobr">操作</span></th>
                       </tr>
                     </thead>
@@ -62,14 +63,9 @@
                              <td>{{ d.name }}</td>
 
                         <td>{{ d.way_code }}</td>
-                      <td>
-                          {% if "MODEL" == d.way_code %}
-                              {{ d.inference }}/{{ d.inference_device }} {{ d.model_name }}
-                          {% else %}
-                              {{ d.way_value }}
-                          {% endif %}
-                          </td>
-                          <td>{{ d.max_concurrency }} / {{ d.concurrency_unit_length }}</td>
+                        <td>{{ d.algorithm_type }}</td>
+                        <td>{{ d.framework }}</td>
+                        <td>{{ d.inference }}</td>
                           <td>{{ d.last_update_time }}</td>
                         <td>
                             <a href="javascript:f_edit('{{ d.code }}')"  class='sun-a-label' style='margin-right: 8px;' ><i class="fa fa-edit"></i>编辑</a>
@@ -155,6 +151,9 @@
                }
             });
 
+    }
+    function f_docs() {
+        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理");
     }
     function f_edit(code) {
         let url = "/algorithm/edit?code="+code;

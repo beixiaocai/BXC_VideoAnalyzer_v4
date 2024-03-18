@@ -1,0 +1,388 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} {% if  "add" == handle %}添加{% else %}编辑{% endif %}算法 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+
+{% endblock stylesheets %}
+{% block content %}
+
+<script>
+    let modeDict = {};//模式字典
+    let modeId;//模式ID
+
+    let algorithmDetectDict = {};//基础检测算法字典
+    let algorithmDetectCode;//基础检测算法编号
+
+    let behaviourDict = {}; //行为算法字典
+    let behaviourCode;
+
+</script>
+
+  <div class="right_col" role="main">
+    <div class="">
+
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>{% if  "add" == handle %}添加{% else %}编辑{% endif %}算法</h2>
+             <button style="margin-left:10px;margin-top: 4px;" onclick="f_docs()" class="btn btn-primary btn-xs"><i class="fa fa-book"></i> 文档</button>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                  <div class="form-horizontal form-label-left">
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">算法编号</label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                              <span style="height: 34px;line-height: 34px;padding: 6px 0;">{{ flow.code }}</span>
+                          </div>
+                        </div>
+
+                              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">算法名称 <span class="required">*</span></label>
+              <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="text" name="name" value="{{ flow.name }}" required="required"  class="form-control">
+                  </div>
+                </div>
+
+                    <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择模式
+                          </label>
+
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+
+                            <select id="select_mode"  class="select2_single form-control" required="required" >
+                                <option value="0">请选择模式</option>
+                                {% for mode in modes %}
+                                   <script>
+                                        modeID = '{{ mode.id }}';
+                                        modeDict[modeID] = {
+                                            "id":modeID,
+                                            "name":'{{ mode.name }}',
+                                            "code":'{{ mode.code }}'
+                                        }
+
+                                    </script>
+                                        <option {% if mode.state == 0 %} disabled {% endif %} {% if mode.id == flow.mode %} selected {% endif %} value="{{ mode.id }}">
+                                            {{ mode.name }}{% if mode.state == 0 %}（暂不支持）{% endif %}
+                                        </option>
+
+                                {% endfor %}
+                            </select>
+
+                          </div>
+                    </div>
+
+
+                    <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择基础检测算法
+                          </label>
+
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+
+                            <select id="select_algorithm_detect"  class="select2_single form-control" required="required" >
+                                <option value="0">请选择基础算法</option>
+                                {% for algorithm in algorithm_detect_data %}
+                                   <script>
+                                        algorithmDetectCode = '{{ algorithm.code }}';
+                                        algorithmDetectDict[algorithmDetectCode] = {
+                                            "code":algorithmDetectCode,
+                                            "name":'{{ algorithm.name }}',
+                                            "way_code":'{{ algorithm.way_code }}',
+                                            "model_class_names":'{{ algorithm.model_class_names }}'
+                                        }
+
+                                    </script>
+
+                                    {% if algorithm.way_code == "MODEL" %}
+                                        <option {% if algorithm.code == flow.algorithm_detect_code %} selected {% endif %} value="{{ algorithm.code }}">
+                                            {{ algorithm.name }}（{{ algorithm.way_code }}/{{ algorithm.inference }}/{{ algorithm.inference_device }}）
+                                        </option>
+                                    {% else %}
+                                        <option {% if algorithm.code == flow.algorithm_detect_code %} selected {% endif %} value="{{ algorithm.code }}">
+                                            {{ algorithm.name }}（{{ algorithm.way_code }}）
+                                        </option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+                          </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测目标</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select id="select_detect_class_name"  class="select2_multiple form-control" required="required"  multiple="multiple" >
+                            <option value="0">---请选择检测目标(可多选)---</option>
+                        </select>
+                      </div>
+                    </div>
+
+                   <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择行为算法</label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select id="select_behaviour"  class="select2_single form-control" required="required" >
+                                <option value="0">请选择行为算法</option>
+
+                                {% for behaviour in behaviours %}
+                                   <script>
+                                        behaviourCode = '{{ behaviour.code }}';
+                                        behaviourDict[behaviourCode] = {
+                                            "code":behaviourCode,
+                                            "name":'{{ behaviour.name }}'
+                                        }
+                                    </script>
+
+                                    <option {% if behaviour.code == flow.behaviour_code %} selected {% endif %} value="{{ behaviour.code }}">
+                                        {{ behaviour.name }}（{{ behaviour.way_code }}）
+                                    </option>
+                                {% endfor %}
+
+                            </select>
+                          </div>
+                        </div>
+
+          <div class="form-group way_code_MODEL">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">最大实例数 <span class="required">*</span></label>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="number" name="max_concurrency" value="{{ flow.max_concurrency }}"  class="form-control">
+                  </div>
+                </div>
+
+          <div class="form-group way_code_MODEL">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">实例增长单位 <span class="required">*</span></label>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="number" name="concurrency_unit_length" value="{{ flow.concurrency_unit_length }}"  class="form-control">
+                  </div>
+                </div>
+
+            <!--
+                  <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">扩展参数
+                      </label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea rows="3" name="extend_params" class="form-control col-md-7 col-xs-12">{{ flow.extend_params }}</textarea>
+
+                      </div>
+                </div>
+
+               <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">备注
+                      </label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea required="required" name="remark" class="form-control col-md-7 col-xs-12">{{ flow.remark }}</textarea>
+
+                      </div>
+                </div>
+                -->
+
+                  <div class="ln_solid"></div>
+
+                    <div class="form-group">
+                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">取消</button>
+                        <button type="button" onclick="f_handle()" class="btn btn-success">提交</button>
+                      </div>
+                    </div>
+
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+<script>
+
+    let flow_code= '{{ flow.code }}';// 布控编号
+    let old_flow_algorithm_detect_code = '{{ flow.algorithm_detect_code }}';// 布控原始基础算法编号
+    let old_flow_detect_class_names = '{{ flow.detect_class_names }}';// 布控原始检测目标
+    let handle = '{{ handle }}';// 操作类型 add 或 edit
+    let ele_input_name= $("input[name='name']");
+    let ele_input_max_concurrency= $("input[name='max_concurrency']");
+    let ele_input_concurrency_unit_length= $("input[name='concurrency_unit_length']");
+
+    let eleSelectFlow= $("#select_mode");// select 流程模式
+    let eleSelectAlgorithmDetect = $("#select_algorithm_detect");// select 基础检测算法
+    let curAlgorithmDetectWayCode = "";
+    let eleSelectDetectClassName = $("#select_detect_class_name");// select 基础检测算法目标
+
+    let eleSelectBehaviour = $("#select_behaviour");// select 行为算法
+    let eleTextarea_extend_params = $("textarea[name='extend_params']");//扩展参数
+    let eleTextarea_remark = $("textarea[name='remark']");
+
+    function f_showSettings(algorithm_code,selected_class_names) {
+
+        let html = "<option value=\"0\">---请选择检测目标(可多选)---</option>";
+
+        let algorithm = algorithmDetectDict[algorithm_code];
+        curAlgorithmDetectWayCode = algorithm["way_code"];
+
+        if(curAlgorithmDetectWayCode==="MODEL"){
+            //需要显示选择目标
+            eleSelectDetectClassName.removeAttr("disabled");
+            let model_class_names = algorithm["model_class_names"];
+            let model_class_names_array = model_class_names.split(",");
+            let selected_class_names_array = selected_class_names.split(",");
+            for (let i = 0; i < model_class_names_array.length; i++) {
+                let class_name = model_class_names_array[i];
+                let match = selected_class_names_array.indexOf(class_name);
+                if(match > -1){
+                    html += "<option selected value=\""+class_name+"\">"+class_name+"</option>";
+                }else{
+                    html += "<option value=\""+class_name+"\">"+class_name+"</option>";
+                }
+            }
+            //需要使用行为算法
+            eleSelectBehaviour.removeAttr("disabled");
+        }else if(curAlgorithmDetectWayCode==="API"){
+            //不需要显示选择目标
+            eleSelectDetectClassName.attr("disabled","disabled");
+            //不需要使用行为算法
+            eleSelectBehaviour.attr("disabled","disabled");
+            eleSelectBehaviour.val("0")
+
+        }else{
+            //预留
+
+        }
+
+        eleSelectDetectClassName.html(html);
+    }
+    eleSelectAlgorithmDetect.change(function () {
+        let code = $(this).val();
+        if(code === old_flow_algorithm_detect_code){
+             f_showSettings(code,old_flow_detect_class_names);
+        }else{
+             f_showSettings(code,"");
+        }
+
+    });
+
+    function f_handle() {
+        let name_s = ele_input_name.val().trim();
+        if(name_s === ""){
+            myAlert("请输入算法名称","error");
+            return false;
+         }
+        modeId = eleSelectFlow.val().trim();
+        if(modeId==="0" || modeId ===""){
+            myAlert("请选择模式","error");
+            return;
+        }
+        algorithmDetectCode = eleSelectAlgorithmDetect.val().trim();//typeof string
+        if(algorithmDetectCode==="0"){
+            myAlert("请选择基础检测算法","error");
+            return;
+        }
+        let detectClassNames_s = ""; //选择目标判断 person,dog,cat,,,
+        let behaviourCode_s = "";
+        if("MODEL" === curAlgorithmDetectWayCode){
+            //选择目标判断
+            let classNames_array = eleSelectDetectClassName.val();//typeof object, array
+            if(classNames_array===null){
+                myAlert("请至少选择1个目标","error");
+                return;
+            }else{
+                let classNames_array_temp = [];
+                for (let i = 0; i < classNames_array.length; i++) {
+                    if("0"!==classNames_array[i]){
+                        classNames_array_temp.push(classNames_array[i]);
+                    }
+                }
+                if(classNames_array_temp.length > 0){
+                    detectClassNames_s = classNames_array_temp.join(",");
+                }else{
+                    myAlert("请至少选择1个目标","error");
+                    return;
+                }
+            }
+            //行为算法判断
+            behaviourCode_s = eleSelectBehaviour.val().trim();//typeof string
+            if(behaviourCode_s==="0"){
+                myAlert("请选择行为算法","error");
+                return;
+            }
+        }else if("API" === curAlgorithmDetectWayCode){
+            //不需要选择目标&行为算法
+
+
+        }else{
+            //预留
+
+        }
+        let max_concurrency = parseInt(ele_input_max_concurrency.val());
+        let concurrency_unit_length = parseInt(ele_input_concurrency_unit_length.val());
+
+        let extend_params = eleTextarea_extend_params.val();
+        let remark = eleTextarea_remark.val();
+        if(extend_params===undefined){
+            extend_params = "";
+        }
+        if(remark===undefined){
+            remark = "";
+        }
+        let data = {
+            "handle":handle,
+            "name":name_s,
+            "mode":modeId,
+            "flow_code":flow_code,
+            "algorithm_detect_code":algorithmDetectCode,
+            "detect_class_names":detectClassNames_s,
+            "behaviour_code":behaviourCode_s,
+            "max_concurrency":max_concurrency,
+            "concurrency_unit_length":concurrency_unit_length,
+            "extend_params":extend_params,
+            "remark":remark
+        }
+
+        let handleUrl;
+        if("add" === handle){
+            handleUrl = "/algorithmFlow/add";
+        }else if("edit" === handle){
+            handleUrl = "/algorithmFlow/edit";
+        }else{
+            return;
+        }
+
+
+        $.ajax({
+           url: handleUrl,
+           type: "post",
+           async: true,
+           data: data,
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+                myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               if(1000 === res.code){
+                    myAlert(res.msg,"success");
+               }else{
+                    myAlert(res.msg,"error");
+               }
+           }
+        });
+
+    }
+
+    function f_docs() {
+        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/添加算法");
+    }
+    $(function() {
+        if(handle==="edit"){
+             f_showSettings(old_flow_algorithm_detect_code,old_flow_detect_class_names);
+        }
+    });
+</script>
+
+{% endblock javascripts %}

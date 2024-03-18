@@ -18,6 +18,8 @@
              <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
              <span id="top_msg">{{top_msg}}</span>
           </h2>
+                         <button style="margin-left:10px;margin-top: 4px;" onclick="f_docs()" class="btn btn-primary btn-xs"><i class="fa fa-book"></i> 文档</button>
+
             <button style="margin-left:10px;" onclick="f_reload()" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
             <button onclick="f_postHandleAllControl('add')" class="btn btn-primary btn-sm"><i class="fa fa-hand-o-right"></i> 执行全部布控</button>
             <button onclick="f_postHandleAllControl('cancel')" class="btn btn-dark btn-sm"><i class="fa fa-close"></i> 取消全部布控</button>
@@ -34,8 +36,8 @@
                 <tr class="headings">
                   <th class="column-title">ID </th>
                   <th class="column-title">视频流 </th>
-                  <th class="column-title">算法流 <i class="bxc_introduce fa fa-info-circle" title="算法流在布控时才能查看（布控需勾选推流选项）"></i></th>
-                  <th class="column-title">布控算法 </th>
+                  <th class="column-title">推流 <i class="bxc_introduce fa fa-info-circle" title="推流在布控执行时才能查看（布控需勾选推流选项）"></i></th>
+                  <th class="column-title">算法 </th>
                   <th class="column-title">计算频率 </th>
                   <th class="column-title">状态 </th>
                   <th class="column-title">时间 </th>
@@ -327,12 +329,8 @@
     function f_open_player(stream_app,stream_name){
         window.open("/stream/player?app="+stream_app+"&name="+stream_name);
     }
-    function f_open_algorithm(code) {
-        let url = "/algorithm/edit?code="+code;
-        window.open(url);
-    }
-    function f_open_behaviour(code) {
-        let url = "/behaviour/edit?code="+code;
+    function f_open_flow(code) {
+        let url = "/algorithmFlow/edit?code="+code;
         window.open(url);
     }
     function f_show_pageData(pageData) {
@@ -384,7 +382,7 @@
                        if(0===data_length){
                             item_html = "";
                             item_html += "<tr class=\"even pointer\">";
-                            item_html += "<td colspan='9'>暂无数据</td>";
+                            item_html += "<td colspan='8'>暂无数据</td>";
                             item_html += "</tr>";
                             eleData.append(item_html);
                        }else{
@@ -406,34 +404,15 @@
                                    item_html += "<td><span class='sun-state-error'>未开启推流</span></td>";
                                }else{
                                    item_html += "<td><a class='sun-a-label' style='font-size: 12px;' href=\"javascript:f_open_player('"+d["push_stream_app"]+"','"+d["push_stream_name"]+"')\" ><i class=\"fa fa-play\"></i> "+
-                                                "算法流"+"</a></td>";
+                                                "推流"+"</a></td>";
                                }
 
-                                if(0===d["algorithm_name"]){//基础算法已被删除
-                                    item_html += "<td><span class='sun-state-error'>已删除</span>";
-                                    if(0===d["behaviour_name"]){
-                                            item_html += " + <span class='sun-state-error'>已删除</span></td>";
-                                    }else{
-                                            item_html += " + <a class='sun-a-label' href=\"javascript:f_open_behaviour('"+d["behaviour_code"]+"')\" > "+ d["behaviour_name"]+"</a></td>";
-                                    }
-
-                                }else{//基础算法未被删除
-                                    let algorithm_way_code = d["algorithm_way_code"];
-
-                                    item_html += "<td><a class='sun-a-label' href=\"javascript:f_open_algorithm('"+d["algorithm_code"]+"')\" > "+d["algorithm_name"]+"</a>";
-
-                                    if("MODEL" === algorithm_way_code){
-                                        if(0===d["behaviour_name"]){
-                                            item_html += " + <span class='sun-state-error'>已删除</span></td>";
-                                        }else{
-                                            item_html += " + <a class='sun-a-label' href=\"javascript:f_open_behaviour('"+d["behaviour_code"]+"')\" > "+ d["behaviour_name"]+"</a></td>";
-                                        }
-                                    }else if("API" === algorithm_way_code){
-                                        item_html += "</td>";
-                                    }else{//错误的way_code
-                                        item_html += "</td>";
-                                    }
+                                if(0===d["flow_nickname"]){//算法已被删除
+                                    item_html += "<td><span class='sun-state-error'>已删除</span></td>";
+                                }else{
+                                    item_html += "<td><a class='sun-a-label' href=\"javascript:f_open_flow('"+d["flow_code"]+"')\" > "+d["flow_nickname"]+"</a>";
                                 }
+
 
                                item_html += "<td>"+d["checkFps"]+"</td>";
 
@@ -566,6 +545,9 @@
     }
     function f_reload() {
         f_getIndex(temp_cur_page,temp_cur_page_size);
+    }
+    function f_docs() {
+        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理");
     }
     window.onload = function (){
         f_getIndex(temp_cur_page,temp_cur_page_size);

@@ -5,8 +5,8 @@
 * QQ：1402990689
 * 微信：bilibili_bxc
 * 哔哩哔哩主页：https://space.bilibili.com/487906612
-* gitee安装包下载地址：https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4
-* github安装包下载地址：https://github.com/any12345com/BXC_VideoAnalyzer_v4
+* gitee下载地址：https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4
+* github下载地址：https://github.com/any12345com/BXC_VideoAnalyzer_v4
 
 ### 软件介绍
 * 基于C++开发的视频行为分析系统v4系统，可以在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等。
@@ -18,11 +18,11 @@
 * [Windows版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows版本)
 * [Ubuntu版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本)
 * [FFmpeg推流模拟摄像头使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
-* [二次开发算法](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发算法/二次开发算法)
-* [测试算法](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发算法/测试算法工具)
+* [算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/算法管理)
+* [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
+* [行为算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理)
+* [布控管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理)
 * [二次开发报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发报警接口/二次开发报警接口)
-* [布控基本参数](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控参数/布控基本参数)
-* [布控扩展参数](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控参数/布控扩展参数)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
 
 ### 使用TensorRT推理引擎的版本请注意
@@ -33,12 +33,18 @@
 
 
 # 版本历史
-### v4.397
+### v4.398
+* 发布时间 2024.03.18
+* （1）大幅度调整算法模块结构，调整后可支持算法模型的层级调用，并支持多种常见的算法层级调用流程
+* （2）优化算法实例管理器，解决此前算法实例自定义缓存时长的bug
+* （3）本次算法模块结构调整后，后续版本将会很快支持分类算法，追踪算法，以及不同算法的层级调用
+
+#### v4.397
 * 发布时间 2024.03.15
 * （1）新增支持可配置硬件解码路数和硬件编码路数（提升性能）
 * （2）优化启动环境检查功能，优化软件监控功能，优化日志
 
-### v4.396
+#### v4.396
 * 发布时间 2024.03.08
 * （1）修复OSD参数的bug
 * （2）修复英伟达多显卡计算的bug

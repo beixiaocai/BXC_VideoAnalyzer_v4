@@ -70,7 +70,26 @@
                   </div>
                 </div>
 
-{% if "edit" == handle %}<input type="hidden" name="way_code" value="{{ algorithm.way_code }}">{% endif %}
+            {% if "edit" == handle %}<input type="hidden" name="algorithm_type" value="{{ algorithm.algorithm_type }}">{% endif %}
+
+       <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">请选择算法类型 <span class="required">*</span></label>
+             <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select name="algorithm_type" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control">
+                        <option value="0">请选择</option>
+                        {% for algorithm_type in algorithm_types %}
+                            {% if algorithm.algorithm_type == algorithm_type.code %}
+                                <option selected value="{{ algorithm.algorithm_type }}">{{ algorithm_type.name }}</option>
+                            {% else %}
+                               <option value="{{ algorithm_type.code }}">{{ algorithm_type.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+
+            {% if "edit" == handle %}<input type="hidden" name="way_code" value="{{ algorithm.way_code }}">{% endif %}
 
                   <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">请选择接入方式 <span class="required">*</span></label>
@@ -112,7 +131,7 @@
 
 
                <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型推理平台 <span class="required">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">推理引擎 <span class="required">*</span></label>
                  <div class="col-md-3 col-sm-3 col-xs-12">
                     <select name="inference" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control">
                         <option value="0">请选择</option>
@@ -124,49 +143,44 @@
                 </div>
 
              <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型推理设备 <span class="required">*</span> <i class="bxc_introduce fa fa-info-circle" title="模型推理设备，比如CPU,GPU,GPU:0,GPU:1"></i></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">推理引擎设备 <span class="required">*</span> <i class="bxc_introduce fa fa-info-circle" title="推理引擎设备，比如CPU,GPU,GPU:0,GPU:1"></i></label>
               <div class="col-md-3 col-sm-3 col-xs-12">
                     <input type="text" name="inference_device" value="{{ algorithm.inference_device }}"  class="form-control">
 
               </div>
                 </div>
 
-          <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型最大并发数 <span class="required">*</span></label>
-                    <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input type="number" name="max_concurrency" value="{{ algorithm.max_concurrency }}"  class="form-control">
-                  </div>
-                </div>
-
-          <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型并发单位长度 <span class="required">*</span></label>
-                    <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input type="number" name="concurrency_unit_length" value="{{ algorithm.concurrency_unit_length }}"  class="form-control">
-                  </div>
-                </div>
-
             <div class="form-group way_code_MODEL">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">模型扩展参数 <span class="required">*</span></label>
                     <div class="col-md-3 col-sm-3 col-xs-12">
-                    <textarea name="extend_params" class="form-control" rows="2" placeholder="">{{ algorithm.extend_params }}</textarea>
+                    <textarea name="extend_params" class="form-control" rows="3" placeholder="">{{ algorithm.extend_params }}</textarea>
                   </div>
                 </div>
 
-
+{% if "add" == handle %}
                 <div class="form-group way_code_MODEL">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件 <span class="required">*</span></label>
-
                     <div class="col-md-3 col-sm-3 col-xs-12">
-                      <input type="file" name="model" accept="application/x-tar"  {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control" placeholder="模型文件" >
+                      <input type="file" name="model" accept="application/x-tar" class="form-control" placeholder="模型文件" >
                     </div>
-
                 </div>
-{% if "edit" == handle %}
+{% elif "edit" == handle %}
+                <div class="form-group way_code_MODEL">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件状态</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                            {% if absolute_model_dir_exist == 1 %}
+                             <span class="sun-state-success">正常</span>
+                            {% else %}
+                            <span class="sun-state-error">异常</span>
+                            {% endif %}
+                      </div>
+                </div>
+
                   <div class="form-group way_code_MODEL">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件夹路径</label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
-                     <input type="text" value="{{ absolute_model_dir }}" readonly  class="form-control">
-                  </div>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件路径</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                         <input type="text" value="{{ absolute_model_dir }}" readonly  class="form-control">
+                      </div>
                 </div>
 
                   <div class="form-group way_code_MODEL">
@@ -189,9 +203,9 @@
                     <input type="text" value="{{ algorithm.model_name_dir }}" disabled="disabled" class="form-control">
                   </div>
                 </div>
-            {% endif %}
+{% endif %}
 
-
+                <!--
                   <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">备注
                   </label>
@@ -199,7 +213,7 @@
                     <textarea name="remark" class="form-control" rows="3" placeholder="">{{ algorithm.remark }}</textarea>
                   </div>
                 </div>
-
+            -->
                 <div class="form-group">
                   <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                     <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">取消</button>
@@ -224,8 +238,10 @@
 let handle = "{{ handle }}";
 let algorithm_code = "{{ algorithm.code }}";
 let algorithm_way_code = "{{ algorithm.way_code }}";
+let algorithm_algorithm_type= "{{ algorithm.algorithm_type }}";
 let ele_input_name= $("input[name='name']");
 let ele_select_way_code= $("select[name='way_code']");
+let ele_select_algorithm_type= $("select[name='algorithm_type']");
 let ele_input_inference_device= $("input[name='inference_device']");
 let ele_input_extend_params= $("input[name='extend_params']");
 let ele_textarea_way_value = $("textarea[name='way_value']");
@@ -235,6 +251,7 @@ let ele_input_model= $("input[name='model']");
 let ele_textarea_remark= $("textarea[name='remark']");
 
 let selectedWayCode = algorithm_way_code;
+let selectedAlgorithmType = algorithm_algorithm_type;
 
 
 ele_select_way_code.change(function () {
@@ -250,6 +267,10 @@ ele_select_way_code.change(function () {
         $(".way_code_API").hide();
     }
 
+});
+
+ele_select_algorithm_type.change(function () {
+    selectedAlgorithmType = $(this).val();
 });
 
 $(document).ready(function () {
@@ -270,13 +291,15 @@ $(document).ready(function () {
     }
 
    $("form").submit(function () {
-       console.log("selectedWayCode=",selectedWayCode);
 
        if(ele_input_name.val().trim() === ""){
             myAlert("请输入算法名称","error");
             return false;
         }
-
+       if(selectedAlgorithmType==="0" || selectedAlgorithmType === ""){
+            myAlert("请选择算法类型","error");
+            return false;
+       }
       if("MODEL" === selectedWayCode){
         if(ele_select_framework.val().trim()==="0"){
             myAlert("请选择算法框架","error");
@@ -334,7 +357,7 @@ $(document).ready(function () {
    });
 });
 function f_docs() {
-    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发算法/二次开发算法");
+    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/添加基础算法");
 }
 </script>
 

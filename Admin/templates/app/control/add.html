@@ -48,14 +48,11 @@
     let streamCodeDict = {};//视频流字典
     let streamCode;
 
-    let algorithmCodeDict = {};//基础算法字典
-    let algorithmCode;
+    let flowDict = {};//基础算法字典
+    let flowCode;
 
     let audioCodeDict = {}; //音频字典
     let audioCode;
-
-    let behaviourCodeDict = {}; //行为算法字典
-    let behaviourCode;
 
     let m_alarmInterfaceCodeDict = {}; //报警接口字典
     let m_alarmInterfaceCode;
@@ -97,7 +94,14 @@
 
               <div class="col-md-4 col-sm-4 col-xs-12" >
                   <div class="form-horizontal form-label-left">
-
+                  {% if  "edit" == handle %}
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">布控ID</label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                              <span style="height: 34px;line-height: 34px;padding: 6px 0;">{{ control.id }}</span>
+                          </div>
+                        </div>
+                {% endif %}
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">布控编号</label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
@@ -180,59 +184,25 @@
 
                           <div class="col-md-9 col-sm-9 col-xs-12">
 
-                            <select id="select_algorithm"  class="select2_single form-control" required="required" >
+                            <select id="select_flow"  class="select2_single form-control" required="required" >
                                 <option value="0">请选择基础算法</option>
-                                {% for algorithm in algorithms %}
+                                {% for flow in flows %}
                                    <script>
-                                        algorithmCode = '{{ algorithm.code }}';
-                                        algorithmCodeDict[algorithmCode] = {
-                                            "code":algorithmCode,
-                                            "name":'{{ algorithm.name }}',
-                                            "way_code":'{{ algorithm.way_code }}',
-                                            "model_class_names":'{{ algorithm.model_class_names }}'
+                                        flowCode = '{{ flow.code }}';
+                                        flowDict[flowCode] = {
+                                            "code":flowCode,
+                                            "name":'{{ flow.name }}'
                                         }
-
                                     </script>
 
-                                    <option {% if algorithm.code == control.algorithm_code %} selected {% endif %} value="{{ algorithm.code }}">{{ algorithm.name }}</option>
+                                    <option {% if flow.code == control.flow_code %} selected {% endif %} value="{{ flow.code }}">{{ flow.name }}</option>
                                 {% endfor %}
                             </select>
 
                           </div>
                     </div>
 
-                        <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择目标</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select id="select_class_name" {% if "API" == control_algorithm_way_code %}disabled="disabled"{% endif %}  class="select2_multiple form-control" required="required"  multiple="multiple" >
-                                <option value="0">---请选择识别目标(可多选)---</option>
-                            </select>
-                          </div>
-                        </div>
 
-                   <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择行为</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select id="select_behaviour" {% if "API" == control_algorithm_way_code %}disabled="disabled"{% endif %}   class="select2_single form-control" required="required" >
-                                <option value="0">请选择行为算法</option>
-
-                                {% for behaviour in behaviours %}
-                                   <script>
-                                        behaviourCode = '{{ behaviour.code }}';
-                                        behaviourCodeDict[behaviourCode] = {
-                                            "code":behaviourCode,
-                                            "name":'{{ behaviour.name }}'
-                                        }
-                                    </script>
-
-                                    <option {% if behaviour.code == control.behaviour_code %} selected {% endif %} value="{{ behaviour.code }}">{{ behaviour.name }}</option>
-                                {% endfor %}
-
-                            </select>
-                          </div>
-                        </div>
-
-         <div class="ln_solid"></div>
 
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">选择音频 <i class="bxc_introduce fa fa-info-circle" title="触发报警时播放的音频"></i>
@@ -387,7 +357,7 @@
                         <div class="form-group">
                           <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                             <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">取消</button>
-                            <button type="button" onclick="f_postHandleControl()" class="btn btn-success">提交</button>
+                            <button type="button" onclick="f_postHandle()" class="btn btn-success">提交</button>
                           </div>
                         </div>
 
@@ -410,8 +380,6 @@
 
     let controlCode= '{{ control.code }}';// 布控编号
     let old_control_polygon = '{{ control.polygon }}';// 布控多边形坐标点
-    let old_control_algorithm_code = '{{ control.algorithm_code }}';// 布控原始基础算法编号
-    let old_control_class_names = '{{ control.class_names }}';// 布控原始检测目标
 
     let handle = '{{ handle }}';// 操作类型 add 或 edit
 
@@ -432,13 +400,10 @@
     let eleInputVideoUrl= $("#input_video_url");// input
     let eleInputVideo = $("#input_video");// input
     let eleInputAudio = $("#input_audio");// input
-    let eleSelectAlgorithm = $("#select_algorithm");// select 基础算法
-    let selected_algorithm_way_code = "";
+    let eleSelectFlow = $("#select_flow");// select 算法
 
-    let eleSelectClassName = $("#select_class_name");// select 布控多选的目标
     let eleSelectAudio = $("#select_audio");// select 音频
     let eleSelectAlarmInterface = $("#select_alarm_interface");// select 报警接口
-    let eleSelectBehaviour = $("#select_behaviour");// select 行为算法
     let eleInputMinInterval = $("#min_interval");
     let eleInputOverlapThresh = $("#overlap_thresh");
 
@@ -569,44 +534,6 @@
         }
     })
 
-    function f_showSettings(algorithm_code,selected_class_names) {
-
-        let html = "<option value=\"0\">---请选择识别目标(可多选)---</option>";
-
-        let algorithm = algorithmCodeDict[algorithm_code];
-        selected_algorithm_way_code = algorithm["way_code"];
-
-        if("MODEL" === selected_algorithm_way_code){
-            //需要显示选择目标
-            eleSelectClassName.removeAttr("disabled");
-            let model_class_names = algorithm["model_class_names"];
-            let model_class_names_array = model_class_names.split(",");
-            let selected_class_names_array = selected_class_names.split(",");
-            for (let i = 0; i < model_class_names_array.length; i++) {
-                let class_name = model_class_names_array[i];
-                let match = selected_class_names_array.indexOf(class_name);
-                if(match > -1){
-                    html += "<option selected value=\""+class_name+"\">"+class_name+"</option>";
-                }else{
-                    html += "<option value=\""+class_name+"\">"+class_name+"</option>";
-                }
-            }
-            //需要使用行为算法
-            eleSelectBehaviour.removeAttr("disabled");
-        }else if("API" === selected_algorithm_way_code){
-            //不需要显示选择目标
-            eleSelectClassName.attr("disabled","disabled");
-            //不需要使用行为算法
-            eleSelectBehaviour.attr("disabled","disabled");
-            eleSelectBehaviour.val("0")
-
-        }else{
-            //预留
-
-        }
-
-        eleSelectClassName.html(html);
-    }
     eleSelectStream.change(function () {
         streamCode = $(this).val();
         let stream = streamCodeDict[streamCode];
@@ -639,15 +566,6 @@
             setTimeout(function () {
                 f_adjustVideoCanvas();
             }, i*200);
-        }
-
-    });
-    eleSelectAlgorithm.change(function () {
-        let algorithm_code = $(this).val();
-        if(algorithm_code === old_control_algorithm_code){
-             f_showSettings(algorithm_code,old_control_class_names);
-        }else{
-             f_showSettings(algorithm_code,"");
         }
 
     });
@@ -703,7 +621,7 @@
         f_playStop();
         f_adjustVideoCanvas();
     }
-    function f_postHandleControl() {
+    function f_postHandle() {
         streamCode = eleSelectStream.val().trim();//typeof string
         if(streamCode==="-1"){
             myAlert("暂无视频流","error");
@@ -712,46 +630,10 @@
             myAlert("请选择视频流","error");
             return;
         }
-        algorithmCode = eleSelectAlgorithm.val().trim();//typeof string
-        if(algorithmCode==="0"){
-            myAlert("请选择基础算法","error");
+        flowCode = eleSelectFlow.val().trim();//typeof string
+        if(flowCode==="0"){
+            myAlert("请选择算法","error");
             return;
-        }
-        let p_classNames = ""; //选择目标判断 person,dog,cat,,,
-        let p_behaviourCode = "";
-        if("MODEL" === selected_algorithm_way_code){
-            //选择目标判断
-            let classNames_array = eleSelectClassName.val();//typeof object, array
-            if(classNames_array===null){
-                myAlert("请至少选择1个目标","error");
-                return;
-            }else{
-                let classNames_array_temp = [];
-                for (let i = 0; i < classNames_array.length; i++) {
-                    if("0"!==classNames_array[i]){
-                        classNames_array_temp.push(classNames_array[i]);
-                    }
-                }
-                if(classNames_array_temp.length > 0){
-                    p_classNames = classNames_array_temp.join(",");
-                }else{
-                    myAlert("请至少选择1个目标","error");
-                    return;
-                }
-            }
-            //行为算法判断
-            p_behaviourCode = eleSelectBehaviour.val().trim();//typeof string
-            if(p_behaviourCode==="0"){
-                myAlert("请选择行为算法","error");
-                return;
-            }
-        }else if("API" === selected_algorithm_way_code){
-            //不需要选择目标&行为算法
-
-
-        }else{
-            //预留
-
         }
 
         audioCode = eleSelectAudio.val().trim();//typeof string
@@ -860,9 +742,7 @@
 
         let data = {
             "controlCode":controlCode,
-            "algorithmCode":algorithmCode,
-            "classNames":p_classNames,
-            "behaviourCode":p_behaviourCode,
+            "flowCode":flowCode,
             "audioCode":audioCode,
             "alarmInterfaceCode":m_alarmInterfaceCode,
             "pushStream":pushStream,
@@ -921,10 +801,12 @@
         f_adjustVideoCanvas();
     }
 
+    function f_docs() {
+        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/添加布控");
+    }
     $(function() {
         if(handle==="edit"){
             //编辑 start
-            f_showSettings(old_control_algorithm_code,old_control_class_names);
             let is_online = parseInt("{{ control_stream.is_online }}");
             let video_codec_name = "{{ control_stream.video_codec_name }}";
             let video_width = parseInt("{{ control_stream.video_width }}");
@@ -990,9 +872,6 @@
 
     });
 
-    function f_docs() {
-    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控参数/布控基本参数");
-}
 </script>
 
 {% endblock javascripts %}

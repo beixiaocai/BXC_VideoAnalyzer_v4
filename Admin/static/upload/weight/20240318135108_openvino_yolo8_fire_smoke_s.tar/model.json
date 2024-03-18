@@ -1,0 +1,8 @@
+{
+  "name": "fire",
+  "inference": "OpenVINO",
+  "class_names": [
+		"fire","smoke"
+  ],
+  "remark": "20240122"
+}

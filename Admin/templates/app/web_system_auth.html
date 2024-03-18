@@ -26,7 +26,7 @@
                   <div class="form-group">
                   <div class="col-md-6 col-sm-6 col-md-offset-3">
                       <h3>系统授权有两种方式</h3>
-                    <p>（1）第一种是通过机器的本机MAC和版本标记生成授权码{% if settings.auth_online_link != "" %} <button type="button" onclick="f_link('{{ settings.auth_online_link }}')" style="color:#23527c;font-size: 12px ;margin-left: 5px; " >在线生成临时机器授权码</button>{% endif %}</p>
+                    <p>（1）第一种是通过机器MAC和版本标记生成授权码{% if settings.auth_online_link != "" %} <button type="button" onclick="f_link('{{ settings.auth_online_link }}')" style="color:#23527c;font-size: 12px ;margin-left: 5px; " >在线生成临时机器授权码</button>{% endif %}</p>
                     <p>（2）第二种是通过加密锁授权{% if settings.auth_buy_link != "" %} <button type="button" onclick="f_link('{{ settings.auth_buy_link }}')" style="color:#23527c;font-size: 12px ;margin-left: 5px; ">购买加密锁授权</button>{% endif %}</p>
                   </div>
                 </div>

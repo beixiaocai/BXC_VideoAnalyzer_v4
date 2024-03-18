@@ -1,8 +1,0 @@
-{
-  "name": "yolov8_face_s",
-  "inference": "OpenVINO",
-  "class_names": [
-		"face"
-  ],
-  "remark": "20240311"
-}
