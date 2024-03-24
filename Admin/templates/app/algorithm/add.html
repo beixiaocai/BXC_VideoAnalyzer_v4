@@ -158,6 +158,12 @@
                   </div>
                 </div>
 
+             <div class="form-group way_code_MODEL">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型转换参数</label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+                    <textarea name="model_convert_params" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control" rows="2"  placeholder="" >{{ algorithm.model_convert_params }}</textarea>
+                  </div>
+                </div>
 
 {% if "add" == handle %}
                 <div class="form-group way_code_MODEL">
@@ -166,9 +172,8 @@
                         <!-- application/x-tar,application/octet-stream-->
                       <input type="file" name="model" accept=".onnx,.tar" class="form-control" placeholder="模型文件" >
                     </div>
-
-
                 </div>
+
 
              <div class="form-group way_code_MODEL">
                  <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
@@ -278,6 +283,7 @@ let ele_select_algorithm_type= $("select[name='algorithm_type']");
 let ele_input_inference_device= $("input[name='inference_device']");
 let ele_textarea_extend_params= $("textarea[name='extend_params']");
 let ele_textarea_model_class_names= $("textarea[name='model_class_names']");
+let ele_textarea_model_convert_params= $("textarea[name='model_convert_params']");
 
 let ele_textarea_way_value = $("textarea[name='way_value']");
 
@@ -488,11 +494,9 @@ function f_handle() {
             return false;
         }
 
+       let model_convert_params_s = ele_textarea_model_convert_params.val().trim();
        let remark_s = ele_textarea_remark.val();
-        if(remark_s === ""){
-            myAlert("请输入备注","error");
-            return false;
-        }
+
 
         let handleUrl;
         formData.append('framework',framework_s);
@@ -500,6 +504,7 @@ function f_handle() {
         formData.append('inference_device',inference_device_s);
         formData.append('extend_params',extend_params_s);
         formData.append('model_class_names',model_class_names_s);
+        formData.append('model_convert_params',model_convert_params_s);
         //formData.append('remark',remark_s);
 
         if(handle === "add"){
