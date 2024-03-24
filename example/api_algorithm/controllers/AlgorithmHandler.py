@@ -32,7 +32,8 @@ class AlgorithmHandler(BaseHandler):
                 "y1": 100,
                 "x2": 500,
                 "y2": 500,
-                "score": 0.93456,
+                "class_score": 0.93456,
+                "class_id": 0,
                 "class_name": "test"
             })
 

@@ -8,6 +8,7 @@
     .div_canvas_box{
         background: #e5e5e5;
         display: flex;
+        position: relative;
     }
     .div_canvas_box>video{
         width: 100%;
@@ -24,10 +25,10 @@
         border: 1px solid darkred;
         position: absolute;
         top: 0;
-        left: 10px;
-        /*width: 800px;*/
-        /*height: 400px;*/
-        z-index: 1;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 6;
     }
     .div_canvas_menu{
         margin-top: 50px;
@@ -38,7 +39,22 @@
 
 
     }
-
+    .show_content{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .item{
+        flex:1;
+        display: flex;
+         justify-content: center;
+        align-items: center;
+        color: #000;
+    }
+    .img{
+        width: 200px;
+    }
 </style>
 
 {% endblock stylesheets %}
@@ -78,17 +94,33 @@
                     <video id="video_player" poster="/static/images/player_poster.jpg" muted controls autoplay>
                         Your browser is too old which doesn't support h5 video
                    </video>
-                   <canvas id="canvas" width="0" height="0">
+                   <canvas id="canvas" >
                         Your browser is too old which doesn't support h5 canvas
                    </canvas>
                 </div>
 
                 <div class="div_canvas_menu">
-                  <button type="button" onclick="f_clickPlayStart()" class="btn btn-success btn-sm"><i class="fa fa-play"></i> 播放视频 </button>
-                  <button type="button" onclick="f_clickPlayStop()" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> 停止播放 </button>
-                  <button type="button" onclick="f_adjustVideoCanvas()" class="btn btn-default btn-sm"><i class="fa fa-adjust"></i> 识别区域与播放器对齐</button>
-                  <button type="button" onclick="f_clearVideoCanvas()" class="btn btn-default btn-sm"><i class="fa fa-paint-brush"></i> 清空算法识别区域</button>
+                  <button type="button" onclick="f_clickPlayStart()" class="btn btn-success btn-sm"><i class="fa fa-play"></i> 播放 </button>
+                  <button type="button" onclick="f_clickPlayStop()" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> 停止 </button>
+                  <button type="button" onclick="f_clearVideoCanvas()" class="btn btn-default btn-sm"><i class="fa fa-paint-brush"></i> 清空区域</button>
+                  <button type="button" onclick="change(1)" class="btn btn-default">绘制矩形区域</button>
+                  <button type="button" onclick="change(4)" class="btn btn-default">绘制越界区域</button>
+              
                 </div>
+                    <div class="div_canvas_menu show_content" >
+                        <div class="item">绘制矩形区域案例</div>
+                        <div class="item">
+                            <img class="img" src="/static/images/control-rect.png"/>
+                        </div>
+                        <div class="item"><button type="button" onclick="f_docs()" class="btn btn-default btn-sm">文档</button></div>
+                    </div>
+                    <div class="div_canvas_menu show_content">
+                        <div class="item">绘制越线区域案例</div>
+                        <div class="item">
+                            <img class="img" src="/static/images/control-crossline.png" />
+                        </div>
+                        <div class="item"><button type="button"  onclick="f_docs()" class="btn btn-default btn-sm">文档</button></div>
+                     </div>
 
               </div>
 
@@ -113,7 +145,7 @@
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">选择视频流</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             {% if  "add" == handle %}
-                              <select id="select_stream" class="select2_single form-control" required="required" >
+                              <select  id="select_stream" class="select2_single form-control" required="required" >
                                   {% if streams|length == 0 %}
                                       <option value="-1">暂无视频流</option>
                                   {% else %}
@@ -376,10 +408,13 @@
 
 <script src="/static/lib/wsPlayer/mp4box.all.min.js"></script>
 <script src="/static/lib/wsPlayer/wsPlayer.js"></script>
+    <!-- \static\vendors\canvas_select -->
+    <script src="/static/vendors/canvas_select/canvas-select.min.js"></script>
 <script>
 
     let controlCode= '{{ control.code }}';// 布控编号
     let old_control_polygon = '{{ control.polygon }}';// 布控多边形坐标点
+    let old_control_polygon_type = '{{ control.polygon_type }}';// string类型
 
     let handle = '{{ handle }}';// 操作类型 add 或 edit
 
@@ -394,6 +429,7 @@
     let mWsVideoPlayer = null;
     let eleVideoPlayerJqueryObj = $("#video_player");
     let eleVideoPlayerJsObj= document.getElementById("video_player");
+    let videoContent=document.querySelector('.div_canvas_box')
     let mVideoUrl = null;
 
     let eleSelectStream = $("#select_stream");// select  选择视频流
@@ -422,123 +458,162 @@
     let eleTextarea_osd_params = $("textarea[name='osd_params']");
     let eleTextarea_extend_params = $("textarea[name='extend_params']");
     let eleTextarea_remark = $("textarea[name='remark']");
+            canvas.width= eleVideoPlayerJsObj.clientWidth
+            canvas.height = eleVideoPlayerJsObj.clientHeight
+       let img = canvas.toDataURL();
+        let instance = new CanvasSelect("#canvas", img);
+        let option = [];
+        instance.labelMaxLen = 10;
+     //   instance.setData(option);
 
+      instance.on("load", (src) => {
+        });
+        // 添加
+        instance.on("add", (info) => {
+ 
+            // 有一个 并且是1 就不让画
+               let flag = false
+            if (info.type == 4) {
+                change(6)
+            }
+            for (let i = 0; i < option.length; i++) {
+                if (option[i].type == info.type) {
+                    flag = true
+                }
+            }
+            option.push(info);
+               if (option.length == 2) {
+                let fItem = option[0]
+                if (fItem.type == 1) {
+                    option.pop()
+                    instance.setData(option);
+                    change(0)
+                } else if (info.type == 1) {
+                    option.shift()
+                    instance.setData(option);
+                    change(0)
+                } else if (info.type == 6) {
+                    let ind = option.length
+                    let line = option[ind - 2] // 拿到直线
+                    let res = doLinesIntersect(line.coor[0], line.coor[1], info.coor[0], info.coor[1]);
+                    if (!res) {
+                        alert("方向线不合规，重新标注")
+                        option.pop()
+                        instance.setData(option);
+                        flag = false
+                        change(0)
+                    }
+                }
+            } else if (option.length == 3) {
+                if (info.type == 6) {
+                    let ind = option.length
+                    let line = option[ind - 2] // 拿到直线
+                    let res = doLinesIntersect(line.coor[0], line.coor[1], info.coor[0], info.coor[1]);
+                    if (!res) {
+                        alert("方向线不合规，重新标注")
+                        option.pop()
+                        instance.setData(option);
+                        flag = false
+                        change(0)
+                    }
+                } else if (info.type == 4) {
+                    flag = true
+                } else {
+                    option.pop()
+                    instance.setData(option);
+                    change(0)
+                }
+            }
+            if (flag) {
+                myAlert("已存在该类型，清除后重新标注", "error");
+                option.pop()
+                instance.setData(option);
+                if (info.type == 4) {
+                    change(6)
+                } else {
+                    change(0)
+                }
+                flag = false
+            }
+        });
+        // 删除
+        instance.on("delete", (info) => {
+            window.info = info;
+        });
+        // 选中
+        instance.on("select", (shape) => {
+            window.shape = shape;
+        });
+        instance.on("updated", (result) => {
+          //   myAlert("请选择视频流", "error");
+            const list = [...result];
 
-    class MyPoint{
-        constructor(x,y) {
-            this.x = x;
-            this.y = y;
+            list.sort((a, b) => a.index - b.index);
+        });
+
+        function change(num) {
+            instance.createType = num;
         }
-    }
-    //创建线段类  多个线段对象相互连接就成为了点
-    class MyLine{
-        x2;
-        y2;
-        //构造方法设置第一个点
-        constructor(x,y) {
-          this.x=x;
-          this.y=y;
-        }
-        //更新 设置第二给点
-        LineUpdate=function (x,y){
-          this.x2=x;
-          this.y2=y;
-        }
-
-
-        //绘制
-        LineDraw=function (){
-            ctx.lineWidth = 2;//设置线条宽度
-            //ctx.font = "normal bold 40px Arial";//设置字体
-            ctx.strokeStyle="red" //设置颜色
-
-          ctx.beginPath();
-          ctx.moveTo(this.x,this.y);//第一个点
-          ctx.lineTo(this.x2,this.y2); //点三个
-          ctx.stroke(); //开始绘制(把前面点连接)
-        }
-
-    }
-
     //清空绘制区域数据
     function f_clearVideoCanvas() {
-        ctx.clearRect(0,0,eleCanvas.width,eleCanvas.height);
+        ctx.clearRect(0,0, videoContent.clientWidth, videoContent.clientHeight);
         recognitionRegionLineArray = [];
-
+        option = [];
+        instance.setData(option);
+        change(0)
     }
     //窗口对齐->清空绘制区域数据
     function f_adjustVideoCanvas() {
         //执行窗口对齐以后，此前的绘制区域数据，可能不在对应，因此需要删除
         let w = eleVideoPlayerJsObj.offsetWidth;
         let h = eleVideoPlayerJsObj.offsetHeight;
-        console.log("f_adjustVideoCanvas",w,h)
         w = w - 1.8;
-        h = h - 2.2;
-        eleCanvas.setAttribute("width",String(w));
-        eleCanvas.setAttribute("height",String(h));
-        f_clearVideoCanvas();
+       h = h - 2.2;
+       eleCanvas.style.width = String(w)+"px";
+       eleCanvas.style.height = String(h)+"px";
+       instance.setData(option);
+       change(0)
+        
     }
     function f_reDrawVideoCanvas() {
-        console.log("f_reDrawVideoCanvas() recognitionRegionLineArray.length=",recognitionRegionLineArray.length);
-        ctx.clearRect(0,0,eleCanvas.width,eleCanvas.height);
-        for (let i = 0; i < recognitionRegionLineArray.length; i++) {
-            let line = recognitionRegionLineArray[i];
-            line.LineDraw();
-        }
+        return 
+        ctx.clearRect(0,0, videoContent.clientWidth, videoContent.clientHeight);
     }
-    //画布鼠标监听 按下  按下后绘制图形
-    eleCanvas.addEventListener("mousedown",function (event){
-        if(recognitionRegionLineArray.length < recognitionRegionLineMaxCount){
-            if(tempPolygonLine===null){
-                let x = event.offsetX;
-                let y = event.offsetY;
-                tempPolygonLine=new MyLine(x,y);
-            }
-        }
-    });
-    // 获取鼠标在画布移动的坐标
-    eleCanvas.addEventListener("mousemove", function(event){
-        if(tempPolygonLine){
-            let x = event.offsetX;
-            let y = event.offsetY;
 
-            f_reDrawVideoCanvas();
-            tempPolygonLine.LineUpdate(x,y);
-            tempPolygonLine.LineDraw();
+  function doLinesIntersect(p1, q1, p2, q2) {
+        // 计算直线1和直线2的a, b, c
+        const a1 = q1[1] - p1[1];
+        const b1 = p1[0] - q1[0];
+        const c1 = a1 * p1[0] + b1 * p1[1];
+
+        const a2 = q2[1] - p2[1];
+        const b2 = p2[0] - q2[0];
+        const c2 = a2 * p2[0] + b2 * p2[1];
+
+        // 计算行列式
+        const det = a1 * b2 - a2 * b1;
+
+        // 没有交点
+        if (det === 0) {
+            return false;
         }
 
+        // 计算交点坐标
+        const x = (b2 * c1 - b1 * c2) / det;
+        const y = (a1 * c2 - a2 * c1) / det;
 
-    });
-    //鼠标左键弹起时候
-    eleCanvas.addEventListener("mouseup",function (event){
-        if(tempPolygonLine){
-
-            f_reDrawVideoCanvas();
-            let x = event.offsetX;
-            let y = event.offsetY;
-            if(recognitionRegionLineArray.length === recognitionRegionLineMaxCount-1){//还差一条边的时候，将第一条边的起点作为最后一条边的终点
-                let firstLine = recognitionRegionLineArray[0];
-                x = firstLine.x;
-                y = firstLine.y;
-            }
-            tempPolygonLine.LineUpdate(x,y);
-            tempPolygonLine.LineDraw();
-            recognitionRegionLineArray.push(tempPolygonLine);
-
-            console.log("mouseup() recognitionRegionLineArray.length=",recognitionRegionLineArray.length);
-            if(recognitionRegionLineArray.length < recognitionRegionLineMaxCount){
-                tempPolygonLine=new MyLine(x,y);
-            }else{
-                tempPolygonLine=null;
-            }
-        }
-    })
-
+        // 检查交点是否在两条线的段上
+        return (
+            (p1[0] <= x && x <= q1[0] && p2[0] <= x && x <= q2[0]) ||
+            (p1[0] >= x && x >= q1[0] && p2[0] >= x && x >= q2[0]) ||
+            (p1[1] <= y && y <= q1[1] && p2[1] <= y && y <= q2[1]) ||
+            (p1[1] >= y && y >= q1[1] && p2[1] >= y && y >= q2[1])
+        );
+    }
     eleSelectStream.change(function () {
         streamCode = $(this).val();
         let stream = streamCodeDict[streamCode];
         if (stream) {
-
             let wsHost = stream["wsHost"];
             let video_codec_name = stream["video_codec_name"];
             let video_width = stream["video_width"];
@@ -553,7 +628,6 @@
             eleInputVideoUrl.val(video_url)
             eleInputVideo.val(stream["video"])
             eleInputAudio.val(stream["audio"])
-
             f_playStart(video_url);
         }else{
             eleInputVideoUrl.val("")
@@ -567,7 +641,6 @@
                 f_adjustVideoCanvas();
             }, i*200);
         }
-
     });
 
     eleRadioPushStream.change(function () {
@@ -578,6 +651,7 @@
     });
 
     function f_playStart(video_url){
+        
         console.log("f_playStart()",video_url);
         if(typeof video_url === "undefined" || !video_url.startsWith("ws://") || !video_url.endsWith(".mp4")){
             myAlert("视频流地址格式不正确！","error");
@@ -592,6 +666,7 @@
         }
 	    mWsVideoPlayer = new wsPlayer("video_player", video_url);
         mWsVideoPlayer.open();
+        initCanvasData()
     }
     function f_playStop(){
         if(mWsVideoPlayer){
@@ -603,12 +678,12 @@
         }else{
             myAlert("播放器未启动！","error");
         }
+        f_clearVideoCanvas()
 
     }
     function f_clickPlayStart() {
         if(mVideoUrl){
             f_playStart(mVideoUrl);
-
             for (let i = 0; i < 10; i++) {
                 setTimeout(function () {
                     f_adjustVideoCanvas();
@@ -736,10 +811,69 @@
         }
 
 
-        console.log("__polygon_point_array=",__polygon_point_array)
+        // 在这里发送数据
+        let rePolygon = []
+        for(let i=0;i<option.length;i++){
+            let item=option[i];
+            if(item.type){
 
-        let polygon = __polygon_point_array.join(",");
+            }
+        }
+       // let polygon = __polygon_point_array.join(",");
+       // 收集点
+        let canvas_width = videoContent.clientWidth;
+        let canvas_height = videoContent.clientHeight
+       let polygonArr=[]
+        let polygon_type=0
+        if(option.length===1){
+            let rItem=option[0];
+            let topL=rItem.coor[0];
+            let botR = rItem.coor[1];
 
+            let topR = [botR[0], topL[1]];
+            let botL = [topL[0], botR[1]];
+            // 四个点
+            polygonArr.push((topL[0]/canvas_width).toFixed(4));
+            polygonArr.push((topL[1]/canvas_height).toFixed(4));
+            polygonArr.push((topR[0]/canvas_width).toFixed(4));
+            polygonArr.push((topR[1]/canvas_height).toFixed(4));
+            polygonArr.push((botR[0]/canvas_width).toFixed(4));
+            polygonArr.push((botR[1]/canvas_height).toFixed(4));
+            polygonArr.push((botL[0]/canvas_width).toFixed(4));
+            polygonArr.push((botL[1]/canvas_height).toFixed(4));
+            polygon_type=1
+        }else if(option.length===2){
+            let FItem = option[0];
+            let LItem = option[1];
+            let topL= FItem.coor[0];
+            let topR= FItem.coor[1];
+            let botL= LItem.coor[0];
+            let botR= LItem.coor[1];
+              // 四个点
+            polygonArr.push((topL[0] / canvas_width).toFixed(4));
+            polygonArr.push((topL[1] / canvas_height).toFixed(4));
+            polygonArr.push((topR[0] / canvas_width).toFixed(4));
+            polygonArr.push((topR[1] / canvas_height).toFixed(4));
+            polygonArr.push((botR[0] / canvas_width).toFixed(4));
+            polygonArr.push((botR[1] / canvas_height).toFixed(4));
+            polygonArr.push((botL[0] / canvas_width).toFixed(4));
+            polygonArr.push((botL[1] / canvas_height).toFixed(4));
+
+            polygon_type = 2
+        }else{
+               // 四个点
+            polygonArr.push(0);
+            polygonArr.push(0);
+            polygonArr.push(0);
+            polygonArr.push(1);
+            polygonArr.push(1);
+            polygonArr.push(1);
+            polygonArr.push(1);
+            polygonArr.push(0);
+            polygon_type = 1
+        }
+        let polygon = polygonArr.join(",");
+        // 判断类型
         let data = {
             "controlCode":controlCode,
             "flowCode":flowCode,
@@ -754,7 +888,8 @@
             "alarmMonitorDuration":alarmMonitorDuration,
             "osd_params":osd_params,
             "extend_params":extend_params,
-            "remark":remark
+            "remark":remark,
+            "polygon_type": polygon_type
         }
 
         let handleUrl;
@@ -774,8 +909,6 @@
         }else{
             return;
         }
-
-
         $.ajax({
            url: handleUrl,
            type: "post",
@@ -789,6 +922,7 @@
            success: function (res) {
                if(1000 === res.code){
                     myAlert(res.msg,"success",3000);
+                 //    f_clearVideoCanvas()
                }else{
                     myAlert(res.msg,"error",3000);
                }
@@ -803,6 +937,62 @@
 
     function f_docs() {
         window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/添加布控");
+    }
+    function initCanvasData(){
+           if (old_control_polygon !== "") {//编辑布控->绘制周界区域存在
+            f_adjustVideoCanvas();
+            let canvas_width = videoContent.clientWidth;
+            let canvas_height = videoContent.clientHeight
+            let polygonData = old_control_polygon.split(',')
+
+            let ind = polygonData.length
+            option = []
+
+            if (old_control_polygon_type == 1) {
+                let topLx = parseInt(polygonData[0] * canvas_width)
+                let topLy = parseInt(polygonData[1] * canvas_height)
+                let bomRx = parseInt(polygonData[ind - 4] * canvas_width)
+                let bomRy = parseInt(polygonData[ind - 3] * canvas_height)
+                let topL = [topLx, topLy];
+                let bomR = [bomRx, bomRy];
+                let obj = {
+                    type: 1,
+                    coor: [topL, bomR]
+                }
+                option.push(obj)
+                instance.setData(option)
+                console.log(option, 'option');
+                change(0)
+            } else if (old_control_polygon_type == 2) {
+                let objL = {
+                    "coor": [],
+                    "type": 4
+                }
+                let objLa = {
+                    "coor": [],
+                    "type": 6
+                }
+                for (let i = 0; i < polygonData.length; i++) {
+                    if (i % 2 === 0) {
+                        if (i > 3) {
+                            let x = polygonData[i] * canvas_width
+                            let y = polygonData[i + 1] * canvas_height
+                            objLa.coor.unshift([x, y])
+                        } else {
+                            let x = polygonData[i] * canvas_width
+                            let y = polygonData[i + 1] * canvas_height
+                            objL.coor.push([x, y])
+                        }
+                    }
+                }
+
+                option.push(objL)
+                option.push(objLa)
+                instance.setData(option)
+                change(0)
+            }
+            f_reDrawVideoCanvas();
+        }
     }
     $(function() {
         if(handle==="edit"){
@@ -834,40 +1024,8 @@
              //编辑 end
         }
 
-
-        setTimeout(function () {
-            if(old_control_polygon!==""){//编辑布控->绘制周界区域存在
-                 f_adjustVideoCanvas();
-                let xys = old_control_polygon.split(",");
-                let lineCount = xys.length / 2;
-                if(lineCount >= 3){
-                    let points = [];
-                    let canvas_width = eleCanvas.width;
-                    let canvas_height = eleCanvas.height
-                    for (let i = 0; i < lineCount; i++) {
-                        let x_index = i * 2;
-                        let y_index = x_index+1;
-                        let x = parseInt(parseFloat(xys[x_index]) * canvas_width);
-                        let y = parseInt(parseFloat(xys[y_index]) * canvas_height);
-                        let p = new MyPoint(x,y);
-                        points.push(p);
-                    }
-                    for (let i = 0; i < lineCount; i++) {
-                        let p1 = points[i];
-                        let p2;
-                        if(i===(lineCount-1)){
-                            p2 = points[0];
-                        }else{
-                            p2 = points[i+1];
-                        }
-                        let line = new MyLine(p1.x,p1.y);
-                        line.LineUpdate(p2.x,p2.y);
-                        recognitionRegionLineArray.push(line);
-                    }
-
-                }
-                f_reDrawVideoCanvas();
-            }
+        setTimeout( () =>{
+         initCanvasData()
         }, 1200);
 
     });

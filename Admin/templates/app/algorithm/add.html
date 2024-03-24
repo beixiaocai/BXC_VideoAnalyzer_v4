@@ -21,7 +21,6 @@
 {% endblock stylesheets %}
 
 {% block content %}
-
   <div class="right_col" role="main">
     <div class="">
       <div class="row">
@@ -50,12 +49,7 @@
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
-              <br>
-              <form class="form-horizontal form-label-left"  method="post" enctype="multipart/form-data" data-parsley-validate  >
-
-                     <input type="hidden" name="handle"  value="{{ handle }}">
-                     <input type="hidden" name="code"  value="{{ algorithm.code }}">
-
+     <div class="form-horizontal form-label-left">
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">算法编号 </label>
                   <div class="col-md-3 col-sm-3 col-xs-12">
@@ -71,8 +65,7 @@
                 </div>
 
             {% if "edit" == handle %}<input type="hidden" name="algorithm_type" value="{{ algorithm.algorithm_type }}">{% endif %}
-
-       <div class="form-group">
+<div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">请选择算法类型 <span class="required">*</span></label>
              <div class="col-md-3 col-sm-3 col-xs-12">
                     <select name="algorithm_type" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control">
@@ -86,13 +79,11 @@
                         {% endfor %}
                     </select>
                   </div>
-                </div>
-
-
+ </div>
             {% if "edit" == handle %}<input type="hidden" name="way_code" value="{{ algorithm.way_code }}">{% endif %}
 
-                  <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">请选择接入方式 <span class="required">*</span></label>
+          <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">请选择算法接入方式 <span class="required">*</span></label>
              <div class="col-md-3 col-sm-3 col-xs-12">
                     <select name="way_code" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control">
 
@@ -106,10 +97,10 @@
                         {% endfor %}
                     </select>
                   </div>
-                </div>
+         </div>
 
              <div class="form-group way_code_API">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">接入参数 <span class="required">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">接口地址 <span class="required">*</span>
                   </label>
                   <div class="col-md-9 col-sm-9 col-xs-12">
                     <textarea name="way_value" class="form-control" rows="2" placeholder="">{{ algorithm.way_value }}</textarea>
@@ -120,12 +111,13 @@
                <div class="form-group way_code_MODEL">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">算法框架 <span class="required">*</span></label>
                  <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select name="framework" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control">
-                        <option value="0">请选择</option>
-                        {% for framework in algorithm_frameworks %}
-                            <option {% if algorithm.framework == framework %}selected{% endif %} value="{{ framework }}">{{ framework }}</option>
-                        {% endfor %}
-                    </select>
+                     {% if "edit" == handle %}
+                        <select disabled="disabled" name="framework" class="form-control">
+                            <option >{{ algorithm.framework }}</option>
+                        </select>
+                     {% else %}
+                        <select name="framework" class="form-control"></select>
+                     {% endif %}
                   </div>
                 </div>
 
@@ -133,38 +125,77 @@
                <div class="form-group way_code_MODEL">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">推理引擎 <span class="required">*</span></label>
                  <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select name="inference" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control">
-                        <option value="0">请选择</option>
-                        {% for inference in algorithm_inferences %}
-                            <option {% if algorithm.inference == inference %}selected{% endif %} value="{{ inference }}">{{ inference }}</option>
-                        {% endfor %}
-                    </select>
+                      {% if "edit" == handle %}
+                        <select disabled="disabled" name="inference" class="form-control">
+                            <option >{{ algorithm.inference }}</option>
+                        </select>
+                     {% else %}
+                        <select name="inference" class="form-control"></select>
+                     {% endif %}
                   </div>
                 </div>
 
              <div class="form-group way_code_MODEL">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">推理引擎设备 <span class="required">*</span> <i class="bxc_introduce fa fa-info-circle" title="推理引擎设备，比如CPU,GPU,GPU:0,GPU:1"></i></label>
-              <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input type="text" name="inference_device" value="{{ algorithm.inference_device }}"  class="form-control">
+                  <div class="col-md-3 col-sm-3 col-xs-12">
+                        <input type="text" name="inference_device" value="{{ algorithm.inference_device }}"  class="form-control">
 
-              </div>
+                  </div>
                 </div>
 
             <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型扩展参数 <span class="required">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型参数 <span class="required">*</span></label>
                     <div class="col-md-3 col-sm-3 col-xs-12">
-                    <textarea name="extend_params" class="form-control" rows="3" placeholder="">{{ algorithm.extend_params }}</textarea>
+                    <textarea name="extend_params" class="form-control" rows="3">{{ algorithm.extend_params }}</textarea>
+                  </div>
+            </div>
+
+
+         <div class="form-group way_code_MODEL">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型目标分类 <span class="required">*</span></label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+                    <textarea name="model_class_names" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control" rows="4"  placeholder="请填写模型支持的目标分类名称，（请注意，分类名称不支持中文），多个分类名称，用英文逗号隔开，无论是检测算法，还是分类算法，都需要填写支持的分类名称，追踪算法只需要填写track即可" >{{ algorithm.model_class_names }}</textarea>
                   </div>
                 </div>
+
 
 {% if "add" == handle %}
                 <div class="form-group way_code_MODEL">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件 <span class="required">*</span></label>
                     <div class="col-md-3 col-sm-3 col-xs-12">
-                      <input type="file" name="model" accept="application/x-tar" class="form-control" placeholder="模型文件" >
+                        <!-- application/x-tar,application/octet-stream-->
+                      <input type="file" name="model" accept=".onnx,.tar" class="form-control" placeholder="模型文件" >
                     </div>
+
+
                 </div>
+
+             <div class="form-group way_code_MODEL">
+                 <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                      <p>1，TensorRT推理引擎支持onnx格式模型文件（Pytorch，Caffe，Tensorflow，Paddle等框架训练的模型都可以转换成onnx）</p>
+                      <p>2，推理引擎选择TensorRT时，后台会将onnx模型转换为.engine模型。在不同的英伟达显卡上进行模型转换时，耗时不同，大约1-8分钟不等，提交过程中请勿关闭页面</p>
+                      <p>3，相同的onnx模型在不同型号英伟达显卡上转换出来的engine模型文件是不通用的</p>
+                      <p>4，OpenVINO推理引擎支持tar格式模型文件，tar模型文件就是OpenVINO支持的.bin/.xml模型文件经过tar压缩后的文件</p>
+                      <p>5，在英特尔处理器上产生的tar模型，在不同型号英特尔处理器上通用</p>
+                  </div>
+                </div>
+
 {% elif "edit" == handle %}
+                <div class="form-group way_code_MODEL">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型目标分类数量</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                            <span class="sun-state-success">{{ model_class_names_len }}</span>
+                      </div>
+                </div>
+
+                  <div class="form-group way_code_MODEL">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件路径</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                         <input type="text" value="{{ absolute_model_dir }}" readonly  class="form-control">
+                      </div>
+                </div>
+
                 <div class="form-group way_code_MODEL">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件状态</label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
@@ -176,33 +207,6 @@
                       </div>
                 </div>
 
-                  <div class="form-group way_code_MODEL">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件路径</label>
-                      <div class="col-md-9 col-sm-9 col-xs-12">
-                         <input type="text" value="{{ absolute_model_dir }}" readonly  class="form-control">
-                      </div>
-                </div>
-
-                  <div class="form-group way_code_MODEL">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型识别分类</label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
-                    <textarea disabled="disabled" class="form-control" rows="6" >{{ algorithm.model_class_names }}</textarea>
-                  </div>
-                </div>
-
-                  <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型备注</label>
-                    <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input type="text" value="{{ algorithm.model_remark }}" disabled="disabled" class="form-control">
-                  </div>
-                </div>
-
-                      <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件夹</label>
-                    <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input type="text" value="{{ algorithm.model_name_dir }}" disabled="disabled" class="form-control">
-                  </div>
-                </div>
 {% endif %}
 
                 <!--
@@ -216,13 +220,37 @@
             -->
                 <div class="form-group">
                   <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                    <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">取消</button>
-                    <button type="submit" class="btn btn-success">提交</button>
+                        <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">取消</button>
+                        <button type="button" onclick="f_handle()" class="btn btn-success">提交</button>
+
+                        <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">提交中</span>
+                        <span id="timer_counter" style="margin-top: 3px;font-size:12px"></span>
+                         <button id="algorithmSubmitBtn" style="margin-left: 2px;display: none;" onclick="f_log()" type="button" class="btn btn-default btn-xs">查看详细日志</button>
                   </div>
                 </div>
 
-              </form>
             </div>
+
+
+            </div>
+              <!--日志弹窗start -->
+              <div id="algorithmSubmitLogDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title" >详细日志</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div style="padding: 5px 20px;">
+                            <div id="algorithmSubmitLogData">暂无内容</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+               </div>
+              <!--日志弹窗end -->
           </div>
         </div>
       </div>
@@ -234,32 +262,52 @@
 {% block javascripts %}
   {{ block.super }}
 <script>
-
+let ele_top_loading = $("#top_loading");
+let eleTimerCounter = $("#timer_counter");
+let mTimer = null;
+let mTimerSpendSecond = 0;//当前计时器开启总时长
+    
 let handle = "{{ handle }}";
 let algorithm_code = "{{ algorithm.code }}";
 let algorithm_way_code = "{{ algorithm.way_code }}";
 let algorithm_algorithm_type= "{{ algorithm.algorithm_type }}";
+
 let ele_input_name= $("input[name='name']");
 let ele_select_way_code= $("select[name='way_code']");
 let ele_select_algorithm_type= $("select[name='algorithm_type']");
 let ele_input_inference_device= $("input[name='inference_device']");
-let ele_input_extend_params= $("input[name='extend_params']");
+let ele_textarea_extend_params= $("textarea[name='extend_params']");
+let ele_textarea_model_class_names= $("textarea[name='model_class_names']");
+
 let ele_textarea_way_value = $("textarea[name='way_value']");
+
 let ele_select_framework= $("select[name='framework']");
 let ele_select_inference= $("select[name='inference']");
-let ele_input_model= $("input[name='model']");
+let ele_input_model= $("input[name='model']"); //模型文件
 let ele_textarea_remark= $("textarea[name='remark']");
 
 let selectedWayCode = algorithm_way_code;
-let selectedAlgorithmType = algorithm_algorithm_type;
+let selectedAlgorithmTypeCode = algorithm_algorithm_type;
 
+let curIsPost = false; //当前是否在提交中，已经提交后该变量会设为true，避免重复操作
+
+//提交后的日志查看start
+let ele_algorithm_submit_log_dialog = $("#algorithmSubmitLogDialog");
+let ele_algorithm_submit_log_data = $("#algorithmSubmitLogData");
+let ele_algorithm_submit_btn =$("#algorithmSubmitBtn");
+function f_log() {
+    ele_algorithm_submit_log_dialog.modal("toggle");
+    //ele_algorithm_submit_log_dialog.modal("show");
+    //ele_algorithm_submit_log_dialog.modal("hide");
+}
+//提交后的日志查看end
 
 ele_select_way_code.change(function () {
     selectedWayCode = $(this).val();
-    if("MODEL" === selectedWayCode){
+    if(selectedWayCode === "MODEL"){
         $(".way_code_MODEL").show();
         $(".way_code_API").hide();
-    }else if("API" === selectedWayCode){
+    }else if(selectedWayCode === "API"){
         $(".way_code_MODEL").hide();
         $(".way_code_API").show();
     }else{
@@ -270,15 +318,257 @@ ele_select_way_code.change(function () {
 });
 
 ele_select_algorithm_type.change(function () {
-    selectedAlgorithmType = $(this).val();
+    selectedAlgorithmTypeCode = $(this).val();
+    f_select_algorithm_type()
 });
+function f_show_algorithm_type_info(info) {
+    //设置算法框架下拉框
+    let html = "<option value=\"0\">请选择</option>";
+    let frameworks = info["frameworks"];
+    for (let i = 0; i < frameworks.length; i++) {
+        let framework = frameworks[i];
+       html += "<option value=\""+framework+"\">"+framework+"</option>";
 
-$(document).ready(function () {
-    if("edit" === handle){
-        if("MODEL" === algorithm_way_code){
+    }
+    ele_select_framework.html(html);
+
+    //设置推理引擎下拉框
+    html = "<option value=\"0\">请选择</option>";
+    let inferences = info["inferences"];
+    for (let i = 0; i < inferences.length; i++) {
+        let inference = inferences[i];
+       html += "<option value=\""+inference+"\">"+inference+"</option>";
+
+    }
+    ele_select_inference.html(html);
+
+
+}
+function f_select_algorithm_type() {
+    $.ajax({
+       url: "/algorithm/postAlgorithmTypeAttrs",
+       type: "post",
+       async: true,
+       data: {
+           "algorithm_type_code":selectedAlgorithmTypeCode
+       },
+       dataType: "json",
+       timeout: 0,
+       error: function () {
+            myAlert("网络异常，请确定网络正常！","error");
+       },
+       success: function (res) {
+           if(1000 === res.code){
+                let info = res.info;
+                f_show_algorithm_type_info(info);
+           }else{
+                  ele_select_framework.html("");
+                  ele_select_inference.html("");
+           }
+       }
+    });
+}
+function f_docs() {
+    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/添加基础算法");
+}
+function updateTimer() {
+    mTimerSpendSecond++;
+    eleTimerCounter.html("耗时"+mTimerSpendSecond.toString()+"秒")
+}
+function f_startTimer() {
+    mTimerSpendSecond = 0;
+    if(mTimer){
+        clearTimeout(mTimer);
+        mTimer = null;
+    }
+    mTimer = setInterval(updateTimer, 1000);
+}
+function f_stopTimer() {
+    if(mTimer){
+        clearTimeout(mTimer);
+        mTimer = null;
+    }
+}
+    
+function f_postHandle(url,formData) {
+    if(curIsPost){
+        myAlert("正在提交中，请勿重复提交！","error",500);
+        return false;
+    }
+    curIsPost = true;
+    ele_top_loading.show();
+    f_startTimer();
+    $.ajax({
+           url: url,
+           type: "post",
+           async: true,
+           contentType:false,
+           processData:false,
+           data: formData,
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+               curIsPost = false;
+               ele_top_loading.hide();
+               f_stopTimer();
+               myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               curIsPost = false;
+               ele_top_loading.hide();
+               f_stopTimer();
+
+               try {
+                   let upload_info = res.upload_info;
+                    let convert_msg = upload_info["convert_msg"];
+                    if(convert_msg !== undefined){
+                        let convert_spend = upload_info["convert_spend"]; //模型转换耗时
+                        let convert_log = upload_info["convert_log"]; //模型转换日志
+                        let upload_info_str = "<p>"+convert_msg +"</p><p>"+convert_spend+"</p><p>"+convert_log+"</p>";
+                        ele_algorithm_submit_log_data.html(upload_info_str)
+                        ele_algorithm_submit_btn.show();
+                    }
+               }catch (e) {
+                    console.log(e)
+               }
+
+               if(1000 === res.code){
+                   myAlert(res.msg,"success",1000);
+                   setTimeout(function () {
+                        window.location.href= "/algorithm/index";
+                    }, 1000);
+               }else{
+                    myAlert(res.msg,"error");
+               }
+           }
+    });
+}
+function f_handle() {
+
+    let name_s = ele_input_name.val().trim();
+   if(name_s=== ""){
+        myAlert("请输入算法名称","error");
+       return false;
+    }
+   if(selectedAlgorithmTypeCode==="0" || selectedAlgorithmTypeCode === ""){
+        myAlert("请选择算法类型","error");
+       return false;
+   }
+    let formData = new FormData();
+    formData.append('code',algorithm_code);
+    formData.append('handle',handle);
+    formData.append('name',name_s);
+    formData.append('algorithm_type',selectedAlgorithmTypeCode);
+    formData.append('way_code',selectedWayCode);
+
+   if(selectedWayCode === "MODEL"){
+       let framework_s = ele_select_framework.val().trim();
+        if(framework_s==="0"){
+            myAlert("请选择算法框架","error");
+            return false;
+        }
+        let inference_s = ele_select_inference.val().trim();
+        if(inference_s==="0"){
+            myAlert("请选择算法推理引擎","error");
+            return false;
+        }
+        let inference_device_s = ele_input_inference_device.val().trim();
+        if(inference_device_s === ""){
+            myAlert("请输入算法推理引擎设备","error");
+            return false;
+        }
+        let extend_params_s = ele_textarea_extend_params.val().trim();
+        if(extend_params_s === ""){
+            myAlert("请输入模型参数","error");
+            return false;
+        }
+       let model_class_names_s = ele_textarea_model_class_names.val().trim();
+        if(model_class_names_s === ""){
+            myAlert("请输入模型目标分类参数","error");
+            return false;
+        }
+
+       let remark_s = ele_textarea_remark.val();
+        if(remark_s === ""){
+            myAlert("请输入备注","error");
+            return false;
+        }
+
+        let handleUrl;
+        formData.append('framework',framework_s);
+        formData.append('inference',inference_s);
+        formData.append('inference_device',inference_device_s);
+        formData.append('extend_params',extend_params_s);
+        formData.append('model_class_names',model_class_names_s);
+        //formData.append('remark',remark_s);
+
+        if(handle === "add"){
+            //添加
+            handleUrl = "/algorithm/add";
+            if(ele_input_model[0].files.length > 0){
+                let file = ele_input_model[0].files[0];
+                let fs_name = file.name;
+                let fs_size = parseInt(file.size);//文件字节大小
+                let fs_size_m = parseInt(fs_size / 1024 / 1024); //换算成M单位
+                if(inference_s === "TensorRT"){
+                    if(!fs_name.endsWith(".onnx")){
+                        myAlert("TensorRT仅支持onnx格式的模型","error");
+                        return false;
+                    }
+                }
+                else if(inference_s === "OpenVINO"){
+                    if(!fs_name.endsWith(".tar")){
+                        myAlert("OpenVINO仅支持tar格式的模型","error");
+                        return false;
+                    }
+                }
+                if(fs_size_m > 1000){
+                    myAlert("模型文件不能超过（1000）M："+String(fs_size_m),"error");
+                    return false;
+                }
+                formData.append("model",file);
+            }else{
+               myAlert("请上传模型文件","error");
+               return false;
+            }
+        }else if(handle === "edit"){
+            handleUrl = "/algorithm/edit";
+        }else{
+            return false;
+       }
+        f_postHandle(handleUrl,formData)
+
+   }else if(selectedWayCode === "API"){
+        let way_value = ele_textarea_way_value.val().trim();
+        if(way_value==="0" || way_value===""){
+            myAlert("请输入接口地址","error");
+            return false;
+        }
+
+        formData.append('way_value',way_value);
+       let handleUrl;
+        if(handle === "add") {
+            handleUrl = "/algorithm/add";
+        }else if(handle === "edit"){
+            handleUrl = "/algorithm/edit";
+        }else{
+            return false;
+        }
+        f_postHandle(handleUrl,formData)
+
+   }else{
+      myAlert("请选择算法接入方式","error");
+      return false;
+   }
+
+}
+
+$(function() {
+     if(handle === "edit"){
+        if(algorithm_way_code==="MODEL"){
             $(".way_code_MODEL").show();
             $(".way_code_API").hide();
-        }else if("API" === algorithm_way_code){
+        }else if(algorithm_way_code==="API"){
             $(".way_code_MODEL").hide();
             $(".way_code_API").show();
         }else{
@@ -290,75 +580,7 @@ $(document).ready(function () {
         $(".way_code_API").hide();
     }
 
-   $("form").submit(function () {
-
-       if(ele_input_name.val().trim() === ""){
-            myAlert("请输入算法名称","error");
-            return false;
-        }
-       if(selectedAlgorithmType==="0" || selectedAlgorithmType === ""){
-            myAlert("请选择算法类型","error");
-            return false;
-       }
-      if("MODEL" === selectedWayCode){
-        if(ele_select_framework.val().trim()==="0"){
-            myAlert("请选择算法框架","error");
-            return false;
-        }
-
-        if(ele_select_inference.val().trim()==="0"){
-            myAlert("请选择模型推理平台","error");
-            return false;
-        }
-        let inference_device = ele_input_inference_device.val().trim();
-        if(inference_device === ""){
-            myAlert("请输入模型推理设备","error");
-            return false;
-        }
-        let extend_params = ele_input_extend_params.val().trim();
-        if(extend_params === ""){
-            myAlert("请输入模型扩展参数","error");
-            return false;
-        }
-
-        if("add" === handle){
-            //添加
-           if(ele_input_model[0].files.length > 0){
-                let file = ele_input_model[0].files[0];
-                let fs_name = file.name;
-                let fs_size = parseInt(file.size);//文件字节大小
-                let fs_size_m = parseInt(fs_size / 1024 / 1024); //换算成M单位
-                if(!fs_name.endsWith(".tar")){
-                    myAlert("模型文件格式必须是tar压缩包","error");
-                    return false;
-                }
-                if(fs_size_m > 1000){
-                    myAlert("模型文件不能超过1000M:"+String(fs_size_m),"error");
-                    return false;
-                }
-           }else{
-               myAlert("请上传模型文件","error");
-               return false;
-           }
-
-        }
-      }else if("API" === selectedWayCode){
-            let way_value = ele_textarea_way_value.val().trim();
-            if(way_value==="0" || way_value===""){
-                myAlert("请输入接入参数","error");
-                return false;
-            }
-
-      }else{
-          myAlert("请选择接入方式","error");
-          return false;
-      }
-
-   });
 });
-function f_docs() {
-    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/添加基础算法");
-}
 </script>
 
 {% endblock javascripts %}

@@ -46,10 +46,8 @@
                         <th class="column-title">ID</th>
                         <th class="column-title">编号</th>
                         <th class="column-title">名称</th>
-                        <th class="column-title">接入方式</th>
                           <th class="column-title">算法类型</th>
-                          <th class="column-title">算法框架</th>
-                          <th class="column-title">推理引擎</th>
+                         <th class="column-title">算法参数</th>
                         <th class="column-title">时间</th>
                           <th class="column-title no-link last"><span class="nobr">操作</span></th>
                       </tr>
@@ -61,11 +59,8 @@
                         <td>{{ d.id }}</td>
                         <td>{{ d.code }}</td>
                              <td>{{ d.name }}</td>
-
-                        <td>{{ d.way_code }}</td>
-                        <td>{{ d.algorithm_type }}</td>
-                        <td>{{ d.framework }}</td>
-                        <td>{{ d.inference }}</td>
+                        <td>{{ d.algorithm_type_name }}</td>
+                        <td> {{ d.way}}</td>
                           <td>{{ d.last_update_time }}</td>
                         <td>
                             <a href="javascript:f_edit('{{ d.code }}')"  class='sun-a-label' style='margin-right: 8px;' ><i class="fa fa-edit"></i>编辑</a>
