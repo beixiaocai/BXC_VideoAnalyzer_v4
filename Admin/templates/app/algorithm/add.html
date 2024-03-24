@@ -144,24 +144,23 @@
                 </div>
 
             <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型参数 <span class="required">*</span></label>
-                    <div class="col-md-3 col-sm-3 col-xs-12">
-                    <textarea name="extend_params" class="form-control" rows="3">{{ algorithm.extend_params }}</textarea>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型推理参数 <span class="required">*</span><i class="bxc_introduce fa fa-info-circle" title="模型推理参数，基于TensorRT推理时运行模型的参数"></i></label>
+                 <div class="col-md-9 col-sm-9 col-xs-12">
+                    <textarea name="extend_params" class="form-control" rows="2">{{ algorithm.extend_params }}</textarea>
                   </div>
             </div>
 
+             <div class="form-group way_code_MODEL">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型转换参数 <span class="required">*</span><i class="bxc_introduce fa fa-info-circle" title="模型转换参数，使用trtexec在将onnx转换为engine的命令行扩展参数"></i></label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+                    <textarea name="model_convert_params" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control" rows="2"  placeholder="" >{{ algorithm.model_convert_params }}</textarea>
+                  </div>
+                </div>
 
          <div class="form-group way_code_MODEL">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">模型目标分类 <span class="required">*</span></label>
                   <div class="col-md-9 col-sm-9 col-xs-12">
                     <textarea name="model_class_names" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control" rows="4"  placeholder="请填写模型支持的目标分类名称，（请注意，分类名称不支持中文），多个分类名称，用英文逗号隔开，无论是检测算法，还是分类算法，都需要填写支持的分类名称，追踪算法只需要填写track即可" >{{ algorithm.model_class_names }}</textarea>
-                  </div>
-                </div>
-
-             <div class="form-group way_code_MODEL">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型转换参数</label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
-                    <textarea name="model_convert_params" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control" rows="2"  placeholder="" >{{ algorithm.model_convert_params }}</textarea>
                   </div>
                 </div>
 
@@ -485,7 +484,7 @@ function f_handle() {
         }
         let extend_params_s = ele_textarea_extend_params.val().trim();
         if(extend_params_s === ""){
-            myAlert("请输入模型参数","error");
+            myAlert("请输入模型推理参数","error");
             return false;
         }
        let model_class_names_s = ele_textarea_model_class_names.val().trim();
@@ -495,6 +494,11 @@ function f_handle() {
         }
 
        let model_convert_params_s = ele_textarea_model_convert_params.val().trim();
+       if(model_convert_params_s === ""){
+            myAlert("请输入模型转换参数","error");
+            return false;
+        }
+
        let remark_s = ele_textarea_remark.val();
 
 
