@@ -169,7 +169,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">模型文件 <span class="required">*</span></label>
                     <div class="col-md-3 col-sm-3 col-xs-12">
                         <!-- application/x-tar,application/octet-stream-->
-                      <input type="file" name="model" accept=".onnx,.tar" class="form-control" placeholder="模型文件" >
+                      <input type="file" name="model" accept=".onnx,.engine,.tar" class="form-control" placeholder="模型文件" >
                     </div>
                 </div>
 
@@ -177,11 +177,11 @@
              <div class="form-group way_code_MODEL">
                  <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                   <div class="col-md-6 col-sm-6 col-xs-12">
-                      <p>1，TensorRT推理引擎支持onnx格式模型文件（Pytorch，Caffe，Tensorflow，Paddle等框架训练的模型都可以转换成onnx）</p>
-                      <p>2，推理引擎选择TensorRT时，后台会将onnx模型转换为.engine模型。在不同的英伟达显卡上进行模型转换时，耗时不同，大约1-8分钟不等，提交过程中请勿关闭页面</p>
-                      <p>3，相同的onnx模型在不同型号英伟达显卡上转换出来的engine模型文件是不通用的</p>
-                      <p>4，OpenVINO推理引擎支持tar格式模型文件，tar模型文件就是OpenVINO支持的.bin/.xml模型文件经过tar压缩后的文件</p>
-                      <p>5，在英特尔处理器上产生的tar模型，在不同型号英特尔处理器上通用</p>
+                      <p>1，TensorRT推理引擎支持onnx或engine格式的模型</p>
+                      <p>2，推理引擎选择TensorRT+上传模型选择onnx格式时，后台会自动将onnx转换为适应本机显卡的加密后的engine格式。在不同的英伟达显卡上进行模型转换时，耗时不同，大约1-8分钟不等，提交过程中请勿关闭页面。相同的onnx模型在不同型号英伟达显卡上转换出来的engine模型文件是不通用的</p>
+                      <p>3，推理引擎选择TensorRT+上传模型选择engine格式时，用户需要对engine加密后上传 <a href="javascript:f_docs()">模型加密参考文档</a></p>
+                      <p>4，OpenVINO推理引擎支持tar格式模型文件，tar模型文件就是OpenVINO支持的.bin+.xml模型文件经过tar压缩后的文件</p>
+                      <p>5，在英特尔处理器上产生的tar模型，在不同型号的英特尔处理器上通用</p>
                   </div>
                 </div>
 
@@ -438,10 +438,11 @@ function f_postHandle(url,formData) {
                }
 
                if(1000 === res.code){
-                   myAlert(res.msg,"success",1000);
-                   setTimeout(function () {
-                        window.location.href= "/algorithm/index";
-                    }, 1000);
+                   myAlert(res.msg,"success");
+                   //myAlert(res.msg,"success",1000);
+                   //setTimeout(function () {
+                   //     window.location.href= "/algorithm/index";
+                   //}, 1000);
                }else{
                     myAlert(res.msg,"error");
                }
@@ -520,8 +521,12 @@ function f_handle() {
                 let fs_size = parseInt(file.size);//文件字节大小
                 let fs_size_m = parseInt(fs_size / 1024 / 1024); //换算成M单位
                 if(inference_s === "TensorRT"){
-                    if(!fs_name.endsWith(".onnx")){
-                        myAlert("TensorRT仅支持onnx格式的模型","error");
+                    if(fs_name.endsWith(".onnx")){
+                        //支持
+                    }else if(fs_name.endsWith(".engine")){
+                        //支持
+                    }else{
+                        myAlert("TensorRT仅支持onnx或engine格式的模型","error");
                         return false;
                     }
                 }
