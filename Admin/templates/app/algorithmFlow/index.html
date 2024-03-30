@@ -48,6 +48,7 @@
                         <th class="column-title">编号</th>
                         <th class="column-title">名称</th>
                         <th class="column-title">模式</th>
+                          <th class="column-title">分析进程</th>
                           <th class="column-title">最大实例数</th>
                         <th class="column-title">时间</th>
                           <th class="column-title no-link last"><span class="nobr">操作</span></th>
@@ -59,9 +60,9 @@
                       <tr class="even pointer">
                         <td>{{ d.id }}</td>
                         <td>{{ d.code }}</td>
-                             <td>{{ d.name }}</td>
-                             <td>{{ d.mode_remark }}</td>
-
+                          <td>{{ d.name }}</td>
+                          <td>{{ d.mode_remark }}</td>
+                          <td>{{ d.deploy_process_index }}</td>
                           <td>{{ d.max_concurrency }}</td>
                           <td>{{ d.last_update_time }}</td>
                         <td>

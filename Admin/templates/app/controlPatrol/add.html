@@ -45,14 +45,14 @@
                   </div>
                 </div>
                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">名称 <span class="required">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">名称 <span class="required" style="color: red;">*</span></label>
               <div class="col-md-3 col-sm-3 col-xs-12">
                     <input type="text" name="name" value="{{ obj.name }}" required="required"  class="form-control">
                   </div>
                 </div>
 
                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">布控 <span class="required">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">布控 <span class="required" style="color: red;">*</span></label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                     <select id="control_codes" style="height: 200px;"  class="select2_multiple form-control" required="required"  multiple="multiple" >
                         <option value="0">---请选择布控(可多选)---</option>
@@ -63,21 +63,21 @@
                   </div>
                 </div>
                              <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">轮巡并发 <span class="required">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">轮巡并发 <span class="required" style="color: red;">*</span></label>
               <div class="col-md-3 col-sm-3 col-xs-12">
                     <input type="number" name="control_concurrency" value="{{ obj.control_concurrency }}" required="required"  class="form-control">
                   </div>
                 </div>
 
                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">轮巡时长（秒） <span class="required">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">轮巡时长（秒） <span class="required" style="color: red;">*</span></label>
               <div class="col-md-3 col-sm-3 col-xs-12">
                     <input type="number" name="control_duration" value="{{ obj.control_duration }}" required="required"  class="form-control">
                   </div>
                 </div>
 
                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">预览刷新时长（秒） <span class="required">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">预览刷新时长（秒） <span class="required" style="color: red;">*</span></label>
               <div class="col-md-3 col-sm-3 col-xs-12">
                     <input type="number" name="preview_refresh_duration" value="{{ obj.preview_refresh_duration }}" required="required"  class="form-control">
                   </div>

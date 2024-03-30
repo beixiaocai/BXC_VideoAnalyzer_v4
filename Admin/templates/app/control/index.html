@@ -372,7 +372,8 @@
                    ele_top_loading.hide();
 
                    let info = res.info;
-                   ele_top_info.html("在线视频流:"+info["online_stream_len"].toString()+" 实时布控中:"+info["online_control_len"].toString());
+                   //ele_top_info.html("在线视频流:"+info["online_stream_len"].toString()+" 实时布控中:"+info["online_control_len"].toString());
+                   ele_top_info.html("实时布控:"+info["online_control_len"].toString());
 
                    eleData.html("");
                    let item_html;

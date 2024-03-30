@@ -44,14 +44,14 @@
                         </div>
 
                               <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">算法名称 <span class="required">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">算法名称 <span class="required" style="color: red;">*</span></label>
               <div class="col-md-3 col-sm-3 col-xs-12">
                     <input type="text" name="name" value="{{ flow.name }}" required="required"  class="form-control">
                   </div>
                 </div>
 
                     <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择算法模式 <span class="required">*</span></label></label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择算法模式 <span class="required" style="color: red;">*</span></label></label>
 
                           <div class="col-md-9 col-sm-9 col-xs-12">
 
@@ -79,8 +79,7 @@
 
 
                     <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测算法
-                          </label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测算法 <span class="required" style="color: red;">*</span></label>
 
                           <div class="col-md-9 col-sm-9 col-xs-12">
 
@@ -116,7 +115,7 @@
                     </div>
 
                     <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测目标</label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测目标 <span class="required" style="color: red;">*</span></label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                         <select id="select_detect_class_name"  class="select2_multiple form-control" required="required"  multiple="multiple" >
                             <option value="0">---请选择检测目标(可多选)---</option>
@@ -158,7 +157,7 @@
                         </div>
 
                    <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择行为算法 <span class="required">*</span></label></label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择行为算法 <span class="required" style="color: red;">*</span></label></label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
                             <select id="select_behaviour"  class="select2_single form-control" required="required" >
                                 <option value="0">请选择</option>
@@ -181,17 +180,22 @@
                           </div>
                         </div>
 
-
+                  <div class="form-group way_code_MODEL">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">分析进程 <span class="required" style="color: red;">*</span></label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <input type="number" name="deploy_process_index" value="{{ flow.deploy_process_index }}"  class="form-control">
+                            </div>
+                        </div>
 
                   <div class="form-group way_code_MODEL">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">最大实例数 <span class="required">*</span></label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">模型最大实例数 <span class="required" style="color: red;">*</span></label>
                             <div class="col-md-3 col-sm-3 col-xs-12">
                             <input type="number" name="max_concurrency" value="{{ flow.max_concurrency }}"  class="form-control">
                           </div>
                         </div>
 
           <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">实例增长单位 <span class="required">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">实例增长单位 <span class="required" style="color: red;">*</span></label>
                     <div class="col-md-3 col-sm-3 col-xs-12">
                     <input type="number" name="concurrency_unit_length" value="{{ flow.concurrency_unit_length }}"  class="form-control">
                   </div>
@@ -245,6 +249,7 @@
     let old_flow_detect_class_names = '{{ flow.detect_class_names }}';// 布控原始检测目标
     let handle = '{{ handle }}';// 操作类型 add 或 edit
     let ele_input_name= $("input[name='name']");
+    let ele_input_deploy_process_index= $("input[name='deploy_process_index']");
     let ele_input_max_concurrency= $("input[name='max_concurrency']");
     let ele_input_concurrency_unit_length= $("input[name='concurrency_unit_length']");
 
@@ -363,6 +368,7 @@
 
         algorithmTrackCode = eleSelectAlgorithmTrack.val().trim();//typeof string
 
+        let deploy_process_index = parseInt(ele_input_deploy_process_index.val());
         let max_concurrency = parseInt(ele_input_max_concurrency.val());
         let concurrency_unit_length = parseInt(ele_input_concurrency_unit_length.val());
 
@@ -383,6 +389,7 @@
             "detect_class_names":detectClassNames_s,
             "algorithm_track_code":algorithmTrackCode,
             "behaviour_code":behaviourCode_s,
+            "deploy_process_index":deploy_process_index,
             "max_concurrency":max_concurrency,
             "concurrency_unit_length":concurrency_unit_length,
             "extend_params":extend_params,
