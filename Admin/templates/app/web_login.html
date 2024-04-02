@@ -88,6 +88,8 @@
     let elePassword = $("input[name='password']");
     let eleVerifyCode = $("input[name='verify_code']");
 
+    let is_logining = false;
+
     $('#verify-code').click(function () {
         $(this)[0].src +="&";
     });
@@ -100,15 +102,18 @@
         }
     }
     function login() {
+        if(is_logining){
+            return false;
+        }
         let username = eleUsername.val().trim();
         let password = elePassword.val().trim();
 
         if(username.length < 5){
-            myAlert("用户名格式不正确!","error");
+            myAlert("用户名格式不正确","error");
             return false;
         }
         if(!validate_password(password)){
-            myAlert("密码格式不正确!","error");
+            myAlert("密码格式不正确","error");
             return false;
         }
 
@@ -118,7 +123,7 @@
             myAlert("验证码格式不正确!","error");
             return false;
         }*/
-
+        is_logining = true;
         $.ajax({
             url: '/login',
             type: "post",
@@ -128,16 +133,17 @@
             timeout: 0,
             error: function () {
                 myAlert("网络异常，请确定网络正常！", "error");
+                is_logining = false;
             },
             success: function (res) {
-                if(1000===res.code){
-                    myAlert(res.msg,"success",1000);
-                    setTimeout(function () {
-                        window.location.href = "/"
-                    }, 1000);
 
+                if(1000===res.code){
+                    window.location.href = "/";
                 }else{
                     myAlert(res.msg,"error",1000);
+                    setTimeout(function () {
+                        is_logining = false;
+                    }, 1000);
                 }
             }
         });

@@ -22,7 +22,7 @@
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
 * [行为算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理)
 * [布控管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理)
-* [二次开发报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/二次开发报警接口/二次开发报警接口)
+* [添加报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/添加报警接口/添加报警接口)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
 
 ### 使用TensorRT推理引擎的版本请注意
@@ -33,7 +33,12 @@
 
 
 # 版本历史
-### v4.402
+### v4.403
+* 发布时间 2024.04.02
+* （1）后台管理调整UI主题
+* （2）启动配置扩展硬件编解码配置项
+
+#### v4.402
 * 发布时间 2024.03.29
 * （1）优化布控推流延迟问题
 * （2）优化启动器的日志记录问题

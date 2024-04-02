@@ -13,10 +13,11 @@
   "autoAddAllForward": true,
   "autoManagePatrolForward": false,
   "cacheModelMaxDuration": 120000,
-  "enableHardwareDecode": false,
+  "enableHardwareDecode": true,
   "hardwareDecodeMaxCount": 1,
-  "hardwareDecoder": "nvidia",
+  "hardwareH264Decoder": "h264_cuvid",
+  "hardwareH265Decoder": "hevc_cuvid",
   "enableHardwareEncode": false,
-  "hardwareEncodeMaxCount": 0,
-  "hardwareEncoder": "nvidia"
+  "hardwareEncodeMaxCount": 1,
+  "hardwareEncoder": "h264_nvenc"
 }
