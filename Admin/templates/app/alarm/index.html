@@ -113,12 +113,11 @@
               <label style="margin-left:20px;padding-top:5px;">
                 <input type="checkbox" class="check_all">
               </label>
-                <button style="margin-left:5px;" onclick="f_handle('read')" class="btn btn-primary btn-sm"><i class="fa fa-book"></i> 已读</button>
-                <button onclick="f_handle('delete')" class="btn btn-primary btn-sm"><i class="fa fa-remove"></i> 删除</button>
-                <button id="top_open_audio" class="btn btn-primary btn-sm"><i class="fa fa-bell-slash-o"></i> 启动报警声音</button>
-                <button onclick="f_handle('allDelete')" class="btn btn-default btn-sm"><i class="fa fa-remove"></i> 全部删除</button>
-                <button onclick="f_handle('clear')" class="btn btn-default btn-sm"><i class="fa fa-remove"></i> 清理报警缓存</button>
-
+                <button style="margin-left:5px;" onclick="f_handle('read')" class="btn btn-primary btn-sm"> 已读</button>
+                <button onclick="f_handle('delete')" class="btn btn-primary btn-sm">删除</button>
+                <button onclick="f_handle('allDelete')" class="btn btn-default btn-sm"> 全部删除</button>
+                <button onclick="f_handle('clear')" class="btn btn-default btn-sm"> 清理报警缓存</button>
+                <button id="top_open_audio" class="btn btn-default btn-sm"><i class="fa fa-bell-slash-o"></i> 启动报警声音</button>
                 <audio id="top_audio"  controls loop style="display: block;float: right; position: relative;height: 34px; "  >
                     浏览器不支持音频播放
                   </audio>

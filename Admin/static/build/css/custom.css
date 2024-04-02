@@ -144,7 +144,7 @@ html , body{
     padding: 0 0 4px 0
 }
 .left_col {
-    background: #373737
+    background: #2A3F54
 }
 .nav-sm .container.body .col-md-3.left_col {
     min-height: 100%;
@@ -221,10 +221,9 @@ html , body{
     left: 100%;
     position: absolute;
     top: 0;
-    width: 140px;
+    width: 150px;
     z-index: 4000;
-    /*background: #3E5367;*/
-    background: #373737;
+    background: #3E5367;
     display: none
 }
 .nav-sm ul.nav.child_menu li {
@@ -357,7 +356,7 @@ body .container.body .right_col {
 .nav_title {
     width: 200px;
     float: left;
-    background: #373737;
+    background: #2A3F54;
     border-radius: 0;
     height: 57px
 }
@@ -499,11 +498,11 @@ body .container.body .right_col {
 }
 body {
     color: #000000;/*#73879C*/
-    background: #373737;
+    background: #2A3F54;
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     /*font-size: 13px;*/
     font-weight: 400;
-    line-height: 1.471;
+    line-height: 1.6;/*1.471*/
 }
 .main_container .top_nav {
     display: block;
@@ -798,8 +797,7 @@ a:active,
 }
 .nav.side-menu>li.active>a {
     text-shadow: rgba(0, 0, 0, 0.25) 0 -1px 0;
-    /*background: linear-gradient(#334556, #2C4257), #373737;*/
-    background: linear-gradient(#3e3c3c, #373d43), #231010;
+    background: linear-gradient(#334556, #2C4257), #2A3F54;
     box-shadow: rgba(0, 0, 0, 0.25) 0 1px 0, inset rgba(255, 255, 255, 0.16) 0 1px 0
 }
 .navbar-brand,
@@ -1671,7 +1669,7 @@ span.right {
     padding: 5px 0 0 0;
     position: fixed;
     width: 200px;
-    /*background: #373737;*/
+    /*background: #2A3F54;*/
 	z-index:999;
 }
 .sidebar-footer a {
@@ -4297,5 +4295,3 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     border-radius: 3px;
 */
 }
-
-
