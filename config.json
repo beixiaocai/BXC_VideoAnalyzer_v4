@@ -13,7 +13,7 @@
   "autoAddAllForward": true,
   "autoManagePatrolForward": false,
   "cacheModelMaxDuration": 120000,
-  "enableHardwareDecode": true,
+  "enableHardwareDecode": false,
   "hardwareDecodeMaxCount": 1,
   "hardwareH264Decoder": "h264_cuvid",
   "hardwareH265Decoder": "hevc_cuvid",
