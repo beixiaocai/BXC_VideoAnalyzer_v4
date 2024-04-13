@@ -36,7 +36,7 @@
                 <tr class="headings">
                   <th class="column-title">ID </th>
                   <th class="column-title">视频流 </th>
-                  <th class="column-title">推流 <i class="bxc_introduce fa fa-info-circle" title="推流在布控执行时才能查看（布控需勾选推流选项）"></i></th>
+                  <th class="column-title">算法流 <i class="bxc_introduce fa fa-info-circle" title="算法流在布控执行时才能查看（布控需勾选算法推流选项）"></i></th>
                   <th class="column-title">算法 </th>
                   <th class="column-title">计算频率 </th>
                   <th class="column-title">状态 </th>
@@ -166,28 +166,30 @@
         window.location.href = url;
     }
     function f_del(controlCode) {
-        ele_top_loading.show();
-        $.ajax({
-               url: '/control/postDel',
-               type: "post",
-               async: true,
-               data: {"controlCode":controlCode},
-               dataType: "json",
-               timeout: 0,
-               error: function () {
-                   ele_top_loading.hide();
-                   myAlert("网络异常，请确定网络正常！","error");
-               },
-               success: function (res) {
-                      ele_top_loading.hide();
-                   if(1000 === res.code){
-                       f_getIndex(temp_cur_page,temp_cur_page_size);
-                   }else{
-                        myAlert(res.msg,"error");
+        let ret = confirm("确认删除吗？");
+        if (ret){
+            ele_top_loading.show();
+            $.ajax({
+                   url: '/control/postDel',
+                   type: "post",
+                   async: true,
+                   data: {"controlCode":controlCode},
+                   dataType: "json",
+                   timeout: 0,
+                   error: function () {
+                       ele_top_loading.hide();
+                       myAlert("网络异常，请确定网络正常！","error");
+                   },
+                   success: function (res) {
+                          ele_top_loading.hide();
+                       if(1000 === res.code){
+                           f_getIndex(temp_cur_page,temp_cur_page_size);
+                       }else{
+                            myAlert(res.msg,"error");
+                       }
                    }
-               }
-            });
-
+                });
+        }
     }
 
     function f_postCopy() {
@@ -395,17 +397,17 @@
                                //item_html += "<td>"+d["code"]+"</td>";
 
                                if(d["stream_active"]){
-                                  item_html += "<td><span class='sun-state-success'>在线</span> <a class='sun-a-label' href=\"javascript:f_open_player('"+d["stream_app"]+"','"+d["stream_name"]+"')\" ><i class=\"fa fa-play\"></i> "+
+                                  item_html += "<td><span class='sun-state-success'><i class=\"fa fa-bar-chart\"></i> 在线</span> <a class='sun-a-label' href=\"javascript:f_open_player('"+d["stream_app"]+"','"+d["stream_name"]+"')\" ><i class=\"fa fa-play\"></i> "+
                                                 d["stream_nickname"]+"</a></td>";
                                }else{
                                   item_html += "<td><span class='sun-state-error'>离线</span> "+d["stream_nickname"]+"</td>";
                                 }
 
                                if(0===d["push_stream"]){
-                                   item_html += "<td><span class='sun-state-error'>未开启推流</span></td>";
+                                   item_html += "<td><span class='sun-state-error'>未开启</span></td>";
                                }else{
                                    item_html += "<td><a class='sun-a-label' style='font-size: 12px;' href=\"javascript:f_open_player('"+d["push_stream_app"]+"','"+d["push_stream_name"]+"')\" ><i class=\"fa fa-play\"></i> "+
-                                                "推流"+"</a></td>";
+                                                "算法流"+"</a></td>";
                                }
 
                                 if(0===d["flow_nickname"]){//算法已被删除
@@ -432,19 +434,19 @@
 
                                item_html += "<td>"+d["last_update_time"]+"</td>";
                                item_html += "<td>";
-                                    if(1===d["cur_state"]) {
-                                        item_html += "<button data-code='" + d["code"] + "'  data-handle='cancel' onclick=\"f_postHandleControl(this)\" class=\"btn btn-dark btn-xs\"><i class=\"fa fa-close\"></i> 取消布控</button>";
-                                        item_html += "<span style='display: none;' class='menu_" + d["code"] + "'>";
-                                    }else{
-                                        item_html += "<button data-code='" + d["code"] + "'  data-handle='add'onclick=\"f_postHandleControl(this)\"class=\"btn btn-primary btn-xs\"><i class=\"fa fa-hand-o-right\"></i> 执行布控</button>";
-                                        item_html += "<span class='menu_" + d["code"] + "'>";
-                                    }
-                                        item_html += "<a href=\"javascript:f_del('"+d["code"]+"')\"  class='sun-a-label'  ><i class=\"fa fa-remove\"></i>删除</a>";
-                                        item_html += "</span>";
 
-                                    item_html += "<a href=\"javascript:f_edit('"+d["code"]+"')\"  class='sun-a-label' ><i class=\"fa fa-edit\"></i>编辑</a>";
-                                    item_html += "<a href=\"javascript:f_copy('"+d["code"]+"')\" class='sun-a-label' ><i class=\"fa fa-copy\"></i>复制</a>";
-                                    item_html += "<a href=\"javascript:f_log('"+d["code"]+"')\" class='sun-a-label' ><i class=\"fa fa-chain\"></i>日志</a>";
+                                    item_html += "<div class=\"btn-group\">";
+                                        if(1===d["cur_state"]) {//布控中
+                                            item_html += "<button data-code='" + d["code"] + "'  data-handle='cancel' onclick=\"f_postHandleControl(this)\" class=\"btn btn-dark btn-sm\">取消布控</button>";
+                                        }else{
+                                            item_html += "<button data-code='" + d["code"] + "'  data-handle='add'onclick=\"f_postHandleControl(this)\"class=\"btn btn-primary btn-sm\">执行布控</button>";
+                                        }
+                                      item_html += "<button onclick=\"f_edit('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"编辑\"><i class=\"fa fa-edit\"></i></button>";
+                                      item_html += "<button onclick=\"f_del('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"删除\"><i class=\"fa fa-remove\"></i></button>";
+                                      item_html += "<button onclick=\"f_copy('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"复制\"><i class=\"fa fa-copy\"></i></button>";
+                                      item_html += "<button onclick=\"f_log('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"日志\"><i class=\"fa fa-chain\"></i></button>";
+                                    item_html += "</div>";
+
                                item_html += "</td></tr>";
 
                                eleData.append(item_html);
@@ -518,26 +520,25 @@
                if(1000 === res.code){
                    myAlert(res.msg,"success",2000);
 
-                   if("add"===handle){
+                   if(handle === "add"){
                        jqueryObj.removeClass("btn-primary")
                        jqueryObj.addClass("btn-dark")
                        jqueryObj.data("handle","cancel");
-                       jqueryObj.html("<i class=\"fa fa-close\"></i>取消布控");
+                       jqueryObj.html("取消布控");
 
                         //布控成功
                        $(".cur_state_"+code).html("<span class='sun-state-success'>布控中</span>");
-                       $(".menu_"+code).hide();
+                       //$(".menu_"+code).hide();
 
-                   }else if('cancel'===handle){
+                   }else if(handle === 'cancel'){
                        jqueryObj.removeClass("btn-dark")
                        jqueryObj.addClass("btn-primary")
                        jqueryObj.data("handle","add");
-                       jqueryObj.html("<i class=\"fa fa-hand-o-right\"></i>执行布控")
+                       jqueryObj.html("执行布控")
                        //取消布控成功
                        $(".cur_state_"+code).html("<span class='sun-state-error'>未布控</span>")
-                       $(".menu_"+code).show();
+                       //$(".menu_"+code).show();
                    }
-
                }else{
                    myAlert(res.msg,"error");
                }

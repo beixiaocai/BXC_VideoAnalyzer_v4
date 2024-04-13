@@ -488,9 +488,9 @@
            }
         });
     }
-    function f_getAuth() {
+    function f_getAuthInfo() {
         $.ajax({
-               url: '/system/getAuth',
+               url: '/auth/getAuthInfo',
                type: "get",
                async: true,
                data: {},
@@ -527,9 +527,9 @@
                }
             });
     }
-    function f_getSystemIndex() {
+    function f_getSystemInfo() {
         $.ajax({
-           url: '/system/getIndex',
+           url: '/system/getSystemInfo',
            type: "get",
            async: true,
            data: {},
@@ -579,7 +579,7 @@
 
                }
                setTimeout(function () {
-                   f_getSystemIndex();
+                   f_getSystemInfo();
                }, 5000);
            }
         });
@@ -627,8 +627,8 @@
     }
     window.onload = function (){
         f_getIndex();
-        f_getAuth();
-        f_getSystemIndex();
+        f_getAuthInfo();
+        f_getSystemInfo();
         f_getCheckVersion();
     };
 

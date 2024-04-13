@@ -30,7 +30,7 @@
                         <th class="column-title">编号</th>
                         <th class="column-title">名称</th>
                         <th class="column-title">是否保存本地</th>
-                        <th class="column-title">上传服务器类型</th>
+                        <th class="column-title">上传类型</th>
                         <th class="column-title">报警延迟</th>
                         <th class="column-title">时间</th>
                           <th class="column-title no-link last"><span class="nobr">操作</span></th>
@@ -48,9 +48,9 @@
                         <td>
 
                             {% if d.request_server_type == 0 %}
-                                 <span style="font-size: 12px;font-weight: 500;line-height: 40px;margin-left: 20px;">不上传服务器</span>
+                                 <span >本地</span>
                             {% elif d.request_server_type == 1 %}
-                               <span style="font-size: 25px;font-weight: 500;line-height: 40px;margin-left: 20px;">HTTP</span>
+                                 <span>HTTP</span>
                             {% elif d.request_server_type == 2 %}
                                <img style="width: 100px;height: 53px;" src="/static/images/db_redis.png">
                             {% elif d.request_server_type == 3 %}
@@ -64,9 +64,13 @@
                         <td>{{ d.alarm_delay }}</td>
                           <td>{{ d.last_update_time }}</td>
                         <td>
-                            <a href="javascript:f_testAlarmInterface('{{ d.code }}')"  class='sun-a-label' >测试上传</a>
-                            <a href="javascript:f_edit('{{ d.code }}')"  class='sun-a-label' ><i class="fa fa-edit"></i>编辑</a>
-                            <a href="javascript:f_del('{{ d.code }}')"  class='sun-a-label' ><i class="fa fa-remove"></i>删除</a>
+                                <div class="btn-group">
+
+                                  <button onclick="f_edit('{{ d.code }}')" class="btn btn-sm btn-primary" type="button"><i class="fa fa-edit"></i> 编辑</button>
+                                  <button onclick="f_del('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="删除"><i class="fa fa-remove"></i></button>
+                                  <button onclick="f_testAlarmInterface('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="测试上传"><i class="fa fa-check"></i></button>
+
+                                </div>
                         </td>
                       </tr>
                     {% endfor %}

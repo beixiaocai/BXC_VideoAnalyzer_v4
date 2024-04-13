@@ -59,10 +59,10 @@
     let eleData = $("#data");
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
-    function f_handle(name,port,handle){
+    function f_handleProcess(name,port,handle){
         ele_top_loading.show();
         $.ajax({
-               url: '/system/getHandle',
+               url: '/system/handleProcess',
                type: "get",
                async: true,
                data: {"name":name,"port":port,"handle":handle},
@@ -80,7 +80,7 @@
                    if(1000 === res.code){
                         myAlert(res.msg,"success",1000);
                         setTimeout(function () {
-                            f_getIndex();
+                            f_getSystemInfo();
                          }, 1000);
 
                    }else{
@@ -89,10 +89,10 @@
                }
             });
     }
-    function f_getIndex() {
+    function f_getSystemInfo() {
         ele_top_loading.show();
         $.ajax({
-               url: '/system/getIndex',
+               url: '/system/getSystemInfo',
                type: "get",
                async: true,
                data: {},
@@ -131,13 +131,13 @@
                                        if("Admin" === d["process_name"]) {
                                             html += "<td></td>";
                                        }else{
-                                           html += "'<td><a class='sun-a-label'  href=\"javascript:f_handle('" + d["process_name"] +"','"+d["process_port"]+ "','restart')\" ><i class=\"fa fa-hourglass-start\"></i> 重启</a>";
+                                           html += "'<td><a class='sun-a-label'  href=\"javascript:f_handleProcess('" + d["process_name"] +"','"+d["process_port"]+ "','restart')\" ><i class=\"fa fa-hourglass-start\"></i> 重启</a>";
                                            html += "</td>";
                                        }
-                                       //html += "<a class='sun-a-label'  href=\"javascript:f_handle('"+ d["process_name"] +"','"+d["process_port"]+"','stop')\" ><i class=\"fa fa-stop\"></i> 停止</a></td>";
+                                       //html += "<a class='sun-a-label'  href=\"javascript:f_handleProcess('"+ d["process_name"] +"','"+d["process_port"]+"','stop')\" ><i class=\"fa fa-stop\"></i> 停止</a></td>";
                                 }else{
                                        html += "<td><span class=\"btn-danger btn-xs\">未运行</span></td>";
-                                       html += "<td><a class='sun-a-label'  href=\"javascript:f_handle('"+ d["process_name"] +"','"+d["process_port"]+"','start')\"  ><i class=\"fa fa-hourglass-start\"></i> 启动</a></td>";
+                                       html += "<td><a class='sun-a-label'  href=\"javascript:f_handleProcess('"+ d["process_name"] +"','"+d["process_port"]+"','start')\"  ><i class=\"fa fa-hourglass-start\"></i> 启动</a></td>";
                                 }
 
                                html += "</tr>";
@@ -154,7 +154,7 @@
     }
 
     window.onload = function (){
-        f_getIndex();
+        f_getSystemInfo();
     };
 
 </script>

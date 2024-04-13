@@ -4251,12 +4251,13 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     cursor: pointer;
 }
 .sun-state-success{
-    color:#169F85;
-    font-size: 13px;
+    color: #2b542c!important;
+    font-weight: 600;
+    font-size: 12px;
     /*font-weight: bold;*/
 }
 .sun-state-error{
-    color:#c9302c;
+    color: #c00e09;
     font-size: 12px;
     /*font-weight:bold;*/
 }
@@ -4266,11 +4267,10 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     /*font-weight:bold;*/
 }
 .sun-a-label{
-    margin-left: 5px;
-    font-size: 14px;
+    margin-left: 2px;
+    font-size: 13px;
     color:#23527c;
     /*text-decoration:underline;*/
-
 }
 #top_loading{
     display: none;

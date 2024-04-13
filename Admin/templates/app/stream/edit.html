@@ -1,0 +1,235 @@
+{% extends "app/base_site.html" %}
+{% block title %} 编辑摄像头 {% endblock title %}
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="">
+
+     <div class="row">
+         <!--add start-->
+                 <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+                <h2>编辑摄像头 <span id="top_msg">{{top_msg}}</span></h2>
+                <button style="margin-left:5px;" onclick="f_docs()" class="btn btn-primary btn-sm">文档</button>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <br>
+              <form class="form-horizontal form-label-left"  method="post" enctype="multipart/form-data" data-parsley-validate  >
+
+                     <input type="hidden" name="handle"  value="{{ handle }}">
+                     <input type="hidden" name="code"  value="{{ stream.code }}">
+                     <input type="hidden" name="app"  value="{{ stream.app }}">
+                     <input type="hidden" name="name"  value="{{ stream.name }}">
+
+                      <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">ID </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" disabled  value="{{ stream.id }}" class="form-control">
+                          </div>
+                        </div>
+
+                             <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">编号 </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                       <input type="text" disabled  value="{{ stream.code }}" class="form-control">
+                  </div>
+                </div>
+
+           <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">ws-fmp4</label>
+       <div class="col-md-6 col-sm-6 col-xs-12">
+               <input type="text" disabled  value="{{ stream.wsMp4Url }}" class="form-control">
+                   </div>
+                </div>
+
+                                    <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">http-fmp4</label>
+       <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" disabled  value="{{ stream.httpMp4Url }}" class="form-control">
+                   </div>
+                </div>
+
+                                 <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">rtsp</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                 <input type="text" disabled  value="{{ stream.rtspUrl }}" class="form-control">
+                   </div>
+                </div>
+              <!--
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">hls</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    {{ stream.hlsUrl }}
+                   </div>
+                </div>-->
+
+                                 <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">状态</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                         {% if stream.forward_state == 1 %}
+                                <span class="sun-state-success"><i class="fa fa-bar-chart"></i> 在线</span>
+                             {% else %}
+                                <span class="sun-state-error">离线</span>
+                             {% endif %}
+
+                   </div>
+                </div>
+
+               <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">名称<span class="required" style="color: red;">*</span>
+                      </label>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="nickname"  value="{{ stream.nickname }}" placeholder="请输入名称" class="form-control">
+                      </div>
+                </div>
+
+               <div class="form-group way_code_MODEL">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">接入协议 <span class="required" style="color: red;">*</span></label>
+                 <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select disabled="disabled" name="pull_stream_type" class="form-control">
+                          <option value="0">请选择</option>
+                            {% for pull_stream_type in pull_stream_types %}
+                                {% if pull_stream_type.id == stream.pull_stream_type %}
+                                    <option selected value="{{ stream.pull_stream_type }}" >{{ pull_stream_type.name }}</option>
+                                 {% endif %}
+                            {% endfor %}
+                        </select>
+                  </div>
+                </div>
+
+
+
+            {% if stream.pull_stream_type == 21 %}
+                <!-- 如GB28181接入协议，其他一些私有协议，是不允许修改该字段的 -->
+
+              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头SIP用户名</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" disabled  value="{{ stream.camera_device_id }}" class="form-control">
+                   </div>
+                </div>
+
+              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">SIP服务器</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                     <input type="text" disabled  value="{{ stream.camera_parent_id }}" class="form-control">
+                   </div>
+                </div>
+
+                              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">最近一次注册时间</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                       <input type="text" disabled  value="{{ stream.camera_last_register_time }}" class="form-control">
+                   </div>
+                </div>
+                              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">最近一次心跳时间</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                       <input type="text" disabled  value="{{ stream.camera_last_keepalive_time }}" class="form-control">
+                   </div>
+                </div>
+                {% else %}
+               <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头视频地址<span class="required" style="color: red;">*</span>
+                      </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <textarea name="pull_stream_url" class="form-control" rows="4" placeholder="请输入摄像头视频地址（视频地址需要与接入协议保持一致）">{{ stream.pull_stream_url }}</textarea>
+                      </div>
+                </div>
+              {% endif %}
+
+               <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头名称
+                      </label>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="camera_name" value="{{ stream.camera_name }}" placeholder="请输入摄像头名称" class="form-control">
+                      </div>
+                </div>
+
+               <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头厂商
+                      </label>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="camera_manufacturer" value="{{ stream.camera_manufacturer }}" placeholder="请输入摄像头厂商" class="form-control">
+                      </div>
+                </div>
+
+
+                 <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">备注
+                      </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+                        <textarea name="remark" class="form-control" rows="3" placeholder="请输入摄像头备注">{{ stream.remark }}</textarea>
+                      </div>
+                </div>
+
+
+                <div class="form-group">
+                  <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                    <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">返回</button>
+                    <button type="submit" class="btn btn-success">提交</button>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+     <!-- add end -->
+
+        </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+<script>
+
+let handle = "{{ handle }}";
+let stream_code = "{{ stream.code }}";
+let stream_pull_stream_type = parseInt("{{ stream.pull_stream_type }}");
+let ele_input_nickname= $("input[name='nickname']");
+
+
+$(document).ready(function () {
+   $("form").submit(function () {
+       if(ele_input_nickname.val().trim() === ""){
+            myAlert("请输入名称","error");
+            return false;
+        }
+
+       if(stream_pull_stream_type ===21){
+           //如GB28181接入协议，其他一些私有协议，是不允许修改该字段的
+       }else{
+           let ele_textarea_pullStreamUrl= $("textarea[name='pull_stream_url']");
+           let pullStreamUrl = ele_textarea_pullStreamUrl.val().trim();
+            if(pullStreamUrl === ""){
+                myAlert("请输入摄像头视频地址","error");
+                return false;
+            }
+            if(pullStreamUrl.startsWith("rtsp://")
+                || pullStreamUrl.startsWith("rtsps://")
+                || pullStreamUrl.startsWith("rtmp://")
+                || pullStreamUrl.startsWith("rtmps://")){
+
+            }else{
+                myAlert("摄像头视频地址仅支持rtsp/rtmp","error");
+                return false;
+            }
+
+       }
+
+   });
+});
+    function f_docs() {
+    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/添加摄像头");
+}
+</script>
+
+{% endblock javascripts %}

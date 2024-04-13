@@ -91,13 +91,11 @@
                },
                success: function (res) {
                    ele_top_loading.hide();
-                   let top_msg = res.top_msg;
-                   ele_top_msg.html(top_msg);
 
-                   let item_html;
                     eleData.html("");
 
                    if(1000 === res.code){
+                       let item_html;
 
                        let data = res.data;
                        let data_length = data.length;
@@ -118,7 +116,7 @@
                                 }else{
                                       item_html += "<td>（用户推流）</td>";
                                 }
-                                item_html += "<td><a class='sun-a-label' href=\"javascript:f_open_player('"+d["app"]+"','"+d["name"]+"')\" ><i class=\"fa fa-play\"></i> "+d["app"]+"/"+d["name"]+"</a></td>";
+                                item_html += "<td><span class='sun-state-success'><i class=\"fa fa-bar-chart\"></i> 在线</span> <a class='sun-a-label' href=\"javascript:f_open_player('"+d["app"]+"','"+d["name"]+"')\" ><i class=\"fa fa-play\"></i> "+d["app"]+"/"+d["name"]+"</a></td>";
                                item_html += "<td>"+d["clients"]+"</td>";
                                item_html += "<td>"+d["produce_speed"]+"</td>";
                                item_html += "<td>"+d["video"]+"</td>";
@@ -131,6 +129,7 @@
                         //setTimeout(function () {f_getOnline();}, 6000);
 
                    }else{
+                        ele_top_msg.html(res.msg);
                         myAlert(res.msg,"error");
                    }
                }

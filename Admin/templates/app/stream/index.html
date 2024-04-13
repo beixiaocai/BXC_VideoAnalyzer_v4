@@ -36,7 +36,7 @@
                     <span id="top_msg">{{top_msg}}</span>
                  </h2>
 
-                    <button style="margin-left:10px;" onclick="f_reload(1,1)" class="btn btn-primary btn-sm">刷新</button>
+                    <button style="margin-left:10px;" onclick="f_refreshStream()" class="btn btn-primary btn-sm">刷新</button>
 
                     <button data-toggle="modal" data-target="#ImportFileDialog"  class="btn btn-primary btn-sm">批量导入</button>
                     <button onclick="f_postHandleAllForward('add')" class="btn btn-default btn-sm">开启全部转发</button>
@@ -44,44 +44,80 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr class="headings">
-                        <th>ID</th>
-                        <th>摄像头编号</th>
-                        <th width="40%">摄像头视频流地址</th>
-                        <th>摄像头名称</th>
-                        <th>转发状态</th>
-                        <th>操作</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {%  for d  in data %}
-                          <tr class="even pointer">
-                            <th scope="row">{{ d.id }}</th><!-- {{forloop.counter}} -->
-                            <td>{{ d.code }}</td>
-                            <td>{{ d.pull_stream_url }}</td>
-                            <td>{{ d.nickname }}</td>
-                            <td>
-                                    {% if  1 == d.forward_state %}
-                                    <span class="sun-state-success">转发中</span>
-                                        <a href="javascript:f_postHandleForward('{{ d.code }}','del')" class="sun-a-label"><i class="fa fa-close"></i> 停止</a>
-                                        <a href="javascript:f_open_player('{{ d.app }}','{{ d.name }}')" class="sun-a-label"><i class="fa fa-play-circle"></i> 播放</a>
-                                  {% else %}
-                                    <span class="sun-state-error">转发未开启</span>
-                                       <a href="javascript:f_postHandleForward('{{ d.code }}','add')" class="sun-a-label"><i class="fa fa-paper-plane"></i> 开启</a>
-                                  {% endif %}
-                            </td>
-                           <td>
-                                <a href="javascript:f_edit('{{ d.code }}')"  class='sun-a-label' style='margin-right: 8px;' ><i class="fa fa-edit"></i>编辑</a>
-                                <a href="javascript:f_del('{{ d.code }}')"  class='sun-a-label' style='margin-right: 8px;' ><i class="fa fa-remove"></i>删除</a>
-                            </td>
-                          </tr>
-                      {% endfor %}
+                    <div class="table-responsive">
+                       <table class="table table-bordered">
+                            <thead>
+                                <tr class="headings">
+                                <th class="column-title">ID</th>
+                                <!--<th>编号</th>-->
 
-                    </tbody>
-                  </table>
+                                    <th class="column-title">接入协议</th>
+                                    <th class="column-title">名称</th>
+                                    <th class="column-title">IP</th>
+                                    <th class="column-title">状态</th>
+                                    <th class="column-title">摄像头名称</th>
+                                    <th class="column-title">厂商</th>
+                                    <th class="column-title">添加时间</th>
+                               <th class="column-title no-link last"><span class="nobr">操作</span></th>
+                              </tr>
+                            </thead>
+                          <tbody>
+                              {%  for d  in data %}
+                                  <tr class="even pointer">
+                                    <th scope="row">{{ d.id }}</th><!-- {{forloop.counter}} -->
+                                    <!--<td>{{ d.code }}</td>-->
 
+                                      <td>
+                                          {% if d.pull_stream_type == 1 %}
+                                              <span>RTSP</span>
+                                              {% elif d.pull_stream_type == 2 %}
+                                                <span>RTMP</span>
+                                              {% elif d.pull_stream_type == 21 %}
+                                                <span>GB28181</span>
+                                          {% endif %}
+                                      </td>
+                                  <td>{{ d.nickname }}</td>
+                                    <td>{{ d.pull_stream_ip }}</td>
+
+                                    <td>
+                                    {% if d.pull_stream_type == 21 %}
+                                        <!-- 国标gb28181接入类型-->
+                                        {% if d.forward_state == 1 %}
+                                            <span class="sun-state-success"><i class="fa fa-bar-chart"></i> 设备在线</span>
+                                            <a href="javascript:f_open_player('{{ d.app }}','{{ d.name }}')" class="sun-a-label">播放</a>
+                                            <a href="javascript:f_postHandleForward('{{ d.code }}','del')" class="sun-a-label">停止</a>
+                                        {% else %}
+                                            <span class="sun-state-error">离线</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <!-- 非国标gb28181接入类型-->
+                                        {% if d.forward_state == 1 %}
+                                            <span class="sun-state-success"><i class="fa fa-bar-chart"></i> 转发中</span>
+                                            <a href="javascript:f_open_player('{{ d.app }}','{{ d.name }}')" class="sun-a-label">播放</a>
+                                            <a href="javascript:f_postHandleForward('{{ d.code }}','del')" class="sun-a-label">停止</a>
+                                        {% else %}
+                                            <span class="sun-state-error">未转发</span>
+                                            <a href="javascript:f_postHandleForward('{{ d.code }}','add')" class="sun-a-label">开启</a>
+                                        {% endif %}
+                                    {% endif %}
+                                    </td>
+
+                                    <td>{{ d.camera_name }}</td>
+                                    <td>{{ d.camera_manufacturer }}</td>
+                                    <td>{{ d.create_time }}</td>
+
+                                      <td>
+                                          <div class="btn-group">
+                                          <button onclick="f_edit('{{ d.code }}')" class="btn btn-sm btn-primary" type="button"><i class="fa fa-edit"></i> 编辑</button>
+                                          <button onclick="f_del('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="删除"><i class="fa fa-remove"></i></button>
+                                        </div>
+                                    </td>
+                                  </tr>
+                              {% endfor %}
+
+                            </tbody>
+                          </table>
+                     </div>
                 </div>
 
               <!--批量导入弹窗start -->
@@ -162,7 +198,6 @@
     let eleFile = $("input[name='file']");
     let eleTextareaImportRemark= $("textarea[name='import_remark']");
 
-
     function f_open_player(stream_app,stream_name){
         window.open("/stream/player?app="+stream_app+"&name="+stream_name);
     }
@@ -175,28 +210,30 @@
         window.location.href = url;
     }
     function f_del(code){
-        ele_top_loading.show();
-        $.ajax({
-               url: '/stream/postDel',
-               type: "post",
-               async: true,
-               data: {"code":code},
-               dataType: "json",
-               timeout: 0,
-               error: function () {
-                   ele_top_loading.hide();
-                   myAlert("网络异常，请确定网络正常！","error");
-               },
-               success: function (res) {
-                      ele_top_loading.hide();
-                   if(1000 === res.code){
+        let ret = confirm("确认删除吗？");
+        if (ret) {
+            ele_top_loading.show();
+            $.ajax({
+                url: '/stream/postDel',
+                type: "post",
+                async: true,
+                data: {"code": code},
+                dataType: "json",
+                timeout: 0,
+                error: function () {
+                    ele_top_loading.hide();
+                    myAlert("网络异常，请确定网络正常！", "error");
+                },
+                success: function (res) {
+                    ele_top_loading.hide();
+                    if (1000 === res.code) {
                         window.location.reload();
-                   }else{
-                        myAlert(res.msg,"error");
-                   }
-               }
+                    } else {
+                        myAlert(res.msg, "error");
+                    }
+                }
             });
-
+        }
     }
     function f_postImportFile() {
 
@@ -307,11 +344,11 @@
             });
 
     }
-    function f_getAllUpdateForwardState() {
-        //全部更新转发状态
+    function f_refreshStream() {
+        //刷新视频流
         ele_top_loading.show();
         $.ajax({
-               url: '/stream/getAllUpdateForwardState',
+               url: '/stream/refreshStream',
                type: "get",
                async: true,
                data: {},
@@ -327,16 +364,13 @@
                         myAlert(res.msg,"success");
                          setTimeout(function () {
                                 window.location.reload();
-                         }, 2000);
+                         }, 1000);
 
                     }else{
                         myAlert(res.msg,"error");
                     }
                }
             });
-    }
-    function f_reload() {
-        f_getAllUpdateForwardState();
     }
 </script>
 

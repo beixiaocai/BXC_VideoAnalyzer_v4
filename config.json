@@ -4,7 +4,8 @@
   "mediaHttpPort": 9002,
   "analyzerPort": 9003,
   "mediaRtspPort": 9554,
-  "videoAnalyzerPort": 9555,
+  "mediaManagerPort": 9555,
+  "videoAnalyzerPort": 9556,
   "mediaSecret": "aqxY9ps21fyhyKNRyYpGvJCTp1JBeGOM",
   "trtexec": "Analyzer\\trtexec.exe",
   "fontPath": "Analyzer\\fonts\\tsimhei.ttf",
@@ -12,12 +13,26 @@
   "mediaRootDir": "MediaServer/www",
   "autoAddAllForward": true,
   "autoManagePatrolForward": false,
-  "cacheModelMaxDuration": 120000,
-  "enableHardwareDecode": false,
-  "hardwareDecodeMaxCount": 1,
-  "hardwareH264Decoder": "h264_cuvid",
-  "hardwareH265Decoder": "hevc_cuvid",
-  "enableHardwareEncode": false,
-  "hardwareEncodeMaxCount": 1,
-  "hardwareEncoder": "h264_nvenc"
+  "analyzer": {
+	  "cacheModelMaxDuration": 120000,
+	  "enableHardwareDecode": false,
+	  "hardwareDecodeMaxCount": 1,
+	  "hardwareH264Decoder": "h264_cuvid",
+	  "hardwareH265Decoder": "hevc_cuvid",
+	  "enableHardwareEncode": false,
+	  "hardwareEncodeMaxCount": 1,
+	  "hardwareEncoder": "h264_nvenc"
+  },
+  "sipServer": {
+	  "sipServerIp": "127.0.0.1",
+      "sipServerPort":15060,
+      "sipServerNonce":"12345678",
+      "sipTransferMode": 0,
+      "sipServerId": "34020000009000009999",
+      "sipServerRealm": "3402000000",
+      "sipServerPass": "123456",
+      "sipServerTimeout": 1800,
+      "sipServerExpiry": 3600,
+      "rtpTransferMode": 0
+  }
 }

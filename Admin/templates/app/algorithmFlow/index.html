@@ -47,7 +47,7 @@
                         <th class="column-title">ID</th>
                         <th class="column-title">编号</th>
                         <th class="column-title">名称</th>
-                        <th class="column-title">模式</th>
+                        <th class="column-title">流程模式</th>
                           <th class="column-title">分析进程</th>
                           <th class="column-title">最大实例数</th>
                         <th class="column-title">时间</th>
@@ -65,9 +65,11 @@
                           <td>{{ d.deploy_process_index }}</td>
                           <td>{{ d.max_concurrency }}</td>
                           <td>{{ d.last_update_time }}</td>
-                        <td>
-                            <a href="javascript:f_edit('{{ d.code }}')"  class='sun-a-label' style='margin-right: 8px;' ><i class="fa fa-edit"></i>编辑</a>
-                            <a href="javascript:f_del('{{ d.code }}')"  class='sun-a-label' style='margin-right: 8px;' ><i class="fa fa-remove"></i>删除</a>
+                               <td>
+                              <div class="btn-group">
+                              <button onclick="f_edit('{{ d.code }}')" class="btn btn-sm btn-primary" type="button"><i class="fa fa-edit"></i> 编辑</button>
+                              <button onclick="f_del('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="删除"><i class="fa fa-remove"></i></button>
+                            </div>
                         </td>
                       </tr>
                     {% endfor %}
