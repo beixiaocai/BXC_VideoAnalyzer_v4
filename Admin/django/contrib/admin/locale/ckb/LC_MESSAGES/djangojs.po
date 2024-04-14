@@ -3,15 +3,16 @@
 # Translators:
 # Bakhtawar Barzan, 2021
 # Bakhtawar Barzan, 2021
-# Swara <swara09@gmail.com>, 2022
+# Mariusz Felisiak <felisiak.mariusz@gmail.com>, 2023
+# Swara <swara09@gmail.com>, 2022-2024
 msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-17 03:19-0500\n"
-"PO-Revision-Date: 2023-04-25 07:59+0000\n"
-"Last-Translator: Swara <swara09@gmail.com>, 2022\n"
-"Language-Team: Central Kurdish (http://www.transifex.com/django/django/"
+"POT-Creation-Date: 2023-09-18 15:04-0300\n"
+"PO-Revision-Date: 2024-01-20 07:59+0000\n"
+"Last-Translator: Swara <swara09@gmail.com>, 2022-2024\n"
+"Language-Team: Central Kurdish (http://app.transifex.com/django/django/"
 "language/ckb/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,7 +68,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Type into this box to filter down the list of selected %s."
-msgstr ""
+msgstr "لەم بوخچەدا بنووسە بۆ ئەوەی لیستی هەڵبژێردراوەکان بپاڵێویت %s."
 
 msgid "Remove all"
 msgstr "لابردنی هەمووی"
@@ -79,8 +80,8 @@ msgstr "کرتە بکە بۆ لابردنی هەموو ئەوانەی هەڵبژ
 #, javascript-format
 msgid "%s selected option not visible"
 msgid_plural "%s selected options not visible"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%sبژاردەی هەڵبژێردراو نابینرێت"
+msgstr[1] "%s هەڵبژاردە هەڵبژێردراوەکان نابینرێن"
 
 msgid "%(sel)s of %(cnt)s selected"
 msgid_plural "%(sel)s of %(cnt)s selected"
@@ -173,7 +174,7 @@ msgid "April"
 msgstr "‎گوڵان"
 
 msgid "May"
-msgstr "‎جۆزەردان"
+msgstr "جۆزەردان"
 
 msgid "June"
 msgstr "‎پوشپەڕ"
@@ -244,33 +245,82 @@ msgctxt "abbrev. month December"
 msgid "Dec"
 msgstr "‎بەفرانبار"
 
+msgid "Sunday"
+msgstr "یەکشەممە"
+
+msgid "Monday"
+msgstr "دووشەممە"
+
+msgid "Tuesday"
+msgstr "سێشەممە"
+
+msgid "Wednesday"
+msgstr "چوارشەممە"
+
+msgid "Thursday"
+msgstr "پێنجشەممە"
+
+msgid "Friday"
+msgstr "هەینی"
+
+msgid "Saturday"
+msgstr "شەممە"
+
+msgctxt "abbrev. day Sunday"
+msgid "Sun"
+msgstr "یەک"
+
+msgctxt "abbrev. day Monday"
+msgid "Mon"
+msgstr "دوو"
+
+msgctxt "abbrev. day Tuesday"
+msgid "Tue"
+msgstr "سێ"
+
+msgctxt "abbrev. day Wednesday"
+msgid "Wed"
+msgstr "چوار"
+
+msgctxt "abbrev. day Thursday"
+msgid "Thur"
+msgstr "پێنج"
+
+msgctxt "abbrev. day Friday"
+msgid "Fri"
+msgstr "هەینی"
+
+msgctxt "abbrev. day Saturday"
+msgid "Sat"
+msgstr "شەم"
+
 msgctxt "one letter Sunday"
 msgid "S"
-msgstr "یەکشەممە"
+msgstr "ی"
 
 msgctxt "one letter Monday"
 msgid "M"
-msgstr "دووشەممە"
+msgstr "د"
 
 msgctxt "one letter Tuesday"
 msgid "T"
-msgstr "سێشەممە"
+msgstr "س"
 
 msgctxt "one letter Wednesday"
 msgid "W"
-msgstr "چوارشەممە"
+msgstr "چ"
 
 msgctxt "one letter Thursday"
 msgid "T"
-msgstr "پێنجشەممە"
+msgstr "پ"
 
 msgctxt "one letter Friday"
 msgid "F"
-msgstr "هەینی"
+msgstr "هە"
 
 msgctxt "one letter Saturday"
 msgid "S"
-msgstr "شەممە"
+msgstr "ش"
 
 msgid "Show"
 msgstr "پیشاندان"

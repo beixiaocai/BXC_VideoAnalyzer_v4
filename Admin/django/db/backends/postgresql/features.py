@@ -70,17 +70,25 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     supports_update_conflicts = True
     supports_update_conflicts_with_target = True
     supports_covering_indexes = True
+    supports_stored_generated_columns = True
+    supports_virtual_generated_columns = False
     can_rename_index = True
     test_collations = {
+        "deterministic": "C",
         "non_default": "sv-x-icu",
         "swedish_ci": "sv-x-icu",
+        "virtual": "sv-x-icu",
     }
     test_now_utc_template = "STATEMENT_TIMESTAMP() AT TIME ZONE 'UTC'"
+    insert_test_table_with_defaults = "INSERT INTO {} DEFAULT VALUES"
 
     django_test_skips = {
         "opclasses are PostgreSQL only.": {
             "indexes.tests.SchemaIndexesNotPostgreSQLTests."
             "test_create_index_ignores_opclasses",
+        },
+        "PostgreSQL requires casting to text.": {
+            "lookup.tests.LookupTests.test_textfield_exact_null",
         },
     }
 
@@ -128,6 +136,13 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     def is_postgresql_14(self):
         return self.connection.pg_version >= 140000
 
+    @cached_property
+    def is_postgresql_15(self):
+        return self.connection.pg_version >= 150000
+
     has_bit_xor = property(operator.attrgetter("is_postgresql_14"))
     supports_covering_spgist_indexes = property(operator.attrgetter("is_postgresql_14"))
     supports_unlimited_charfield = True
+    supports_nulls_distinct_unique_constraints = property(
+        operator.attrgetter("is_postgresql_15")
+    )

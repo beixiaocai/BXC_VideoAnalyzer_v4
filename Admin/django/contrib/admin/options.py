@@ -1,8 +1,11 @@
 import copy
+import enum
 import json
 import re
 from functools import partial, update_wrapper
+from urllib.parse import parse_qsl
 from urllib.parse import quote as urlquote
+from urllib.parse import urlparse
 
 from django import forms
 from django.conf import settings
@@ -13,8 +16,7 @@ from django.contrib.admin.checks import (
     InlineModelAdminChecks,
     ModelAdminChecks,
 )
-from django.contrib.admin.decorators import display
-from django.contrib.admin.exceptions import DisallowedModelAdminToField
+from django.contrib.admin.exceptions import DisallowedModelAdminToField, NotRegistered
 from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
 from django.contrib.admin.utils import (
     NestedObjects,
@@ -69,6 +71,13 @@ from django.views.generic import RedirectView
 
 IS_POPUP_VAR = "_popup"
 TO_FIELD_VAR = "_to_field"
+IS_FACETS_VAR = "_facets"
+
+
+class ShowFacets(enum.Enum):
+    NEVER = "NEVER"
+    ALLOW = "ALLOW"
+    ALWAYS = "ALWAYS"
 
 
 HORIZONTAL, VERTICAL = 1, 2
@@ -178,23 +187,27 @@ class BaseModelAdmin(metaclass=forms.MediaDefiningClass):
             # rendered output. formfield can be None if it came from a
             # OneToOneField with parent_link=True or a M2M intermediary.
             if formfield and db_field.name not in self.raw_id_fields:
-                related_modeladmin = self.admin_site._registry.get(
-                    db_field.remote_field.model
-                )
-                wrapper_kwargs = {}
-                if related_modeladmin:
-                    wrapper_kwargs.update(
-                        can_add_related=related_modeladmin.has_add_permission(request),
-                        can_change_related=related_modeladmin.has_change_permission(
-                            request
-                        ),
-                        can_delete_related=related_modeladmin.has_delete_permission(
-                            request
-                        ),
-                        can_view_related=related_modeladmin.has_view_permission(
-                            request
-                        ),
+                try:
+                    related_modeladmin = self.admin_site.get_model_admin(
+                        db_field.remote_field.model
                     )
+                except NotRegistered:
+                    wrapper_kwargs = {}
+                else:
+                    wrapper_kwargs = {
+                        "can_add_related": related_modeladmin.has_add_permission(
+                            request
+                        ),
+                        "can_change_related": related_modeladmin.has_change_permission(
+                            request
+                        ),
+                        "can_delete_related": related_modeladmin.has_delete_permission(
+                            request
+                        ),
+                        "can_view_related": related_modeladmin.has_view_permission(
+                            request
+                        ),
+                    }
                 formfield.widget = widgets.RelatedFieldWidgetWrapper(
                     formfield.widget,
                     db_field.remote_field,
@@ -239,8 +252,11 @@ class BaseModelAdmin(metaclass=forms.MediaDefiningClass):
         ordering.  Otherwise don't specify the queryset, let the field decide
         (return None in that case).
         """
-        related_admin = self.admin_site._registry.get(db_field.remote_field.model)
-        if related_admin is not None:
+        try:
+            related_admin = self.admin_site.get_model_admin(db_field.remote_field.model)
+        except NotRegistered:
+            return None
+        else:
             ordering = related_admin.get_ordering(request)
             if ordering is not None and ordering != ():
                 return db_field.remote_field.model._default_manager.using(db).order_by(
@@ -429,7 +445,9 @@ class BaseModelAdmin(metaclass=forms.MediaDefiningClass):
             else self.get_list_display(request)
         )
 
-    def lookup_allowed(self, lookup, value):
+    # RemovedInDjango60Warning: when the deprecation ends, replace with:
+    # def lookup_allowed(self, lookup, value, request):
+    def lookup_allowed(self, lookup, value, request=None):
         from django.contrib.admin.filters import SimpleListFilter
 
         model = self.model
@@ -447,19 +465,23 @@ class BaseModelAdmin(metaclass=forms.MediaDefiningClass):
 
         relation_parts = []
         prev_field = None
-        for part in lookup.split(LOOKUP_SEP):
+        parts = lookup.split(LOOKUP_SEP)
+        for part in parts:
             try:
                 field = model._meta.get_field(part)
             except FieldDoesNotExist:
                 # Lookups on nonexistent fields are ok, since they're ignored
                 # later.
                 break
-            # It is allowed to filter on values that would be found from local
-            # model anyways. For example, if you filter on employee__department__id,
-            # then the id value would be found already from employee__department_id.
             if not prev_field or (
                 prev_field.is_relation
-                and field not in prev_field.path_infos[-1].target_fields
+                and field not in model._meta.parents.values()
+                and field is not model._meta.auto_field
+                and (
+                    model._meta.auto_field is None
+                    or part not in getattr(prev_field, "to_fields", [])
+                )
+                and (field.is_relation or not field.primary_key)
             ):
                 relation_parts.append(part)
             if not getattr(field, "path_infos", None):
@@ -473,7 +495,12 @@ class BaseModelAdmin(metaclass=forms.MediaDefiningClass):
             # Either a local field filter, or no fields at all.
             return True
         valid_lookups = {self.date_hierarchy}
-        for filter_item in self.list_filter:
+        # RemovedInDjango60Warning: when the deprecation ends, replace with:
+        # for filter_item in self.get_list_filter(request):
+        list_filter = (
+            self.get_list_filter(request) if request is not None else self.list_filter
+        )
+        for filter_item in list_filter:
             if isinstance(filter_item, type) and issubclass(
                 filter_item, SimpleListFilter
             ):
@@ -629,6 +656,7 @@ class ModelAdmin(BaseModelAdmin):
     save_on_top = False
     paginator = Paginator
     preserve_filters = True
+    show_facets = ShowFacets.ALLOW
     inlines = ()
 
     # Custom templates (designed to be over-ridden in subclasses)
@@ -962,12 +990,16 @@ class ModelAdmin(BaseModelAdmin):
             action_flag=DELETION,
         )
 
-    @display(description=mark_safe('<input type="checkbox" id="action-toggle">'))
     def action_checkbox(self, obj):
         """
         A list_display column containing a checkbox widget.
         """
-        return helpers.checkbox.render(helpers.ACTION_CHECKBOX_NAME, str(obj.pk))
+        attrs = {
+            "class": "action-select",
+            "aria-label": format_html(_("Select this object for an action - {}"), obj),
+        }
+        checkbox = forms.CheckboxInput(attrs, lambda value: False)
+        return checkbox.render(helpers.ACTION_CHECKBOX_NAME, str(obj.pk))
 
     @staticmethod
     def _get_action_description(func, name):
@@ -1110,11 +1142,11 @@ class ModelAdmin(BaseModelAdmin):
         # Apply keyword searches.
         def construct_search(field_name):
             if field_name.startswith("^"):
-                return "%s__istartswith" % field_name[1:]
+                return "%s__istartswith" % field_name.removeprefix("^")
             elif field_name.startswith("="):
-                return "%s__iexact" % field_name[1:]
+                return "%s__iexact" % field_name.removeprefix("=")
             elif field_name.startswith("@"):
-                return "%s__search" % field_name[1:]
+                return "%s__search" % field_name.removeprefix("@")
             # Use field_name if it includes a lookup.
             opts = queryset.model._meta
             lookup_fields = field_name.split(LOOKUP_SEP)
@@ -1318,12 +1350,17 @@ class ModelAdmin(BaseModelAdmin):
             context,
         )
 
+    def _get_preserved_qsl(self, request, preserved_filters):
+        query_string = urlparse(request.build_absolute_uri()).query
+        return parse_qsl(query_string.replace(preserved_filters, ""))
+
     def response_add(self, request, obj, post_url_continue=None):
         """
         Determine the HttpResponse for the add_view stage.
         """
         opts = obj._meta
         preserved_filters = self.get_preserved_filters(request)
+        preserved_qsl = self._get_preserved_qsl(request, preserved_filters)
         obj_url = reverse(
             "admin:%s_%s_change" % (opts.app_label, opts.model_name),
             args=(quote(obj.pk),),
@@ -1381,7 +1418,11 @@ class ModelAdmin(BaseModelAdmin):
             if post_url_continue is None:
                 post_url_continue = obj_url
             post_url_continue = add_preserved_filters(
-                {"preserved_filters": preserved_filters, "opts": opts},
+                {
+                    "preserved_filters": preserved_filters,
+                    "preserved_qsl": preserved_qsl,
+                    "opts": opts,
+                },
                 post_url_continue,
             )
             return HttpResponseRedirect(post_url_continue)
@@ -1397,7 +1438,12 @@ class ModelAdmin(BaseModelAdmin):
             self.message_user(request, msg, messages.SUCCESS)
             redirect_url = request.path
             redirect_url = add_preserved_filters(
-                {"preserved_filters": preserved_filters, "opts": opts}, redirect_url
+                {
+                    "preserved_filters": preserved_filters,
+                    "preserved_qsl": preserved_qsl,
+                    "opts": opts,
+                },
+                redirect_url,
             )
             return HttpResponseRedirect(redirect_url)
 
@@ -1443,6 +1489,7 @@ class ModelAdmin(BaseModelAdmin):
 
         opts = self.opts
         preserved_filters = self.get_preserved_filters(request)
+        preserved_qsl = self._get_preserved_qsl(request, preserved_filters)
 
         msg_dict = {
             "name": opts.verbose_name,
@@ -1459,7 +1506,12 @@ class ModelAdmin(BaseModelAdmin):
             self.message_user(request, msg, messages.SUCCESS)
             redirect_url = request.path
             redirect_url = add_preserved_filters(
-                {"preserved_filters": preserved_filters, "opts": opts}, redirect_url
+                {
+                    "preserved_filters": preserved_filters,
+                    "preserved_qsl": preserved_qsl,
+                    "opts": opts,
+                },
+                redirect_url,
             )
             return HttpResponseRedirect(redirect_url)
 
@@ -1496,7 +1548,12 @@ class ModelAdmin(BaseModelAdmin):
                 current_app=self.admin_site.name,
             )
             redirect_url = add_preserved_filters(
-                {"preserved_filters": preserved_filters, "opts": opts}, redirect_url
+                {
+                    "preserved_filters": preserved_filters,
+                    "preserved_qsl": preserved_qsl,
+                    "opts": opts,
+                },
+                redirect_url,
             )
             return HttpResponseRedirect(redirect_url)
 
@@ -1692,9 +1749,9 @@ class ModelAdmin(BaseModelAdmin):
                 has_delete_permission = inline.has_delete_permission(request, obj)
             else:
                 # Disable all edit-permissions, and override formset settings.
-                has_add_permission = (
-                    has_change_permission
-                ) = has_delete_permission = False
+                has_add_permission = has_change_permission = has_delete_permission = (
+                    False
+                )
                 formset.extra = formset.max_num = 0
             has_view_permission = inline.has_view_permission(request, obj)
             prepopulated = dict(inline.get_prepopulated_fields(request, obj))
@@ -1829,9 +1886,11 @@ class ModelAdmin(BaseModelAdmin):
             form,
             list(fieldsets),
             # Clear prepopulated fields on a view-only form to avoid a crash.
-            self.get_prepopulated_fields(request, obj)
-            if add or self.has_change_permission(request, obj)
-            else {},
+            (
+                self.get_prepopulated_fields(request, obj)
+                if add or self.has_change_permission(request, obj)
+                else {}
+            ),
             readonly_fields,
             model_admin=self,
         )

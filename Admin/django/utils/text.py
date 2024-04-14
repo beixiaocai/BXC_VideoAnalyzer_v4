@@ -23,8 +23,61 @@ def capfirst(x):
     return x[0].upper() + x[1:]
 
 
-# Set up regular expressions
-re_words = _lazy_re_compile(r"<[^>]+?>|([^<>\s]+)", re.S)
+# ----- Begin security-related performance workaround -----
+
+# We used to have, below
+#
+# re_words = _lazy_re_compile(r"<[^>]+?>|([^<>\s]+)", re.S)
+#
+# But it was shown that this regex, in the way we use it here, has some
+# catastrophic edge-case performance features. Namely, when it is applied to
+# text with only open brackets "<<<...". The class below provides the services
+# and correct answers for the use cases, but in these edge cases does it much
+# faster.
+re_notag = _lazy_re_compile(r"([^<>\s]+)", re.S)
+re_prt = _lazy_re_compile(r"<|([^<>\s]+)", re.S)
+
+
+class WordsRegex:
+    @staticmethod
+    def search(text, pos):
+        # Look for "<" or a non-tag word.
+        partial = re_prt.search(text, pos)
+        if partial is None or partial[1] is not None:
+            return partial
+
+        # "<" was found, look for a closing ">".
+        end = text.find(">", partial.end(0))
+        if end < 0:
+            # ">" cannot be found, look for a word.
+            return re_notag.search(text, pos + 1)
+        else:
+            # "<" followed by a ">" was found -- fake a match.
+            end += 1
+            return FakeMatch(text[partial.start(0) : end], end)
+
+
+class FakeMatch:
+    __slots__ = ["_text", "_end"]
+
+    def end(self, group=0):
+        assert group == 0, "This specific object takes only group=0"
+        return self._end
+
+    def __getitem__(self, group):
+        if group == 1:
+            return None
+        assert group == 0, "This specific object takes only group in {0,1}"
+        return self._text
+
+    def __init__(self, text, end):
+        self._text, self._end = text, end
+
+
+# ----- End security-related performance workaround -----
+
+# Set up regular expressions.
+re_words = WordsRegex
 re_chars = _lazy_re_compile(r"<[^>]+?>|(.)", re.S)
 re_tag = _lazy_re_compile(r"<(/)?(\S+?)(?:(\s*/)|\s.*?)?>", re.S)
 re_newlines = _lazy_re_compile(r"\r\n|\r")  # Used in normalize_newlines
@@ -64,28 +117,35 @@ def wrap(text, width):
     return "".join(_generator())
 
 
+def add_truncation_text(text, truncate=None):
+    if truncate is None:
+        truncate = pgettext(
+            "String to return when truncating text", "%(truncated_text)s…"
+        )
+    if "%(truncated_text)s" in truncate:
+        return truncate % {"truncated_text": text}
+    # The truncation text didn't contain the %(truncated_text)s string
+    # replacement argument so just append it to the text.
+    if text.endswith(truncate):
+        # But don't append the truncation text if the current text already ends
+        # in this.
+        return text
+    return f"{text}{truncate}"
+
+
 class Truncator(SimpleLazyObject):
     """
     An object used to truncate text, either by characters or words.
+
+    When truncating HTML text (either chars or words), input will be limited to
+    at most `MAX_LENGTH_HTML` characters.
     """
+
+    # 5 million characters are approximately 4000 text pages or 3 web pages.
+    MAX_LENGTH_HTML = 5_000_000
 
     def __init__(self, text):
         super().__init__(lambda: str(text))
-
-    def add_truncation_text(self, text, truncate=None):
-        if truncate is None:
-            truncate = pgettext(
-                "String to return when truncating text", "%(truncated_text)s…"
-            )
-        if "%(truncated_text)s" in truncate:
-            return truncate % {"truncated_text": text}
-        # The truncation text didn't contain the %(truncated_text)s string
-        # replacement argument so just append it to the text.
-        if text.endswith(truncate):
-            # But don't append the truncation text if the current text already
-            # ends in this.
-            return text
-        return "%s%s" % (text, truncate)
 
     def chars(self, num, truncate=None, html=False):
         """
@@ -101,7 +161,7 @@ class Truncator(SimpleLazyObject):
 
         # Calculate the length to truncate to (max length - end_text length)
         truncate_len = length
-        for char in self.add_truncation_text("", truncate):
+        for char in add_truncation_text("", truncate):
             if not unicodedata.combining(char):
                 truncate_len -= 1
                 if truncate_len == 0:
@@ -124,7 +184,7 @@ class Truncator(SimpleLazyObject):
                 end_index = i
             if s_len > length:
                 # Return the truncated string
-                return self.add_truncation_text(text[: end_index or 0], truncate)
+                return add_truncation_text(text[: end_index or 0], truncate)
 
         # Return the original string since no truncation was necessary
         return text
@@ -150,7 +210,7 @@ class Truncator(SimpleLazyObject):
         words = self._wrapped.split()
         if len(words) > length:
             words = words[:length]
-            return self.add_truncation_text(" ".join(words), truncate)
+            return add_truncation_text(" ".join(words), truncate)
         return " ".join(words)
 
     def _truncate_html(self, length, truncate, text, truncate_len, words):
@@ -163,6 +223,11 @@ class Truncator(SimpleLazyObject):
         """
         if words and length <= 0:
             return ""
+
+        size_limited = False
+        if len(text) > self.MAX_LENGTH_HTML:
+            text = text[: self.MAX_LENGTH_HTML]
+            size_limited = True
 
         html4_singlets = (
             "br",
@@ -220,10 +285,14 @@ class Truncator(SimpleLazyObject):
                 # Add it to the start of the open tags list
                 open_tags.insert(0, tagname)
 
+        truncate_text = add_truncation_text("", truncate)
+
         if current_len <= length:
+            if size_limited and truncate_text:
+                text += truncate_text
             return text
+
         out = text[:end_text_pos]
-        truncate_text = self.add_truncation_text("", truncate)
         if truncate_text:
             out += truncate_text
         # Close any tags still open

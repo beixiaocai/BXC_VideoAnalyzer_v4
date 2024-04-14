@@ -54,9 +54,6 @@ class LimitedStream(IOBase):
 
 
 class WSGIRequest(HttpRequest):
-    non_picklable_attrs = HttpRequest.non_picklable_attrs | frozenset(["environ"])
-    meta_non_picklable_attrs = frozenset(["wsgi.errors", "wsgi.input"])
-
     def __init__(self, environ):
         script_name = get_script_name(environ)
         # If PATH_INFO is empty (e.g. accessing the SCRIPT_NAME URL without a
@@ -81,13 +78,6 @@ class WSGIRequest(HttpRequest):
         self._stream = LimitedStream(self.environ["wsgi.input"], content_length)
         self._read_started = False
         self.resolver_match = None
-
-    def __getstate__(self):
-        state = super().__getstate__()
-        for attr in self.meta_non_picklable_attrs:
-            if attr in state["META"]:
-                del state["META"][attr]
-        return state
 
     def _get_scheme(self):
         return self.environ.get("wsgi.url_scheme")
@@ -187,7 +177,7 @@ def get_script_name(environ):
             # do the same with script_url before manipulating paths (#17133).
             script_url = _slashes_re.sub(b"/", script_url)
         path_info = get_bytes_from_wsgi(environ, "PATH_INFO", "")
-        script_name = script_url[: -len(path_info)] if path_info else script_url
+        script_name = script_url.removesuffix(path_info)
     else:
         script_name = get_bytes_from_wsgi(environ, "SCRIPT_NAME", "")
 

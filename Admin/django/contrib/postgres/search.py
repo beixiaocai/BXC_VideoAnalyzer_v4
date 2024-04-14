@@ -116,9 +116,11 @@ class SearchVector(SearchVectorCombinable, Func):
         clone.set_source_expressions(
             [
                 Coalesce(
-                    expression
-                    if isinstance(expression.output_field, (CharField, TextField))
-                    else Cast(expression, TextField()),
+                    (
+                        expression
+                        if isinstance(expression.output_field, (CharField, TextField))
+                        else Cast(expression, TextField())
+                    ),
                     Value(""),
                 )
                 for expression in clone.get_source_expressions()
@@ -144,10 +146,7 @@ class SearchVector(SearchVectorCombinable, Func):
             weight_sql, extra_params = compiler.compile(clone.weight)
             sql = "setweight({}, {})".format(sql, weight_sql)
 
-        # These parameters must be bound on the client side because we may
-        # want to create an index on this expression.
-        sql = connection.ops.compose_sql(sql, config_params + params + extra_params)
-        return sql, []
+        return sql, config_params + params + extra_params
 
 
 class CombinedSearchVector(SearchVectorCombinable, CombinedExpression):

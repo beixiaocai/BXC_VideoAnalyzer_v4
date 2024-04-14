@@ -1,6 +1,7 @@
 """
 Classes to represent the definitions of aggregate functions.
 """
+
 from django.core.exceptions import FieldError, FullResultSet
 from django.db.models.expressions import Case, Func, Star, Value, When
 from django.db.models.fields import IntegerField
@@ -65,7 +66,14 @@ class Aggregate(Func):
         c.filter = c.filter and c.filter.resolve_expression(
             query, allow_joins, reuse, summarize
         )
-        if not summarize:
+        if summarize:
+            # Summarized aggregates cannot refer to summarized aggregates.
+            for ref in c.get_refs():
+                if query.annotations[ref].is_summary:
+                    raise FieldError(
+                        f"Cannot compute {c.name}('{ref}'): '{ref}' is an aggregate"
+                    )
+        elif not self.is_summary:
             # Call Aggregate.get_source_expressions() to avoid
             # returning self.filter and including that in this loop.
             expressions = super(Aggregate, c).get_source_expressions()

@@ -2,9 +2,9 @@ import copy
 import datetime
 import functools
 import inspect
-import warnings
 from collections import defaultdict
 from decimal import Decimal
+from types import NoneType
 from uuid import UUID
 
 from django.core.exceptions import EmptyResultSet, FieldError, FullResultSet
@@ -13,7 +13,6 @@ from django.db.models import fields
 from django.db.models.constants import LOOKUP_SEP
 from django.db.models.query_utils import Q
 from django.utils.deconstruct import deconstructible
-from django.utils.deprecation import RemovedInDjango50Warning
 from django.utils.functional import cached_property
 from django.utils.hashable import make_hashable
 
@@ -28,7 +27,7 @@ class SQLiteNumericMixin:
         sql, params = self.as_sql(compiler, connection, **extra_context)
         try:
             if self.output_field.get_internal_type() == "DecimalField":
-                sql = "CAST(%s AS NUMERIC)" % sql
+                sql = "(CAST(%s AS NUMERIC))" % sql
         except FieldError:
             pass
         return sql, params
@@ -177,6 +176,8 @@ class BaseExpression:
     filterable = True
     # Can the expression can be used as a source expression in Window?
     window_compatible = False
+    # Can the expression be used as a database default value?
+    allowed_default = False
 
     def __init__(self, output_field=None):
         if output_field is not None:
@@ -202,9 +203,11 @@ class BaseExpression:
 
     def _parse_expressions(self, *expressions):
         return [
-            arg
-            if hasattr(arg, "resolve_expression")
-            else (F(arg) if isinstance(arg, str) else Value(arg))
+            (
+                arg
+                if hasattr(arg, "resolve_expression")
+                else (F(arg) if isinstance(arg, str) else Value(arg))
+            )
             for arg in expressions
         ]
 
@@ -255,6 +258,13 @@ class BaseExpression:
             for expr in self.get_source_expressions()
         )
 
+    @cached_property
+    def contains_subquery(self):
+        return any(
+            expr and (getattr(expr, "subquery", False) or expr.contains_subquery)
+            for expr in self.get_source_expressions()
+        )
+
     def resolve_expression(
         self, query=None, allow_joins=True, reuse=None, summarize=False, for_save=False
     ):
@@ -276,9 +286,11 @@ class BaseExpression:
         c.is_summary = summarize
         c.set_source_expressions(
             [
-                expr.resolve_expression(query, allow_joins, reuse, summarize)
-                if expr
-                else None
+                (
+                    expr.resolve_expression(query, allow_joins, reuse, summarize)
+                    if expr
+                    else None
+                )
                 for expr in c.get_source_expressions()
             ]
         )
@@ -357,22 +369,16 @@ class BaseExpression:
         field = self.output_field
         internal_type = field.get_internal_type()
         if internal_type == "FloatField":
-            return (
-                lambda value, expression, connection: None
-                if value is None
-                else float(value)
+            return lambda value, expression, connection: (
+                None if value is None else float(value)
             )
         elif internal_type.endswith("IntegerField"):
-            return (
-                lambda value, expression, connection: None
-                if value is None
-                else int(value)
+            return lambda value, expression, connection: (
+                None if value is None else int(value)
             )
         elif internal_type == "DecimalField":
-            return (
-                lambda value, expression, connection: None
-                if value is None
-                else Decimal(value)
+            return lambda value, expression, connection: (
+                None if value is None else Decimal(value)
             )
         return self._convert_value_noop
 
@@ -418,9 +424,11 @@ class BaseExpression:
         clone = self.copy()
         clone.set_source_expressions(
             [
-                F(f"{prefix}{expr.name}")
-                if isinstance(expr, F)
-                else expr.prefix_references(prefix)
+                (
+                    F(f"{prefix}{expr.name}")
+                    if isinstance(expr, F)
+                    else expr.prefix_references(prefix)
+                )
                 for expr in self.get_source_expressions()
             ]
         )
@@ -508,10 +516,28 @@ class Expression(BaseExpression, Combinable):
 # The current approach for NULL is based on lowest common denominator behavior
 # i.e. if one of the supported databases is raising an error (rather than
 # return NULL) for `val <op> NULL`, then Django raises FieldError.
-NoneType = type(None)
 
 _connector_combinations = [
     # Numeric operations - operands of same type.
+    # PositiveIntegerField should take precedence over IntegerField (except
+    # subtraction).
+    {
+        connector: [
+            (
+                fields.PositiveIntegerField,
+                fields.PositiveIntegerField,
+                fields.PositiveIntegerField,
+            ),
+        ]
+        for connector in (
+            Combinable.ADD,
+            Combinable.MUL,
+            Combinable.DIV,
+            Combinable.MOD,
+            Combinable.POW,
+        )
+    },
+    # Other numeric operands.
     {
         connector: [
             (fields.IntegerField, fields.IntegerField, fields.IntegerField),
@@ -735,6 +761,10 @@ class CombinedExpression(SQLiteNumericMixin, Expression):
         c.rhs = rhs
         return c
 
+    @cached_property
+    def allowed_default(self):
+        return self.lhs.allowed_default and self.rhs.allowed_default
+
 
 class DurationExpression(CombinedExpression):
     def compile(self, side, compiler, connection):
@@ -805,6 +835,8 @@ class TemporalSubtraction(CombinedExpression):
 @deconstructible(path="django.db.models.F")
 class F(Combinable):
     """An object capable of resolving references to existing query objects."""
+
+    allowed_default = False
 
     def __init__(self, name):
         """
@@ -879,6 +911,7 @@ class ResolvedOuterRef(F):
 
 class OuterRef(F):
     contains_aggregate = False
+    contains_over_clause = False
 
     def resolve_expression(self, *args, **kwargs):
         if isinstance(self.name, self.__class__):
@@ -989,6 +1022,10 @@ class Func(SQLiteNumericMixin, Expression):
         copy.extra = self.extra.copy()
         return copy
 
+    @cached_property
+    def allowed_default(self):
+        return all(expression.allowed_default for expression in self.source_expressions)
+
 
 @deconstructible(path="django.db.models.Value")
 class Value(SQLiteNumericMixin, Expression):
@@ -997,6 +1034,7 @@ class Value(SQLiteNumericMixin, Expression):
     # Provide a default value for `for_save` in order to allow unresolved
     # instances to be compiled until a decision is taken in #25425.
     for_save = False
+    allowed_default = True
 
     def __init__(self, value, output_field=None):
         """
@@ -1025,7 +1063,7 @@ class Value(SQLiteNumericMixin, Expression):
             if hasattr(output_field, "get_placeholder"):
                 return output_field.get_placeholder(val, compiler, connection), [val]
         if val is None:
-            # cx_Oracle does not always convert None to the appropriate
+            # oracledb does not always convert None to the appropriate
             # NULL type (like in case expressions using numbers), so we
             # use a literal SQL NULL
             return "NULL", []
@@ -1071,6 +1109,8 @@ class Value(SQLiteNumericMixin, Expression):
 
 
 class RawSQL(Expression):
+    allowed_default = True
+
     def __init__(self, sql, params, output_field=None):
         if output_field is None:
             output_field = fields.Field()
@@ -1110,6 +1150,13 @@ class Star(Expression):
 
     def as_sql(self, compiler, connection):
         return "*", []
+
+
+class DatabaseDefault(Expression):
+    """Placeholder expression for the database default in an insert query."""
+
+    def as_sql(self, compiler, connection):
+        return "DEFAULT", []
 
 
 class Col(Expression):
@@ -1181,7 +1228,9 @@ class Ref(Expression):
         return {self.refs}
 
     def relabeled_clone(self, relabels):
-        return self
+        clone = self.copy()
+        clone.source = self.source.relabeled_clone(relabels)
+        return clone
 
     def as_sql(self, compiler, connection):
         return connection.ops.quote_name(self.refs), []
@@ -1213,8 +1262,15 @@ class ExpressionList(Func):
         # Casting to numeric is unnecessary.
         return self.as_sql(compiler, connection, **extra_context)
 
+    def get_group_by_cols(self):
+        group_by_cols = []
+        for partition in self.get_source_expressions():
+            group_by_cols.extend(partition.get_group_by_cols())
+        return group_by_cols
+
 
 class OrderByList(Func):
+    allowed_default = False
     template = "ORDER BY %(expressions)s"
 
     def __init__(self, *expressions, **extra):
@@ -1271,6 +1327,10 @@ class ExpressionWrapper(SQLiteNumericMixin, Expression):
 
     def __repr__(self):
         return "{}({})".format(self.__class__.__name__, self.expression)
+
+    @property
+    def allowed_default(self):
+        return self.expression.allowed_default
 
 
 class NegatedExpression(ExpressionWrapper):
@@ -1399,6 +1459,10 @@ class When(Expression):
             cols.extend(source.get_group_by_cols())
         return cols
 
+    @cached_property
+    def allowed_default(self):
+        return self.condition.allowed_default and self.result.allowed_default
+
 
 @deconstructible(path="django.db.models.Case")
 class Case(SQLiteNumericMixin, Expression):
@@ -1496,6 +1560,12 @@ class Case(SQLiteNumericMixin, Expression):
             return self.default.get_group_by_cols()
         return super().get_group_by_cols()
 
+    @cached_property
+    def allowed_default(self):
+        return self.default.allowed_default and all(
+            case_.allowed_default for case_ in self.cases
+        )
+
 
 class Subquery(BaseExpression, Combinable):
     """
@@ -1506,6 +1576,7 @@ class Subquery(BaseExpression, Combinable):
     template = "(%(subquery)s)"
     contains_aggregate = False
     empty_result_set_value = None
+    subquery = True
 
     def __init__(self, queryset, output_field=None, **extra):
         # Allow the usage of both QuerySet and sql.Query objects.
@@ -1566,6 +1637,15 @@ class Exists(Subquery):
             sql = "CASE WHEN {} THEN 1 ELSE 0 END".format(sql)
         return sql, params
 
+    def as_sql(self, compiler, *args, **kwargs):
+        try:
+            return super().as_sql(compiler, *args, **kwargs)
+        except EmptyResultSet:
+            features = compiler.connection.features
+            if not features.supports_boolean_expr_in_select_clause:
+                return "1=0", ()
+            return compiler.compile(Value(False))
+
 
 @deconstructible(path="django.db.models.OrderBy")
 class OrderBy(Expression):
@@ -1576,16 +1656,7 @@ class OrderBy(Expression):
         if nulls_first and nulls_last:
             raise ValueError("nulls_first and nulls_last are mutually exclusive")
         if nulls_first is False or nulls_last is False:
-            # When the deprecation ends, replace with:
-            # raise ValueError(
-            #     "nulls_first and nulls_last values must be True or None."
-            # )
-            warnings.warn(
-                "Passing nulls_first=False or nulls_last=False is deprecated, use None "
-                "instead.",
-                RemovedInDjango50Warning,
-                stacklevel=2,
-            )
+            raise ValueError("nulls_first and nulls_last values must be True or None.")
         self.nulls_first = nulls_first
         self.nulls_last = nulls_last
         self.descending = descending
@@ -1631,10 +1702,13 @@ class OrderBy(Expression):
         return (template % placeholders).rstrip(), params
 
     def as_oracle(self, compiler, connection):
-        # Oracle doesn't allow ORDER BY EXISTS() or filters unless it's wrapped
-        # in a CASE WHEN.
-        if connection.ops.conditional_expression_supported_in_where_clause(
-            self.expression
+        # Oracle < 23c doesn't allow ORDER BY EXISTS() or filters unless it's
+        # wrapped in a CASE WHEN.
+        if (
+            not connection.features.supports_boolean_expr_in_select_clause
+            and connection.ops.conditional_expression_supported_in_where_clause(
+                self.expression
+            )
         ):
             copy = self.copy()
             copy.expression = Case(

@@ -46,6 +46,11 @@ class BaseSequenceSerializer(BaseSerializer):
         return value % (", ".join(strings)), imports
 
 
+class BaseUnorderedSequenceSerializer(BaseSequenceSerializer):
+    def __init__(self, value):
+        super().__init__(sorted(value, key=repr))
+
+
 class BaseSimpleSerializer(BaseSerializer):
     def serialize(self):
         return repr(self.value), set()
@@ -151,7 +156,7 @@ class FloatSerializer(BaseSimpleSerializer):
         return super().serialize()
 
 
-class FrozensetSerializer(BaseSequenceSerializer):
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
     def _format(self):
         return "frozenset([%s])"
 
@@ -163,7 +168,7 @@ class FunctionTypeSerializer(BaseSerializer):
         ):
             klass = self.value.__self__
             module = klass.__module__
-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
                 "import %s" % module
             }
         # Further error checking
@@ -279,7 +284,7 @@ class SequenceSerializer(BaseSequenceSerializer):
         return "[%s]"
 
 
-class SetSerializer(BaseSequenceSerializer):
+class SetSerializer(BaseUnorderedSequenceSerializer):
     def _format(self):
         # Serialize as a set literal except when value is empty because {}
         # is an empty dict.
@@ -304,7 +309,7 @@ class TypeSerializer(BaseSerializer):
     def serialize(self):
         special_cases = [
             (models.Model, "models.Model", ["from django.db import models"]),
-            (type(None), "type(None)", []),
+            (types.NoneType, "types.NoneType", ["import types"]),
         ]
         for case, string, imports in special_cases:
             if case is self.value:
@@ -338,13 +343,14 @@ class Serializer:
         (datetime.date, datetime.timedelta, datetime.time): DateTimeSerializer,
         SettingsReference: SettingsReferenceSerializer,
         float: FloatSerializer,
-        (bool, int, type(None), bytes, str, range): BaseSimpleSerializer,
+        (bool, int, types.NoneType, bytes, str, range): BaseSimpleSerializer,
         decimal.Decimal: DecimalSerializer,
         (functools.partial, functools.partialmethod): FunctoolsPartialSerializer,
         (
             types.FunctionType,
             types.BuiltinFunctionType,
             types.MethodType,
+            functools._lru_cache_wrapper,
         ): FunctionTypeSerializer,
         collections.abc.Iterable: IterableSerializer,
         (COMPILED_REGEX_TYPE, RegexObject): RegexSerializer,

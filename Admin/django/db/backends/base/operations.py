@@ -1,6 +1,7 @@
 import datetime
 import decimal
 import json
+import warnings
 from importlib import import_module
 
 import sqlparse
@@ -8,7 +9,9 @@ import sqlparse
 from django.conf import settings
 from django.db import NotSupportedError, transaction
 from django.db.backends import utils
+from django.db.models.expressions import Col
 from django.utils import timezone
+from django.utils.deprecation import RemovedInDjango60Warning
 from django.utils.encoding import force_str
 
 
@@ -219,6 +222,13 @@ class BaseDatabaseOperations:
         it in a WHERE statement. The resulting string should contain a '%s'
         placeholder for the column being searched against.
         """
+        warnings.warn(
+            (
+                "DatabaseOperations.field_cast_sql() is deprecated use "
+                "DatabaseOperations.lookup_cast() instead."
+            ),
+            RemovedInDjango60Warning,
+        )
         return "%s"
 
     def force_no_ordering(self):
@@ -776,3 +786,9 @@ class BaseDatabaseOperations:
 
     def on_conflict_suffix_sql(self, fields, on_conflict, update_fields, unique_fields):
         return ""
+
+    def prepare_join_on_clause(self, lhs_table, lhs_field, rhs_table, rhs_field):
+        lhs_expr = Col(lhs_table, lhs_field)
+        rhs_expr = Col(rhs_table, rhs_field)
+
+        return lhs_expr, rhs_expr

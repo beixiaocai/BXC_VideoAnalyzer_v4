@@ -42,6 +42,7 @@ class PostgreSQLSHAMixin:
 class Chr(Transform):
     function = "CHR"
     lookup_name = "chr"
+    output_field = CharField()
 
     def as_mysql(self, compiler, connection, **extra_context):
         return super().as_sql(
@@ -256,7 +257,7 @@ class Reverse(Transform):
     def as_oracle(self, compiler, connection, **extra_context):
         # REVERSE in Oracle is undocumented and doesn't support multi-byte
         # strings. Use a special subquery instead.
-        return super().as_sql(
+        sql, params = super().as_sql(
             compiler,
             connection,
             template=(
@@ -267,6 +268,7 @@ class Reverse(Transform):
             ),
             **extra_context,
         )
+        return sql, params * 3
 
 
 class Right(Left):
@@ -274,7 +276,9 @@ class Right(Left):
 
     def get_substr(self):
         return Substr(
-            self.source_expressions[0], self.source_expressions[1] * Value(-1)
+            self.source_expressions[0],
+            self.source_expressions[1] * Value(-1),
+            self.source_expressions[1],
         )
 
 

@@ -151,10 +151,10 @@ class SQLCompiler:
         # Note that even if the group_by is set, it is only the minimal
         # set to group by. So, we need to add cols in select, order_by, and
         # having into the select in any case.
-        selected_expr_indices = {}
-        for index, (expr, _, alias) in enumerate(select, start=1):
+        selected_expr_positions = {}
+        for ordinal, (expr, _, alias) in enumerate(select, start=1):
             if alias:
-                selected_expr_indices[expr] = index
+                selected_expr_positions[expr] = ordinal
             # Skip members of the select clause that are already explicitly
             # grouped against.
             if alias in group_by_refs:
@@ -183,9 +183,9 @@ class SQLCompiler:
                 continue
             if (
                 allows_group_by_select_index
-                and (select_index := selected_expr_indices.get(expr)) is not None
+                and (position := selected_expr_positions.get(expr)) is not None
             ):
-                sql, params = str(select_index), ()
+                sql, params = str(position), ()
             else:
                 sql, params = expr.select_format(self, sql, params)
             params_hash = make_hashable(params)
@@ -331,7 +331,9 @@ class SQLCompiler:
             default_order, _ = ORDER_DIR["DESC"]
 
         selected_exprs = {}
-        if select := self.select:
+        # Avoid computing `selected_exprs` if there is no `ordering` as it's
+        # relatively expensive.
+        if ordering and (select := self.select):
             for ordinal, (expr, _, alias) in enumerate(select, start=1):
                 pos_expr = PositionRef(ordinal, alias, expr)
                 if alias:
@@ -1214,9 +1216,9 @@ class SQLCompiler:
                 "field": f,
                 "reverse": False,
                 "local_setter": f.set_cached_value,
-                "remote_setter": f.remote_field.set_cached_value
-                if f.unique
-                else lambda x, y: None,
+                "remote_setter": (
+                    f.remote_field.set_cached_value if f.unique else lambda x, y: None
+                ),
                 "from_parent": False,
             }
             related_klass_infos.append(klass_info)
@@ -1815,6 +1817,7 @@ class SQLInsertCompiler(SQLCompiler):
         )
         opts = self.query.get_meta()
         self.returning_fields = returning_fields
+        cols = []
         with self.connection.cursor() as cursor:
             for sql, params in self.as_sql():
                 cursor.execute(sql, params)
@@ -1825,6 +1828,7 @@ class SQLInsertCompiler(SQLCompiler):
                 and len(self.query.objs) > 1
             ):
                 rows = self.connection.ops.fetch_returned_insert_rows(cursor)
+                cols = [field.get_col(opts.db_table) for field in self.returning_fields]
             elif self.connection.features.can_return_columns_from_insert:
                 assert len(self.query.objs) == 1
                 rows = [
@@ -1833,7 +1837,9 @@ class SQLInsertCompiler(SQLCompiler):
                         self.returning_params,
                     )
                 ]
+                cols = [field.get_col(opts.db_table) for field in self.returning_fields]
             else:
+                cols = [opts.pk.get_col(opts.db_table)]
                 rows = [
                     (
                         self.connection.ops.last_insert_id(
@@ -1843,7 +1849,6 @@ class SQLInsertCompiler(SQLCompiler):
                         ),
                     )
                 ]
-        cols = [field.get_col(opts.db_table) for field in self.returning_fields]
         converters = self.get_converters(cols)
         if converters:
             rows = list(self.apply_converters(rows, converters))
@@ -1890,7 +1895,10 @@ class SQLDeleteCompiler(SQLCompiler):
         Create the SQL for this query. Return the SQL string and list of
         parameters.
         """
-        if self.single_alias and not self.contains_self_reference_subquery:
+        if self.single_alias and (
+            self.connection.features.delete_can_self_reference_subquery
+            or not self.contains_self_reference_subquery
+        ):
             return self._as_sql(self.query)
         innerq = self.query.clone()
         innerq.__class__ = Query

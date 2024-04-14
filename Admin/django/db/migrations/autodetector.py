@@ -1,6 +1,7 @@
 import functools
 import re
 from collections import defaultdict
+from graphlib import TopologicalSorter
 from itertools import chain
 
 from django.conf import settings
@@ -15,7 +16,6 @@ from django.db.migrations.utils import (
     RegexObject,
     resolve_relation,
 )
-from django.utils.topological_sort import stable_topological_sort
 
 
 class MigrationAutodetector:
@@ -384,22 +384,17 @@ class MigrationAutodetector:
         nicely inside the same app.
         """
         for app_label, ops in sorted(self.generated_operations.items()):
-            # construct a dependency graph for intra-app dependencies
-            dependency_graph = {op: set() for op in ops}
+            ts = TopologicalSorter()
             for op in ops:
+                ts.add(op)
                 for dep in op._auto_deps:
                     # Resolve intra-app dependencies to handle circular
                     # references involving a swappable model.
                     dep = self._resolve_dependency(dep)[0]
-                    if dep[0] == app_label:
-                        for op2 in ops:
-                            if self.check_dependency(op2, dep):
-                                dependency_graph[op].add(op2)
-
-            # we use a stable sort for deterministic tests & general behavior
-            self.generated_operations[app_label] = stable_topological_sort(
-                ops, dependency_graph
-            )
+                    if dep[0] != app_label:
+                        continue
+                    ts.add(op, *(x for x in ops if self.check_dependency(x, dep)))
+            self.generated_operations[app_label] = list(ts.static_order())
 
     def _optimize_migrations(self):
         # Add in internal dependencies among the migrations
@@ -571,11 +566,12 @@ class MigrationAutodetector:
                                 rem_model_state.app_label,
                                 rem_model_state.name_lower,
                             )
-                            self.renamed_models_rel[
-                                renamed_models_rel_key
-                            ] = "%s.%s" % (
-                                model_state.app_label,
-                                model_state.name_lower,
+                            self.renamed_models_rel[renamed_models_rel_key] = (
+                                "%s.%s"
+                                % (
+                                    model_state.app_label,
+                                    model_state.name_lower,
+                                )
                             )
                             self.old_model_keys.remove((rem_app_label, rem_model_name))
                             self.old_model_keys.add((app_label, model_name))
@@ -976,9 +972,9 @@ class MigrationAutodetector:
                                 (rem_app_label, rem_model_name, rem_field_name)
                             )
                             old_field_keys.add((app_label, model_name, field_name))
-                            self.renamed_fields[
-                                app_label, model_name, field_name
-                            ] = rem_field_name
+                            self.renamed_fields[app_label, model_name, field_name] = (
+                                rem_field_name
+                            )
                             break
 
     def generate_renamed_fields(self):
@@ -1045,6 +1041,7 @@ class MigrationAutodetector:
         preserve_default = (
             field.null
             or field.has_default()
+            or field.db_default is not models.NOT_PROVIDED
             or field.many_to_many
             or (field.blank and field.empty_strings_allowed)
             or (isinstance(field, time_fields) and field.auto_now)
@@ -1161,6 +1158,9 @@ class MigrationAutodetector:
                             for to_field in new_field.to_fields
                         ]
                     )
+                    if old_from_fields := getattr(old_field, "from_fields", None):
+                        old_field.from_fields = tuple(old_from_fields)
+                        old_field.to_fields = tuple(old_field.to_fields)
                 dependencies.extend(
                     self._get_dependencies_for_foreign_key(
                         app_label,
@@ -1192,6 +1192,7 @@ class MigrationAutodetector:
                         old_field.null
                         and not new_field.null
                         and not new_field.has_default()
+                        and new_field.db_default is models.NOT_PROVIDED
                         and not new_field.many_to_many
                     ):
                         field = new_field.clone()
@@ -1309,6 +1310,7 @@ class MigrationAutodetector:
 
     def generate_added_indexes(self):
         for (app_label, model_name), alt_indexes in self.altered_indexes.items():
+            dependencies = self._get_dependencies_for_model(app_label, model_name)
             for index in alt_indexes["added_indexes"]:
                 self.add_operation(
                     app_label,
@@ -1316,6 +1318,7 @@ class MigrationAutodetector:
                         model_name=model_name,
                         index=index,
                     ),
+                    dependencies=dependencies,
                 )
 
     def generate_removed_indexes(self):
@@ -1372,6 +1375,7 @@ class MigrationAutodetector:
             app_label,
             model_name,
         ), alt_constraints in self.altered_constraints.items():
+            dependencies = self._get_dependencies_for_model(app_label, model_name)
             for constraint in alt_constraints["added_constraints"]:
                 self.add_operation(
                     app_label,
@@ -1379,6 +1383,7 @@ class MigrationAutodetector:
                         model_name=model_name,
                         constraint=constraint,
                     ),
+                    dependencies=dependencies,
                 )
 
     def generate_removed_constraints(self):
@@ -1428,6 +1433,22 @@ class MigrationAutodetector:
                 model_name,
             )
             dependencies.append((through_app_label, through_object_name, None, True))
+        return dependencies
+
+    def _get_dependencies_for_model(self, app_label, model_name):
+        """Return foreign key dependencies of the given model."""
+        dependencies = []
+        model_state = self.to_state.models[app_label, model_name]
+        for field in model_state.fields.values():
+            if field.is_relation:
+                dependencies.extend(
+                    self._get_dependencies_for_foreign_key(
+                        app_label,
+                        model_name,
+                        field,
+                        self.to_state,
+                    )
+                )
         return dependencies
 
     def _get_altered_foo_together_operations(self, option_name):

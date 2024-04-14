@@ -1,4 +1,5 @@
 """Translation helper functions."""
+
 import functools
 import gettext as gettext_module
 import os
@@ -583,7 +584,11 @@ def get_language_from_request(request, check_path=False):
             return get_supported_language_variant(accept_lang)
         except LookupError:
             continue
-    return None
+
+    try:
+        return get_supported_language_variant(settings.LANGUAGE_CODE)
+    except LookupError:
+        return settings.LANGUAGE_CODE
 
 
 @functools.lru_cache(maxsize=1000)

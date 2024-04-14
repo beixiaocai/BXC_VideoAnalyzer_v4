@@ -5,7 +5,7 @@ import posixpath
 import shutil
 import stat
 import tempfile
-from importlib import import_module
+from importlib.util import find_spec
 from urllib.request import build_opener
 
 import django
@@ -181,7 +181,7 @@ class TemplateCommand(BaseCommand):
                 )
                 for old_suffix, new_suffix in self.rewrite_template_suffixes:
                     if new_path.endswith(old_suffix):
-                        new_path = new_path[: -len(old_suffix)] + new_suffix
+                        new_path = new_path.removesuffix(old_suffix) + new_suffix
                         break  # Only rewrite once
 
                 if os.path.exists(new_path):
@@ -240,8 +240,7 @@ class TemplateCommand(BaseCommand):
         if template is None:
             return os.path.join(django.__path__[0], "conf", subdir)
         else:
-            if template.startswith("file://"):
-                template = template[7:]
+            template = template.removeprefix("file://")
             expanded_template = os.path.expanduser(template)
             expanded_template = os.path.normpath(expanded_template)
             if os.path.isdir(expanded_template):
@@ -276,12 +275,8 @@ class TemplateCommand(BaseCommand):
                     type=name_or_dir,
                 )
             )
-        # Check it cannot be imported.
-        try:
-            import_module(name)
-        except ImportError:
-            pass
-        else:
+        # Check that __spec__ doesn't exist.
+        if find_spec(name) is not None:
             raise CommandError(
                 "'{name}' conflicts with the name of an existing Python "
                 "module and cannot be used as {an} {app} {type}. Please try "
