@@ -464,7 +464,7 @@
         //执行全部布控 或 取消全部布控
         ele_top_loading.show();
         $.ajax({
-               url: '/control/postHandleAllControl',
+               url: '/inner/handleAllControl',
                type: "post",
                async: true,
                data: {"handle":handle,"batch_state":10},
