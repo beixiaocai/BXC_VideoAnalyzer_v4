@@ -347,9 +347,10 @@
         let app = stream["app"];
         let name = stream["name"];
 
-        let target_video_width = 1280;
-        let target_video_height = 720;//720p
         /*
+        let target_video_width = 1280;
+        let target_video_height = 720;
+
         if(mSelectedGridVideoCount===4){
            target_video_width = 720;
            target_video_height = 576;//576p
@@ -361,6 +362,8 @@
            target_video_height = 360;//360p
         }*/
 
+        let target_video_width = video_width;
+        let target_video_height = video_height;
         let target_video_codec_name = "h264";
 
         let video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height,target_video_codec_name);

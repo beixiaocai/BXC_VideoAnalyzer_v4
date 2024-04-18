@@ -331,7 +331,7 @@
                     </div>
 
                   <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">时间范围 <i class="bxc_introduce fa fa-info-circle" title="触发报警行为的时间范围（单位秒）"></i></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">时间范围 <i class="bxc_introduce fa fa-info-circle" title="触发报警行为的时间范围（单位秒，未开启报警视频时有效）"></i></label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                            <input name="alarm_monitor_duration"  type="number" value="{{ control.alarm_monitor_duration }}" class="form-control" >
                       </div>
@@ -620,8 +620,12 @@
             let video_height = stream["video_height"];
             let app = stream["app"];
             let name = stream["name"];
-            let target_video_width = 1280;
-            let target_video_height = 720;
+            //let target_video_width = 1280;
+            //let target_video_height = 720;
+
+            let target_video_width = video_width;
+            let target_video_height = video_height;
+
             let video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height);
             mVideoUrl = video_url;
 
@@ -921,7 +925,7 @@
            },
            success: function (res) {
                if(1000 === res.code){
-                    myAlert(res.msg,"success",3000);
+                    myAlert(res.msg,"success");
                  //    f_clearVideoCanvas()
                }else{
                     myAlert(res.msg,"error",3000);
@@ -1010,8 +1014,12 @@
 
             let video_url;
             if(is_online){
-                let target_video_width = 1280;
-                let target_video_height = 720;
+                //let target_video_width = 1280;
+                //let target_video_height = 720;
+
+                let target_video_width = video_width;
+                let target_video_height = video_height;
+
                 video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height);
             }else{
                 video_url  = wsMp4Url;//不在线，就用默认地址

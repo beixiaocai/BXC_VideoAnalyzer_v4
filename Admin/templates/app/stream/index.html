@@ -202,7 +202,7 @@
         window.open("/stream/player?app="+stream_app+"&name="+stream_name);
     }
     function f_downloadCameraTemplate() {
-        let url= "/static/upload/temp/camera.xlsx"
+        let url= "/static/upload/temp/camera20240418.xlsx"
         window.open(url);
     }
     function f_edit(code) {
@@ -277,7 +277,7 @@
 
                         setTimeout(function () {
                             window.location.reload();
-                         }, 1000);
+                         }, 2000);
 
                     }else{
                         myAlert(res.msg,"error");

@@ -165,8 +165,12 @@
 
             let video_url;
             if(is_online){
-                let target_video_width = 1280;
-                let target_video_height = 720;
+                //let target_video_width = 1280;
+                //let target_video_height = 720;
+
+                let target_video_width = video_width;
+                let target_video_height = video_height;
+
                 video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height);
             }else{
                 video_url  = wsMp4Url;//不在线，就用默认地址
