@@ -147,6 +147,8 @@
     }
     function f_play(audio_path) {
         let audio_url = uploadAudioDir_www+audio_path
+        //console.log(audio_url)
+
         try {
             if(!eleAudioPlayer.paused){//播放中
                 eleAudioPlayer.pause();
