@@ -144,14 +144,14 @@
                 </div>
 
             <div class="form-group way_code_MODEL">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型推理参数 <span class="required" style="color: red;">*</span><i class="bxc_introduce fa fa-info-circle" title="模型推理参数，基于TensorRT推理时运行模型的参数"></i></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">模型推理参数 <span class="required" style="color: red;">*</span><i class="bxc_introduce fa fa-info-circle" title="分析器基于模型计算时的自定义参数"></i></label>
                  <div class="col-md-9 col-sm-9 col-xs-12">
                     <textarea name="extend_params" class="form-control" rows="2">{{ algorithm.extend_params }}</textarea>
                   </div>
             </div>
 
              <div class="form-group way_code_MODEL">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型转换参数 <span class="required" style="color: red;">*</span><i class="bxc_introduce fa fa-info-circle" title="模型转换参数，使用trtexec在将onnx转换为engine的命令行扩展参数"></i></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">模型转换参数 <span class="required" style="color: red;">*</span><i class="bxc_introduce fa fa-info-circle" title="trtexec在将onnx转换为engine的命令行扩展参数"></i></label>
                   <div class="col-md-9 col-sm-9 col-xs-12">
                     <textarea name="model_convert_params" {% if "edit" == handle %}disabled="disabled"{% endif %} class="form-control" rows="2"  placeholder="" >{{ algorithm.model_convert_params }}</textarea>
                   </div>
@@ -228,8 +228,9 @@
                         <button type="button" onclick="f_handle()" class="btn btn-success">提交</button>
 
                         <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">提交中</span>
-                        <span id="timer_counter" style="margin-top: 3px;font-size:12px"></span>
-                         <button id="algorithmSubmitBtn" style="margin-left: 2px;display: none;" onclick="f_log()" type="button" class="btn btn-default btn-xs">查看详细日志</button>
+                        <span id="timer_counter" style="font-size:12px"></span>
+                        <span id="submit_msg" style="margin-left: 3px;font-size:12px;"></span>
+                        <button id="show_log_btn" style="margin-left: 3px;display: none;" onclick="f_log()" type="button" class="btn btn-default btn-xs">查看详细日志</button>
                   </div>
                 </div>
 
@@ -295,11 +296,12 @@ let selectedWayCode = algorithm_way_code;
 let selectedAlgorithmTypeCode = algorithm_algorithm_type;
 
 let curIsPost = false; //当前是否在提交中，已经提交后该变量会设为true，避免重复操作
+let ele_submit_msg =$("#submit_msg");
 
 //提交后的日志查看start
 let ele_algorithm_submit_log_dialog = $("#algorithmSubmitLogDialog");
 let ele_algorithm_submit_log_data = $("#algorithmSubmitLogData");
-let ele_algorithm_submit_btn =$("#algorithmSubmitBtn");
+let ele_algorithm_show_log_btn =$("#show_log_btn");
 function f_log() {
     ele_algorithm_submit_log_dialog.modal("toggle");
     //ele_algorithm_submit_log_dialog.modal("show");
@@ -396,6 +398,7 @@ function f_stopTimer() {
 }
     
 function f_postHandle(url,formData) {
+
     if(curIsPost){
         myAlert("正在提交中，请勿重复提交！","error",500);
         return false;
@@ -431,12 +434,13 @@ function f_postHandle(url,formData) {
                         let convert_log = upload_info["convert_log"]; //模型转换日志
                         let upload_info_str = "<p>"+convert_msg +"</p><p>"+convert_spend+"</p><p>"+convert_log+"</p>";
                         ele_algorithm_submit_log_data.html(upload_info_str)
-                        ele_algorithm_submit_btn.show();
+                        ele_algorithm_show_log_btn.show();
                     }
                }catch (e) {
                     console.log(e)
                }
-
+               ele_submit_msg.show();
+               ele_submit_msg.html(res.msg)
                if(1000 === res.code){
                    myAlert(res.msg,"success");
                    //myAlert(res.msg,"success",1000);
@@ -450,6 +454,8 @@ function f_postHandle(url,formData) {
     });
 }
 function f_handle() {
+    ele_submit_msg.html("");
+    ele_submit_msg.hide();
 
     let name_s = ele_input_name.val().trim();
    if(name_s=== ""){

@@ -15,6 +15,9 @@
     let algorithmDetectDict = {};//基础检测算法字典
     let algorithmDetectCode;//基础检测算法编号
 
+    let algorithmClassifyDict = {};//基础分类算法字典
+    let algorithmClassifyCode;//基础分类算法编号
+
     let algorithmTrackDict = {};//追踪算法字典
     let algorithmTrackCode;//追踪算法编号
 
@@ -123,6 +126,51 @@
                       </div>
                     </div>
 
+
+                      <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择分类算法 </label>
+
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+
+                            <select id="select_algorithm_classify"  class="select2_single form-control" required="required" >
+                                <option value="0">请选择</option>
+                                {% for algorithm in algorithm_classify_data %}
+                                   <script>
+                                        algorithmClassifyCode = '{{ algorithm.code }}';
+                                        algorithmClassifyDict[algorithmClassifyCode] = {
+                                            "code":algorithmClassifyCode,
+                                            "algorithm_type":'{{ algorithm.algorithm_type }}',
+                                            "name":'{{ algorithm.name }}',
+                                            "way_code":'{{ algorithm.way_code }}',
+                                            "model_class_names":'{{ algorithm.model_class_names }}'
+                                        }
+
+                                    </script>
+
+                                    {% if algorithm.way_code == "MODEL" %}
+                                        <option {% if algorithm.code == flow.algorithm_classify_code %} selected {% endif %} value="{{ algorithm.code }}">
+                                            {{ algorithm.name }}（{{ algorithm.way_code }}/{{ algorithm.framework }}/{{ algorithm.inference }}）
+                                        </option>
+                                    {% else %}
+                                        <option {% if algorithm.code == flow.algorithm_classify_code %} selected {% endif %} value="{{ algorithm.code }}">
+                                            {{ algorithm.name }}（{{ algorithm.way_code }}）
+                                        </option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+                          </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">选择分类目标 </label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select id="select_classify_class_name"  class="select2_multiple form-control" required="required"  multiple="multiple" >
+                            <option value="0">---请选择分类目标(可多选)---</option>
+                        </select>
+                      </div>
+                    </div>
 
                     <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">选择追踪算法</label>
@@ -246,24 +294,39 @@
 
     let flow_code= '{{ flow.code }}';// 布控编号
     let old_flow_algorithm_detect_code = '{{ flow.algorithm_detect_code }}';// 布控原始基础算法编号
-    let old_flow_detect_class_names = '{{ flow.detect_class_names }}';// 布控原始检测目标
+    let old_flow_detect_class_names = '{{ flow.detect_class_names }}';// 布控原始检测算法目标
+
+    let old_flow_algorithm_classify_code = '{{ flow.algorithm_classify_code }}';// 布控原始分类算法编号
+    let old_flow_classify_class_names = '{{ flow.classify_class_names }}';// 布控原始分类算法目标
+
     let handle = '{{ handle }}';// 操作类型 add 或 edit
     let ele_input_name= $("input[name='name']");
     let ele_input_deploy_process_index= $("input[name='deploy_process_index']");
     let ele_input_max_concurrency= $("input[name='max_concurrency']");
     let ele_input_concurrency_unit_length= $("input[name='concurrency_unit_length']");
 
+    //检测算法
     let eleSelectFlow= $("#select_mode");// select 流程模式
-    let eleSelectAlgorithmDetect = $("#select_algorithm_detect");// select 基础检测算法
+    let eleSelectAlgorithmDetect = $("#select_algorithm_detect");// select 检测算法
     let selectedAlgorithmDetectWayCode = "";
-    let eleSelectDetectClassName = $("#select_detect_class_name");// select 基础检测算法目标
+    let eleSelectDetectClassName = $("#select_detect_class_name");// select 检测算法目标
 
+    //分类算法
+    let eleSelectAlgorithmClassify = $("#select_algorithm_classify");// select 分类算法
+    let selectedAlgorithmClassifyWayCode = "";
+    let eleSelectClassifyClassName = $("#select_classify_class_name");// select 分类算法目标
+
+    //追踪算法
     let eleSelectAlgorithmTrack = $("#select_algorithm_track");// select 追踪算法
+
+    //行为算法
     let eleSelectBehaviour = $("#select_behaviour");// select 行为算法
+
     let eleTextarea_extend_params = $("textarea[name='extend_params']");//扩展参数
     let eleTextarea_remark = $("textarea[name='remark']");
 
-    function f_showSettings(algorithm_code,selected_class_names) {
+    function f_showDetectOptions(algorithm_code,selected_class_names) {
+       console.log("f_showDetectOptions->",algorithm_code,selected_class_names)
 
         let html = "<option value=\"0\">---请选择检测目标(可多选)---</option>";
 
@@ -304,14 +367,81 @@
 
         eleSelectDetectClassName.html(html);
     }
+    function f_showClassifyOptions(algorithm_code,selected_class_names) {
+        console.log("f_showClassifyOptions->",algorithm_code,selected_class_names)
+        let html = "<option value=\"0\">---请选择分类目标(可多选)---</option>";
+        let algorithm = algorithmClassifyDict[algorithm_code];
+        if (algorithm === undefined){
+            //不存在当前编号
+        }else{
+            selectedAlgorithmClassifyWayCode = algorithm["way_code"];
+            if(selectedAlgorithmClassifyWayCode==="MODEL"){
+                //需要显示选择目标
+                eleSelectClassifyClassName.removeAttr("disabled");
+                let model_class_names = algorithm["model_class_names"];
+                let model_class_names_array = model_class_names.split(",");
+                let selected_class_names_array = selected_class_names.split(",");
+                for (let i = 0; i < model_class_names_array.length; i++) {
+                    let class_name = model_class_names_array[i];
+                    let match = selected_class_names_array.indexOf(class_name);
+                    if(match > -1){
+                        html += "<option selected value=\""+class_name+"\">"+class_name+"</option>";
+                    }else{
+                        html += "<option value=\""+class_name+"\">"+class_name+"</option>";
+                    }
+                }
+                //需要使用行为算法
+                eleSelectBehaviour.removeAttr("disabled");
+
+            }else if(selectedAlgorithmClassifyWayCode==="API"){
+                //不需要显示选择目标
+                eleSelectClassifyClassName.attr("disabled","disabled");
+                //不需要使用行为算法start
+                eleSelectBehaviour.attr("disabled","disabled");
+                eleSelectBehaviour.val("0")
+                //不需要使用行为算法end
+            }else{
+                //预留
+            }
+        }
+
+        eleSelectClassifyClassName.html(html);
+    }
     eleSelectAlgorithmDetect.change(function () {
         let code = $(this).val();
         if(code === old_flow_algorithm_detect_code){
-             f_showSettings(code,old_flow_detect_class_names);
+             f_showDetectOptions(code,old_flow_detect_class_names);
         }else{
-             f_showSettings(code,"");
+             f_showDetectOptions(code,"");
         }
     });
+    eleSelectAlgorithmClassify.change(function () {
+        let code = $(this).val();
+        if(code === old_flow_algorithm_classify_code){
+             f_showClassifyOptions(code,old_flow_classify_class_names);
+        }else{
+             f_showClassifyOptions(code,"");
+        }
+    });
+    function f_options_s(options_array) {
+        let options_s = "";
+        if(options_array===null){
+            //不能为空
+        }else{
+            let temp = [];
+            for (let i = 0; i < options_array.length; i++) {
+                if("0"!==options_array[i]){
+                    temp.push(options_array[i]);
+                }
+            }
+            if(temp.length > 0) {
+                options_s = temp.join(",");
+            }
+        }
+        console.log("options_array->",typeof options_array,options_array)
+        console.log("options_s->",typeof options_s,options_s)
+        return options_s;
+    }
 
     function f_handle() {
         let name_s = ele_input_name.val().trim();
@@ -329,28 +459,23 @@
             myAlert("请选择检测算法","error");
             return;
         }
+        algorithmClassifyCode= eleSelectAlgorithmClassify.val().trim();//typeof string
+        algorithmTrackCode = eleSelectAlgorithmTrack.val().trim();//typeof string
+
         let detectClassNames_s = ""; //选择目标判断 person,dog,cat,,,
+        let classifyClassNames_s = "";
         let behaviourCode_s = "";
+
         if(selectedAlgorithmDetectWayCode === "MODEL"){
-            //选择目标判断
-            let classNames_array = eleSelectDetectClassName.val();//typeof object, array
-            if(classNames_array===null){
+            //检测算法目标options
+            detectClassNames_s = f_options_s(eleSelectDetectClassName.val());// eleSelectDetectClassName.val();//typeof object, array
+            if(detectClassNames_s === ""){
                 myAlert("请至少选择1个检测目标","error");
                 return;
-            }else{
-                let classNames_array_temp = [];
-                for (let i = 0; i < classNames_array.length; i++) {
-                    if("0"!==classNames_array[i]){
-                        classNames_array_temp.push(classNames_array[i]);
-                    }
-                }
-                if(classNames_array_temp.length > 0){
-                    detectClassNames_s = classNames_array_temp.join(",");
-                }else{
-                    myAlert("请至少选择1个检测目标","error");
-                    return;
-                }
             }
+            //分类算法目标options
+            classifyClassNames_s = f_options_s(eleSelectClassifyClassName.val());
+
             //行为算法判断
             behaviourCode_s = eleSelectBehaviour.val().trim();//typeof string
             if(behaviourCode_s==="0"){
@@ -360,13 +485,13 @@
         }else if(selectedAlgorithmDetectWayCode === "API"){
             //不需要选择目标&行为算法
 
-
         }else{
             //预留
 
         }
 
-        algorithmTrackCode = eleSelectAlgorithmTrack.val().trim();//typeof string
+
+
 
         let deploy_process_index = parseInt(ele_input_deploy_process_index.val());
         let max_concurrency = parseInt(ele_input_max_concurrency.val());
@@ -386,8 +511,10 @@
             "mode":modeId,
             "flow_code":flow_code,
             "algorithm_detect_code":algorithmDetectCode,
-            "detect_class_names":detectClassNames_s,
+            "algorithm_classify_code":algorithmClassifyCode,
             "algorithm_track_code":algorithmTrackCode,
+            "detect_class_names":detectClassNames_s,
+            "classify_class_names":classifyClassNames_s,
             "behaviour_code":behaviourCode_s,
             "deploy_process_index":deploy_process_index,
             "max_concurrency":max_concurrency,
@@ -420,7 +547,7 @@
                if(1000 === res.code){
                    myAlert(res.msg,"success",1000);
                    setTimeout(function () {
-                        window.location.href= "/algorithmFlow/index";
+                        //window.location.href= "/algorithmFlow/index";
                     }, 1000);
                }else{
                     myAlert(res.msg,"error");
@@ -435,7 +562,8 @@
     }
     $(function() {
         if(handle==="edit"){
-             f_showSettings(old_flow_algorithm_detect_code,old_flow_detect_class_names);
+             f_showDetectOptions(old_flow_algorithm_detect_code,old_flow_detect_class_names);
+             f_showClassifyOptions(old_flow_algorithm_classify_code,old_flow_classify_class_names);
         }
     });
 </script>
