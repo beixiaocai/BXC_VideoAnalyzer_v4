@@ -13,15 +13,10 @@
 
 ### 版本介绍
 | 操作系统 | OpenVINO | TensorRT | 下载地址 |
-| :----: | :----: | :----: | :----: |
+| :----: | :----: | :----: | :----- |
 | Windows10/11 | 支持 | 不支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 |
-| Windows10/11 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 + 百度网盘链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220 |
+| Windows10/11 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本 |
 | Ubuntu20/21/22 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本|
-
-#### 下载Windows10/11支持TensorRT的版本时请注意
-* （1）软件内置TensorRT基于CUDA12.0开发，所以想要运行CUDA12.0，英伟达显卡驱动必须满足最低驱动版本要求，否则无法运行
-* （2）参考CUDA版本与英伟达显卡驱动版本关系表：[查看版本关系表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html)
-* （3）英伟达显卡驱动下载地址：[下载英伟达显卡驱动](https://www.nvidia.cn/Download/index.aspx?lang=cn)
 
 ### 使用说明
 * [启动配置](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
@@ -35,7 +30,6 @@
 * [布控管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理)
 * [添加报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/添加报警接口/添加报警接口)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
-
 
 
 # 版本历史
