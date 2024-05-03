@@ -13,9 +13,9 @@
 
 ### 版本介绍
 | 操作系统 | OpenVINO | TensorRT | 下载地址 |
-| :-----| :----: | :----: |:-----|
+| :----: | :----: | :----: | :----: |
 | Windows10/11 | 支持 | 不支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 |
-| Windows10/11 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 + 网盘链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220 |
+| Windows10/11 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 + 百度网盘链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220 |
 | Ubuntu20/21/22 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本|
 
 #### 下载Windows10/11支持TensorRT的版本时请注意
