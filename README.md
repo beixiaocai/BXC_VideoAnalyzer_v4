@@ -9,8 +9,19 @@
 * github下载地址：https://github.com/any12345com/BXC_VideoAnalyzer_v4
 
 ### 软件介绍
-* 基于C++开发的视频行为分析系统v4系统，可以在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等。
+* 基于C++开发的视频行为分析系统v4版本，可以在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等。
 
+### 版本介绍
+| 操作系统 | OpenVINO | TensorRT | 下载地址 |
+| :-----| :----: | :----: |:-----|
+| Windows10/11 | 支持 | 不支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 |
+| Windows10/11 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 + 网盘链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220 |
+| Ubuntu20/21/22 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本|
+
+#### 下载Windows10/11支持TensorRT的版本时请注意
+* （1）软件内置TensorRT基于CUDA12.0开发，所以想要运行CUDA12.0，英伟达显卡驱动必须满足最低驱动版本要求，否则无法运行
+* （2）参考CUDA版本与英伟达显卡驱动版本关系表：[查看版本关系表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html)
+* （3）英伟达显卡驱动下载地址：[下载英伟达显卡驱动](https://www.nvidia.cn/Download/index.aspx?lang=cn)
 
 ### 使用说明
 * [启动配置](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
@@ -25,11 +36,7 @@
 * [添加报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/添加报警接口/添加报警接口)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
 
-### 使用TensorRT推理引擎的版本请注意
-* （1）Windows版支持TensorRT+OpenVINO的分析器，请下载对应版本 Analyzer+library 替换到软件的Analyzer模块 网盘链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220
-* （2）软件依赖库内置CUDA库版本是12.0，所以想要运行CUDA12.0，英伟达显卡驱动必须满足最低驱动版本要求，否则无法运行
-* （3）CUDA版本与英伟达显卡驱动版本关系表：[查看版本关系表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html)
-* （4）英伟达显卡驱动下载地址：[下载英伟达显卡驱动](https://www.nvidia.cn/Download/index.aspx?lang=cn)
+
 
 # 版本历史
 ### v4.408
@@ -39,7 +46,7 @@
 * （3）优化原有TensorRT推理追踪算法的计算性能
 * （4）升级OpenVINO依赖库，由2023.3.0升级至2024.1.0，新版本稳定性有所提升
 * （5）优化合成报警视频质量，改善合成视频时丢帧问题
-* 特别说明：本次版本优化的内容较多，也进行了比较完整的测试，建议升级至改版本
+* 特别说明：本次版本优化的内容较多，也进行了比较完整的测试，建议升级至该版本
 * 注：生产环境建议使用TensorRT，OpenVINO虽然安装简单，但是性能和稳定性远不如TensorRT。即便是本次版本花费了不少时间和精力去兼容OpenVINO版追踪算法和分类算法，但兼容OpenVINO只是为了降低大家体验该软件的门槛
 
 #### v4.407
@@ -214,13 +221,6 @@
 * 发布时间 2023.12.20
 * （1）优化视频分析器的调度逻辑
 * （2）新增支持英伟达显卡TensorRT推理。
-* 特别注意事项
-* （1）由于TensorRT必须在内置英伟达显卡的设备上运行，而且依赖库非常庞大，所以分析器模块分为两种版本，非nvidia显卡版和nvidia显卡版。
-* （2）gitee下载的本软件，默认内置的是非nvidia显卡版分析器，如需nvidia显卡版分析器，请到下面的网盘链接下载并替换
-* nvidia显卡版分析器百度网盘下载链接：https://pan.baidu.com/s/19sgSxAriNneRT9s44o_5eA 提取码：1220
-* （3）软件依赖库内置CUDA库版本是12.0，所以想要运行CUDA12.0，英伟达显卡驱动必须满足最低驱动版本要求，否则无法运行
-* （4）CUDA版本与英伟达显卡驱动版本关系表：[查看版本关系表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html)
-* （5）英伟达显卡驱动下载地址：[下载英伟达显卡驱动](https://www.nvidia.cn/Download/index.aspx?lang=cn)
 
 #### v4.22
 * 发布时间 2023.12.14
