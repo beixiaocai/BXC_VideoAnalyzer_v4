@@ -2,6 +2,7 @@
 .idea/
 log/*
 Admin/static/upload/alarm/*
+Admin/static/storage*
 
 MediaServer/log/*
 MediaServer/www/*

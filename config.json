@@ -8,9 +8,10 @@
   "videoAnalyzerPort": 9555,
   "mediaSecret": "aqxY9ps21fyhyKNRyYpGvJCTp1JBeGOM",
   "trtexec": "Analyzer\\trtexec.exe",
+  "ffmpeg": "Analyzer\\ffmpeg.exe",
   "fontPath": "Analyzer\\fonts\\tsimhei.ttf",
   "uploadDir": "Admin\\static\\upload",
-  "mediaRootDir": "MediaServer/www",
+  "storageDir": "Admin\\static\\storage",
   "autoAddAllForward": true,
   "autoManagePatrolForward": false,
   "analyzer": {

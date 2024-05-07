@@ -1,0 +1,6 @@
+DateJS
+jqvmap
+mocha
+parsleyjs
+gauge.js 动态图表库
+jquery.easy-pie-chart

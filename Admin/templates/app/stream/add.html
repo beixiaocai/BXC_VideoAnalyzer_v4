@@ -19,11 +19,7 @@
             </div>
             <div class="x_content">
               <br>
-              <form class="form-horizontal form-label-left"  method="post" enctype="multipart/form-data" data-parsley-validate  >
-                     <input type="hidden" name="handle"  value="{{ handle }}">
-                     <input type="hidden" name="code"  value="{{ stream.code }}">
-                     <input type="hidden" name="app"  value="{{ stream.app }}">
-                     <input type="hidden" name="name"  value="{{ stream.name }}">
+              <div class="form-horizontal form-label-left" >
 
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">编号 </label>
@@ -31,34 +27,6 @@
                        <input type="text" disabled  value="{{ stream.code }}" class="form-control">
                   </div>
                 </div>
-
-           <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">ws-fmp4</label>
-       <div class="col-md-6 col-sm-6 col-xs-12">
-               <input type="text" disabled  value="{{ stream.wsMp4Url }}" class="form-control">
-                   </div>
-                </div>
-
-                                    <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">http-fmp4</label>
-       <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="text" disabled  value="{{ stream.httpMp4Url }}" class="form-control">
-                   </div>
-                </div>
-
-                                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">rtsp</label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                 <input type="text" disabled  value="{{ stream.rtspUrl }}" class="form-control">
-                   </div>
-                </div>
-              <!--
-                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">hls</label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                    {{ stream.hlsUrl }}
-                   </div>
-                </div>-->
 
                <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">名称<span class="required" style="color: red;">*</span>
@@ -73,34 +41,58 @@
                  <div class="col-md-6 col-sm-6 col-xs-12">
                         <select name="pull_stream_type" class="form-control">
                             <option value="0">请选择</option>
-                            {% for pull_stream_type in pull_stream_types %}
-                                 <option value="{{ pull_stream_type.id }}">{{ pull_stream_type.name }}</option>
+                            {% for item in pull_stream_types %}
+                                 <option  {% if item.id == 1 %} selected {% endif %}  value="{{ item.id }}">{{ item.name }}</option>
                             {% endfor %}
                         </select>
                   </div>
                 </div>
 
-                  <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头视频地址<span class="required" style="color: red;">*</span>
-                      </label>
+           <div class="form-group onvif-item">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">探测ONVIF IP </label>
                <div class="col-md-6 col-sm-6 col-xs-12">
-                        <textarea name="pull_stream_url" class="form-control" rows="4" placeholder="请输入摄像头视频地址（视频地址需要与接入协议保持一致）">{{ stream.pull_stream_url }}</textarea>
+                              <input type="text" name="onvif_ip" value="{{ stream.onvif_ip }}" placeholder="请输入探测IP" class="form-control">
                       </div>
                 </div>
+
+             <div class="form-group onvif-item">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">探测ONVIF用户名 </label>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="onvif_username" value="{{ stream.pull_stream_username }}" class="form-control">
+                      </div>
+                </div>
+
+
+             <div class="form-group onvif-item">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">探测ONVIF密码 </label>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="onvif_password" value="{{ stream.pull_stream_password }}" class="form-control">
+                      </div>
+                </div>
+
+                <div class="form-group onvif-item">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12"> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <button type="button"  style="margin-top: 4px;margin-bottom: 6px;" onclick="f_checkOnvifDevice()" class="btn btn-primary">探测</button>
+                      </div>
+                </div>
+
+
+                  <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">直播流地址 <span class="required" style="color: red;">*</span></label>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="pull_stream_url" value="{{ stream.pull_stream_url }}" placeholder="请输入直播流地址" class="form-control">
+                      </div>
+                </div>
+
 
                              <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头IP <span class="required" style="color: red;">*</span></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">直播流IP </label>
                <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" name="pull_stream_ip" value="{{ stream.pull_stream_ip }}" placeholder="请输入摄像头IP" class="form-control">
+                              <input type="text" name="pull_stream_ip" value="{{ stream.pull_stream_ip }}" placeholder="请输入直播流IP" class="form-control">
                       </div>
                 </div>
 
-                                      <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头端口 <span class="required" style="color: red;">*</span></label>
-               <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" name="pull_stream_port" value="{{ stream.pull_stream_port }}" placeholder="请输入摄像头端口" class="form-control">
-                      </div>
-                </div>
 
 
                <div class="form-group">
@@ -128,15 +120,14 @@
                       </div>
                 </div>
 
-
                 <div class="form-group">
                   <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                     <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">返回</button>
-                    <button type="submit" class="btn btn-success">提交</button>
+                    <button type="button" onclick="f_handle()" class="btn btn-success">提交</button>
                   </div>
                 </div>
 
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -150,54 +141,209 @@
 {% block javascripts %}
   {{ block.super }}
 <script>
+    //let handle = "{{ handle }}";
+    let stream_code = "{{ stream.code }}";
+    let stream_app = "{{ stream.app }}";
+    let stream_name = "{{ stream.name }}";
+    let ele_input_nickname= $("input[name='nickname']");
+    let ele_select_pull_stream_type= $("select[name='pull_stream_type']");
 
-let handle = "{{ handle }}";
-let obj_code = "{{ stream.code }}";
-let ele_input_nickname= $("input[name='nickname']");
-let ele_pull_stream_type= $("select[name='pull_stream_type']");
-let ele_textarea_pullStreamUrl= $("textarea[name='pull_stream_url']");
+    let ele_input_onvif_ip= $("input[name='onvif_ip']");
+    let ele_input_onvif_username= $("input[name='onvif_username']");
+    let ele_input_onvif_password= $("input[name='onvif_password']");
 
-$(document).ready(function () {
-   $("form").submit(function () {
-       if(ele_input_nickname.val().trim() === ""){
+    let ele_input_pull_stream_url = $("input[name='pull_stream_url']");
+    let ele_input_pull_stream_ip = $("input[name='pull_stream_ip']");
+    let ele_input_camera_name= $("input[name='camera_name']");
+    let ele_input_camera_manufacturer= $("input[name='camera_manufacturer']");
+    let ele_textarea_remark= $("textarea[name='remark']");
+
+
+    function f_docs() {
+        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/添加摄像头");
+    }
+    function f_validate_ip(ip) {
+      const pattern = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+      return pattern.test(ip);
+    }
+    ele_select_pull_stream_type.change(function () {
+          let pull_stream_type = $(this).val();
+          pull_stream_type = parseInt(pull_stream_type);
+          if(pull_stream_type===1){
+              $(".onvif-item").show();
+          }else{
+              $(".onvif-item").hide();
+                if(pull_stream_type===0){
+                    myAlert("请选择接入协议","error");
+                    return false;
+                }else if(pull_stream_type === 21){
+                    myAlert("如需接入GB28181，请到摄像头管理平台配置","error");
+                    return false;
+                }
+          }
+    });
+    function f_checkOnvifDevice() {
+        let onvif_ip = ele_input_onvif_ip.val().trim();
+        let onvif_username = ele_input_onvif_username.val().trim();
+        let onvif_password = ele_input_onvif_password.val().trim();
+        if(onvif_ip === ""){
+            myAlert("ONVIF IP不能为空","error");
+            return false;
+        }
+        if(!f_validate_ip(onvif_ip)){
+            myAlert("ONVIF IP格式不正确","error");
+            return false;
+        }
+        if(onvif_username === ""){
+            myAlert("ONVIF用户名不能为空","error");
+            return false;
+        }
+        if(onvif_password === ""){
+            myAlert("ONVIF密码不能为空","error");
+            return false;
+        }
+        $.ajax({
+           url: "/onvif/postCheckOnvifDevice",
+           type: "post",
+           async: true,
+           data: {"ip":onvif_ip,"username":onvif_username,"password":onvif_password},
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+                myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               if(1000 === res.code){
+                   let info = res.info;
+                   let streamUri = info.streamUri;
+                   let deviceInfo = info.deviceInfo;
+                   let HardwareId = deviceInfo["HardwareId"];
+                   let Manufacturer = deviceInfo["Manufacturer"];
+                   let FirmwareVersion = deviceInfo["FirmwareVersion"];
+                   let Model = deviceInfo["Model"];
+                   let SerialNumber = deviceInfo["SerialNumber"];
+                   if(HardwareId===null){
+                       HardwareId = "";
+                   }
+                    if(Manufacturer ===null){
+                        Manufacturer = "";
+                    }
+                    if(FirmwareVersion===null){
+                        FirmwareVersion = "";
+                    }
+                    if(Model===null){
+                        Model = "";
+                    }
+                    if(SerialNumber===null){
+                        SerialNumber = "";
+                    }
+                    ele_input_pull_stream_url.val(streamUri);
+                    ele_input_pull_stream_ip.val(onvif_ip);
+                    ele_input_camera_name.val(HardwareId);//设备编号设置为摄像头名称
+                    ele_input_camera_manufacturer.val(Manufacturer);
+
+                    let remark = "FirmwareVersion="+FirmwareVersion+",Model="+Model+",SerialNumber="+SerialNumber;
+                    ele_textarea_remark.val(remark)
+
+               }else{
+                    myAlert(res.msg,"error");
+               }
+           }
+        });
+
+    }
+    function f_handle() {
+        let nickname = ele_input_nickname.val().trim();
+        if( nickname === ""){
             myAlert("请输入名称","error");
             return false;
         }
 
-        let pull_stream_type = ele_pull_stream_type.val().trim();
-        if(pull_stream_type==="0"){
+        let pull_stream_type = parseInt(ele_select_pull_stream_type.val().trim());
+        if(pull_stream_type===0){
             myAlert("请选择接入协议","error");
             return false;
-        }
-        pull_stream_type = parseInt(pull_stream_type);
-        if(pull_stream_type === 21){
-            myAlert("GB28181接入协议需要在设备端配置","error");
+        }else if(pull_stream_type === 21){
+            myAlert("如需接入GB28181，请到摄像头管理平台配置","error");
             return false;
         }
-
-       let pullStreamUrl = ele_textarea_pullStreamUrl.val().trim();
-        if(pullStreamUrl === ""){
-            myAlert("请输入摄像头视频地址","error");
+        let pull_stream_url = ele_input_pull_stream_url.val().trim();
+        if(pull_stream_url === ""){
+            myAlert("请输入直播流地址","error");
             return false;
         }
-        if(pullStreamUrl.startsWith("rtsp://")
-            || pullStreamUrl.startsWith("rtsps://")
-            || pullStreamUrl.startsWith("rtmp://")
-            || pullStreamUrl.startsWith("rtmps://")){
-
-        }else{
-            myAlert("摄像头视频地址仅支持rtsp/rtmp","error");
-            return false;
+        if(pull_stream_type === 1 ){
+            if(!pull_stream_url.startsWith("rtsp://")){
+                myAlert("RTSP类型接入协议仅支持rtsp直播流地址","error");
+                return false;
+            }
         }
+        else if(pull_stream_type === 2 ){
+            if(!pull_stream_url.startsWith("rtmp://")){
+                myAlert("RTMP类型接入协议仅支持rtmp直播流地址","error");
+                return false;
+            }
+        }
+        else if(pull_stream_type === 3 ){
+            if(!pull_stream_url.startsWith("http://")){
+                myAlert("FLV接入协议仅支持FLV直播流地址","error");
+                return false;
+            }
+        }
+        else if(pull_stream_type === 4 ){
+            if(!pull_stream_url.startsWith("http://")){
+                myAlert("HLS接入协议仅支持HLS直播流地址","error");
+                return false;
+            }
+        }
+        let onvif_ip = ele_input_onvif_ip.val().trim();
+        let onvif_username = ele_input_onvif_username.val().trim();
+        let onvif_password = ele_input_onvif_password.val().trim();
+        let pull_stream_ip = ele_input_pull_stream_ip.val().trim();
+        let camera_name = ele_input_camera_name.val().trim();
+        let camera_manufacturer = ele_input_camera_manufacturer.val().trim();
+        let remark = ele_textarea_remark.val().trim();
+        let data = {
+            "stream_code":stream_code,
+            "stream_app":stream_app,
+            "stream_name":stream_name,
+            "nickname":nickname,
+            "pull_stream_type":pull_stream_type,
+            "pull_stream_url":pull_stream_url,
+            "pull_stream_ip":pull_stream_ip,
+            "pull_stream_port":0,
+            "camera_name":camera_name,
+            "camera_manufacturer":camera_manufacturer,
+            "remark":remark,
+            "onvif_username":onvif_username,
+            "onvif_password":onvif_password,
+        };
+        $.ajax({
+           url: "/stream/add",
+           type: "post",
+           async: true,
+           data: data,
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+                myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               if(1000 === res.code){
+                   myAlert(res.msg,"success",1000);
+                   setTimeout(function () {
+                        window.location.href= "/stream/index";
+                    }, 1000);
+               }else{
+                    myAlert(res.msg,"error");
+               }
+           }
+        });
 
 
+    }
 
 
-   });
-});
-    function f_docs() {
-    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/添加摄像头");
-}
 </script>
 
 {% endblock javascripts %}

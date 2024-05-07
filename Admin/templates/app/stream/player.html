@@ -48,14 +48,29 @@
       <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="x_panel">
-            <div>
+            <div class="x_title">
                   <label>
                       <input id="input_address" type="text" placeholder="请输入播放地址（支持ws-fmp4/http-fmp4）">
                   </label>
                   <button style="margin-left: 10px;"  type="button" class="btn btn-success btn-sm" onclick="f_clickPlayStart()">播放</button>
                   <button type="button" class="btn btn-default btn-sm" onclick="f_clickPlayStop()">停止</button>
 
+                <!--
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                  </ul>-->
+
+                    <div style="float: right; margin-top: 6px; margin-right: 50px;">
+                        <button type="button" id="handle_snapshot"  class="btn btn-primary btn-sm">截图</button>
+                        <button type="button" id="handle_record"  class="btn btn-primary btn-sm">开启录像</button>
+                    </div>
+
+                  <div class="clearfix"></div>
             </div>
+
             <div class="x_content">
               <div class="col-md-12 col-sm-12 col-xs-12">
                    <video id="video_player" poster="/static/images/player_poster.jpg" muted controls autoplay>
@@ -92,35 +107,42 @@
 <script src="/static/lib/wsPlayer/mp4box.all.min.js"></script>
 <script src="/static/lib/wsPlayer/wsPlayer.js"></script>
 <script>
-    let mWsVideoPlayer = null;
+    let stream_app = "{{ stream.app }}";
+    let stream_name = "{{ stream.name }}";
+
     let eleVideoPlayerJqueryObj = $("#video_player");
     let eleInputAddress= $("#input_address");
-    let mVideoUrl = null;
+    let eleHandleSnapshot = $("#handle_snapshot");
+    let eleHandleRecord = $("#handle_record");
+    let mCurrentVideoPlayer = null;
+    let mCurrentVideoUrl = null;//当前视频流地址
+    let mCurrentIsRecording = false;
+
     function f_playStart(video_url) {
-        mVideoUrl = video_url;
-        if(mVideoUrl.startsWith("ws://")){
-            if(mWsVideoPlayer){
+        mCurrentVideoUrl = video_url;
+        if(mCurrentVideoUrl.startsWith("ws://")){
+            if(mCurrentVideoPlayer){
                 try {
-                    mWsVideoPlayer.close();
+                    mCurrentVideoPlayer.close();
                 }catch (e) {
                     console.log("f_playStart() err:",e);
                 }
             }
-            mWsVideoPlayer = new wsPlayer("video_player", mVideoUrl);
-            mWsVideoPlayer.open();
-        }else if(mVideoUrl.startsWith("http://")){
-            eleVideoPlayerJqueryObj.attr("src",mVideoUrl);
+            mCurrentVideoPlayer = new wsPlayer("video_player", mCurrentVideoUrl);
+            mCurrentVideoPlayer.open();
+        }else if(mCurrentVideoUrl.startsWith("http://")){
+            eleVideoPlayerJqueryObj.attr("src",mCurrentVideoUrl);
         }
     }
     function f_playStop() {
-        if(mVideoUrl.startsWith("ws://")){
-            if(mWsVideoPlayer){
-                mWsVideoPlayer.close();
-                mWsVideoPlayer = null;
+        if(mCurrentVideoUrl.startsWith("ws://")){
+            if(mCurrentVideoPlayer){
+                mCurrentVideoPlayer.close();
+                mCurrentVideoPlayer = null;
                 eleVideoPlayerJqueryObj.removeAttr("src");
                 eleVideoPlayerJqueryObj.load();
             }
-        }else if(mVideoUrl.startsWith("http://")){
+        }else if(mCurrentVideoUrl.startsWith("http://")){
             eleVideoPlayerJqueryObj.removeAttr("src");
             eleVideoPlayerJqueryObj.load();
         }
@@ -148,7 +170,125 @@
 	function f_clickPlayStop() {
         f_playStop();
     }
+    function f_getVideoIsRecording() {
+        $.ajax({
+               url: "/nvr/getVideoIsRecording",
+               type: "get",
+               async: true,
+               data: {"app":stream_app,"name":stream_name},
+               dataType: "json",
+               timeout: 0,
+               error: function () {
+                   myAlert("网络异常，请确定网络正常！","error");
+               },
+               success: function (res) {
+                   if(1000 === res.code){
+                       eleHandleRecord.html("停止录像");
+                       eleHandleRecord.removeClass("btn-primary")
+                       eleHandleRecord.addClass("btn-danger")
+                        mCurrentIsRecording = true;
+                   }
+               }
+            });
+    }
+    eleHandleSnapshot.click(function () {
+        $.ajax({
+           url: "/nvr/postSnapShot",
+           type: "post",
+           async: true,
+           data: {"app":stream_app,"name":stream_name},
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+               myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               if(1000 === res.code){
+                       let info = res.info;
 
+                       let snapshot_ret = info["snapshot_ret"]
+                       let snapshot_msg = info["snapshot_msg"]
+                       if(snapshot_ret===true){
+                           let snapshot_filename = info["snapshot_filename"]
+                           let download_url = "/nvr/getDownload?filename="+snapshot_filename;
+                           window.open(download_url);
+                       }else{
+                           myAlert(snapshot_msg,"error");
+                       }
+               }else{
+                    myAlert(res.msg,"error");
+               }
+           }
+        });
+    })
+    eleHandleRecord.click(function () {
+        //开启录像和停止录像
+        console.log("stream_app->",typeof stream_app,stream_app)
+        console.log("stream_name->",typeof stream_name,stream_name)
+
+        if(mCurrentIsRecording){
+            //当前正在录制中，接下来执行停止录像
+            $.ajax({
+               url: "/nvr/postStopRecordVideo",
+               type: "post",
+               async: true,
+               data: {"app":stream_app,"name":stream_name},
+               dataType: "json",
+               timeout: 0,
+               error: function () {
+                   myAlert("网络异常，请确定网络正常！","error");
+               },
+               success: function (res) {
+                   if(1000 === res.code){
+                       eleHandleRecord.html("开启录像");
+                       eleHandleRecord.removeClass("btn-danger")
+                       eleHandleRecord.addClass("btn-primary")
+
+                       mCurrentIsRecording = false;
+                       let info = res.info;
+
+                       let record_ret = info["record_ret"]
+                       let record_msg = info["record_msg"]
+                       if(record_ret===true){
+                           let record_video_filename = info["record_video_filename"]
+                           let download_url = "/nvr/getDownload?filename="+record_video_filename;
+                           window.open(download_url);
+                       }else{
+                           myAlert(record_msg,"error");
+                       }
+                   }else{
+                        myAlert(res.msg,"error");
+                   }
+               }
+            });
+
+        }else{
+            //当前未录制，接下来开启录像
+            $.ajax({
+               url: "/nvr/postStartRecordVideo",
+               type: "post",
+               async: true,
+               data: {"app":stream_app,"name":stream_name},
+               dataType: "json",
+               timeout: 0,
+               error: function () {
+                   myAlert("网络异常，请确定网络正常！","error");
+               },
+               success: function (res) {
+                   if(1000 === res.code){
+                        eleHandleRecord.html("停止录像");
+                       eleHandleRecord.removeClass("btn-primary")
+                       eleHandleRecord.addClass("btn-danger")
+                        mCurrentIsRecording = true;
+
+                   }else{
+                        myAlert(res.msg,"error");
+                   }
+               }
+            });
+        }
+    });
+    
     $(function() {
         let is_exist_stream = parseInt("{{ is_exist_stream }}");
         if(is_exist_stream){
@@ -181,6 +321,8 @@
             eleInputAddress.val(video_url);
             f_playStart(video_url);
         }
+
+        f_getVideoIsRecording();
     });
 </script>
 

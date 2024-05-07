@@ -33,7 +33,15 @@
 
 
 # 版本历史
-### v4.408
+### v4.409
+* 发布时间 2024.05.07
+* （1）新增支持ONVIF搜索功能，ONVIF自动获取地址功能，ONVIF获取设备信息功能，ONVIF截屏功能
+* （2）新增支持视频流手动录像功能，手动截图功能
+* （3）新增支持可自定义配置存储根路径，已将报警数据移至该路径，后续录像截屏数据均会放在该路径
+* （4）优化报警数据存储结构，扩展报警描述文本信息
+* （5）优化后台管理依赖库，去除未使用依赖库，提高web访问性能
+
+#### v4.408
 * 发布时间 2024.05.01
 * （1）新增支持检测算法->分类算法->行为算法的模式，对解决算法误报非常有效
 * （2）新增支持OpenVINO推理追踪算法
@@ -274,20 +282,18 @@
 * v1版本源码讲解（2）音频解码，音频重采样，音频编码，合成报警视频 https://www.bilibili.com/video/BV1984y1L7zB
 * v2版本视频介绍地址 https://www.bilibili.com/video/BV1CG411f7ak
 * v3版本视频介绍地址 https://www.bilibili.com/video/BV1Xy4y1P7M2
+* v1版本开源地址 https://gitee.com/Vanishi/BXC_VideoAnalyzer_v1
+* v2版本开源地址 https://gitee.com/Vanishi/BXC_VideoAnalyzer_v2
 * v3版本安装包下载地址 https://gitee.com/Vanishi/BXC_VideoAnalyzer_v3
 * v3版本源码购买地址（淘宝） https://item.taobao.com/item.htm?id=746326947806
 * v3版本源码购买地址（闲鱼） https://h5.m.goofish.com/item?id=744350097882
 
-
-<img width="720" alt="控制面板" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/index.png">
-<img width="720" alt="报警视频管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/alarm_index.png">
-<img width="720" alt="摄像头管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/stream_index.png">
-<img width="720" alt="行为算法管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/behaviour_index.png">
-<img width="720" alt="基础算法管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/algorithm_index.png">
-<img width="720" alt="添加基础算法" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/algorithm_add.png">
-<img width="720" alt="音频管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/audio_index.png">
-<img width="720" alt="布控管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/control_index.png">
-<img width="720" alt="添加布控" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/control_add.png">
-<img width="720" alt="系统维护" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/system_index.png">
-<img width="720" alt="版本" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/version.png">
-
+<img width="720" alt="控制面板" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/1.png">
+<img width="720" alt="报警视频管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/2.png">
+<img width="720" alt="摄像头管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/3.png">
+<img width="720" alt="算法管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/4.png">
+<img width="720" alt="添加算法" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/5.png">
+<img width="720" alt="布控管理" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/6.png">
+<img width="720" alt="添加布控" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/7.png">
+<img width="720" alt="系统维护" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/8.png">
+<img width="720" alt="关于系统" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/9.png">
