@@ -28,12 +28,18 @@
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
 * [行为算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理)
 * [布控管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理)
-* [添加报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/添加报警接口/添加报警接口)
+* [自定义报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警接口)
+* [自定义报警过滤器](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警过滤器)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
 
 
 # 版本历史
-### v4.409
+### v4.410
+* 发布时间 2024.05.11
+* （1）新增支持自定义报警过滤器功能，可以在报警前调用自己的报警过滤器，用于提前验证报警是否为误报
+* （2）修复此前版本ONVIF功能的bug
+
+#### v4.409
 * 发布时间 2024.05.07
 * （1）新增支持ONVIF搜索功能，ONVIF自动获取地址功能，ONVIF获取设备信息功能，ONVIF截屏功能
 * （2）新增支持视频流手动录像功能，手动截图功能

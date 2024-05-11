@@ -76,7 +76,7 @@
                           <div class="col-md-9 col-sm-9 col-xs-12">
                             <div class="radio">
                               <label>
-                                <input type="radio" {% if obj.request_server_type == 0 %} checked="checked" {% endif %} value="0" name="request_server_type"> 不上传
+                                <input type="radio" {% if obj.request_server_type == 0 %} checked="checked" {% endif %} value="0" name="request_server_type"> 不上传服务器
                               </label>
                             </div>
 
@@ -141,8 +141,8 @@
                   <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">备注
                   </label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
-                    <textarea name="remark" class="form-control" rows="3" placeholder="">{{ obj.remark }}</textarea>
+                   <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="text" name="remark" value="{{ obj.remark }}"  class="form-control">
                   </div>
                 </div>
 
@@ -188,7 +188,7 @@ $(document).ready(function () {
    });
 });
 function f_docs() {
-    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/添加报警接口/添加报警接口");
+    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警接口");
 }
 </script>
 

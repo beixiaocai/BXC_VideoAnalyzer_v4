@@ -74,16 +74,16 @@
                   <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">扩展参数
                   </label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
-                    <textarea name="extend_params" class="form-control" rows="2" placeholder="">{{ audio.extend_params }}</textarea>
+                  <div class="col-md-3 col-sm-3 col-xs-12">
+                      <input type="text" name="extend_params" value="{{ audio.extend_params }}"  class="form-control">
                   </div>
                 </div>
 
                   <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">备注
                   </label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
-                    <textarea name="remark" class="form-control" rows="3" placeholder="">{{ audio.remark }}</textarea>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="text" name="remark" value="{{ audio.remark }}"  class="form-control">
                   </div>
                 </div>
 
@@ -112,7 +112,6 @@ let handle = "{{ handle }}";
 let audio_code = "{{ audio.code }}";
 let ele_input_name= $("input[name='name']");
 let ele_input_file= $("input[name='file']");
-let ele_textarea_remark= $("textarea[name='remark']");
 
 $(document).ready(function () {
    $("form").submit(function () {

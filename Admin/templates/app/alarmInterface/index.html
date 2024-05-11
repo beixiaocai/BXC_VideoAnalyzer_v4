@@ -30,8 +30,7 @@
                         <th class="column-title">编号</th>
                         <th class="column-title">名称</th>
                         <th class="column-title">是否保存本地</th>
-                        <th class="column-title">上传类型</th>
-                        <th class="column-title">报警延迟</th>
+                        <th class="column-title">上传服务器类型</th>
                         <th class="column-title">时间</th>
                           <th class="column-title no-link last"><span class="nobr">操作</span></th>
                       </tr>
@@ -48,7 +47,7 @@
                         <td>
 
                             {% if d.request_server_type == 0 %}
-                                 <span >本地</span>
+                                 <span >不上传服务器</span>
                             {% elif d.request_server_type == 1 %}
                                  <span>HTTP</span>
                             {% elif d.request_server_type == 2 %}
@@ -61,7 +60,6 @@
                                   未定义状态
                             {% endif %}
                         </td>
-                        <td>{{ d.alarm_delay }}</td>
                           <td>{{ d.last_update_time }}</td>
                         <td>
                                 <div class="btn-group">
