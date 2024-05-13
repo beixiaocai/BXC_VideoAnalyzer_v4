@@ -12,17 +12,19 @@
 * 基于C++开发的视频行为分析系统v4版本，可以在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等。
 
 ### 版本介绍
-| 操作系统 | OpenVINO | TensorRT | 下载地址 |
+| 操作系统 | 硬件 | 推理引擎 | 下载地址 |
 | :----: | :----: | :----: | :----- |
-| Windows10/11 | 支持 | 不支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 |
-| Windows10/11 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本 |
-| Ubuntu20/21/22 | 支持 | 支持 | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本|
+| Windows10/11 | Intel | OpenVINO | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 |
+| Windows10/11 | Intel+Nvidia | OpenVINO,TensorRT | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本 |
+| Ubuntu20/21/22 | Intel+Nvidia | OpenVINO,TensorRT | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本|
+| Ubuntu20/21/22 | RK3588 | RKNPU | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本|
 
 ### 使用说明
 * [启动配置](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
 * [支持哪些硬件](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/支持哪些硬件)
 * [Windows版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows版本)
 * [Ubuntu版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本)
+* [RK3588版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本)
 * [FFmpeg推流模拟摄像头使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
 * [算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/算法管理)
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
@@ -34,7 +36,11 @@
 
 
 # 版本历史
-### v4.410
+### v4.411
+* 发布时间 2024.05.13
+* （1）优化机器授权码授权验证逻辑，减少频繁验证导致性能浪费 
+
+#### v4.410
 * 发布时间 2024.05.11
 * （1）新增支持自定义报警过滤器功能，可以在报警前调用自己的报警过滤器，用于提前验证报警是否为误报
 * （2）修复此前版本ONVIF功能的bug

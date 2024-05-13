@@ -393,15 +393,15 @@
     let eleExpireHour= $("#active_code_expire_hour");
     let eleCreateDate= $("#active_code_create_date");
     let eleExpireDate= $("#active_code_expire_date");
-    function f_showMachineVerifyInfo(state,remark,expire_hour,create_date_str,expire_date_str) {
+    function f_showMachineVerifyInfo(verify,remark,expire_hour,create_date_str,expire_date_str) {
         let state_str;
-        if(-2===state){
+        if(-2===verify){
             state_str = "<span class='sun-state-error'>未授权</span";
-        }else if(-1===state){
+        }else if(-1===verify){
             state_str = "<span class='sun-state-error'>格式不正确</span";
-        }else if(0===state){
+        }else if(0===verify){
             state_str = "<span class='sun-state-error'>已过期</span";
-        }else if(1===state){
+        }else if(1===verify){
             state_str = "<span class='sun-state-success'>授权中</span>";
         }else{
             state_str ="<span class='sun-state-error'>授权失败</span>";
@@ -450,7 +450,7 @@
                 myAlert("网络异常，请确定网络正常！","error");
            },
            success: function (res) {
-               if(1000 === res.code){
+               if(res.code === 1000){
                     try {
                         let osInfo = res["osInfo"];
                         let os_cpu_used_rate = osInfo["os_cpu_used_rate"];
@@ -500,24 +500,23 @@
                    myAlert("网络异常，请确定网络正常！","error");
                },
                success: function (res) {
-                   if(1000 === res.code){
-                       let info = res.info;
+                   if(res.code === 1000){
+                        let info = res.info;
                         let dongle_status = info.dongle_status;
                         if(dongle_status===1){
                             //加密锁授权通过
                             eleStateStr.html("<span class='sun-state-success'>加密锁授权中</span>");
                             eleExpireHour.html("永久有效");
                         }else{
-                            let state = parseInt(info["state"]);
-                            let expire_hour = parseInt(info["expire_hour"]);
-                            let remark = info["remark"];
+                            let verify = parseInt(info["verify"]);
+                            let verify_expire_hour = parseInt(info["verify_expire_hour"]);
                             let create_date_str = info["create_date_str"];
                             let expire_date_str = info["expire_date_str"];
 
-                            if(isNaN(state)||isNaN(expire_hour)||create_date_str===""||expire_date_str===""){
+                            if(isNaN(verify)||isNaN(verify_expire_hour)||create_date_str===""||expire_date_str===""){
                                 f_showMachineVerifyInfo(-1,-1,-1,-1,-1)
                             }else{
-                                f_showMachineVerifyInfo(state,remark,expire_hour,create_date_str,expire_date_str);
+                                f_showMachineVerifyInfo(verify,info["verify_remark"],verify_expire_hour,create_date_str,expire_date_str);
                             }
                         }
 

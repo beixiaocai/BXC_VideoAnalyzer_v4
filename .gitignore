@@ -4,10 +4,11 @@ log/*
 Admin/static/upload/alarm/*
 Admin/static/storage*
 
-MediaServer/log/*
+MediaServer/log
 MediaServer/www/*
 
 # vs
 .vs
+.ac
 
 
