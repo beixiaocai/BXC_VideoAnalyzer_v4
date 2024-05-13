@@ -14,10 +14,10 @@
 ### 版本介绍
 | 操作系统 | 硬件 | 推理引擎 | 下载地址 |
 | :----: | :----: | :----: | :----- |
-| Windows10/11 | Intel | OpenVINO | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4 |
-| Windows10/11 | Intel+Nvidia | OpenVINO,TensorRT | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本 |
-| Ubuntu20/21/22 | Intel+Nvidia | OpenVINO,TensorRT | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本|
-| Ubuntu20/21/22 | RK3588 | RKNPU | https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本|
+| Windows10/11 | Intel | OpenVINO | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4) |
+| Windows10/11 | Intel+Nvidia | OpenVINO,TensorRT | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本) |
+| Ubuntu20/21/22 | Intel+Nvidia | OpenVINO,TensorRT | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本) |
+| Ubuntu20/21/22 | RK3588 | RKNPU | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本) |
 
 ### 使用说明
 * [启动配置](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
