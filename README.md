@@ -30,13 +30,18 @@
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
 * [行为算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理)
 * [布控管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理)
-* [自定义报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警接口)
-* [自定义报警过滤器](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警过滤器)
+* [报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警接口)
+* [报警过滤器](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警过滤器)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
 
 
 # 版本历史
-### v4.411
+### v4.412
+* 发布时间 2024.05.14
+* （1）优化此前串行算法流的性能问题，此前的检测->分类或检测->追踪均有大幅度性能提升
+* （2）修复分析器多进程的bug
+
+#### v4.411
 * 发布时间 2024.05.13
 * （1）优化机器授权码授权检测逻辑，将所有检测逻辑全部移动至分析器模块
 * （2）减少各个子模块频繁检测导致性能浪费 
