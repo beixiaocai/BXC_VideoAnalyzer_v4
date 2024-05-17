@@ -32,9 +32,11 @@
                      <div style="margin-top: 4px;" class="col-md-12 col-sm-12">
                           <span>软件标记：</span><span style="color: green;font-size: 15px ;margin-right: 10px;">{{ project_flag }}</span>
                       </div>
+{% if settings.is_show_author == 1 %}
                     <div style="margin-top: 4px;"  class="col-md-12 col-sm-12">
                         <a href="{{ settings.author_link }}" target="_blank">{{ settings.author }}</a>
                     </div>
+{% endif %}
                 <div style="margin-top: 20px;"  class="col-md-12 col-sm-12">
                          <button onclick="f_getCheckVersion()" class="btn btn-primary btn">检测新版本</button>
                 </div>

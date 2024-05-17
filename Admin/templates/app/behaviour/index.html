@@ -125,7 +125,8 @@
 
     }
     function f_docs() {
-        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理");
+        let url= "{{ settings.docs.behaviourAdd }}";
+        window.open(url);
     }
     function f_edit(code) {
         let url = "/behaviour/edit?code="+code;

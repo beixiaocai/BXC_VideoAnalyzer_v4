@@ -185,7 +185,8 @@
     let ele_input_pull_stream_ip = $("input[name='pull_stream_ip']");
 
     function f_docs() {
-        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/添加摄像头");
+        let url= "{{ settings.docs.streamAdd }}";
+        window.open(url);
     }
     function f_validate_ip(ip) {
       const pattern = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;

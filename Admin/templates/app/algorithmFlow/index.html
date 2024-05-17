@@ -152,8 +152,9 @@
             });
 
     }
-        function f_docs() {
-        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/算法管理");
+    function f_docs() {
+        let url= "{{ settings.docs.algorithmFlowAdd }}";
+        window.open(url);
     }
     function f_edit(code) {
         let url = "/algorithmFlow/edit?code="+code;

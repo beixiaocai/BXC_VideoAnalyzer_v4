@@ -22,8 +22,8 @@
                   <div class="form-group">
                   <div class="col-md-6 col-sm-6 col-md-offset-3">
                       <h3>系统授权有两种方式</h3>
-                    <p style="margin-top: 20px;">（1）第一种生成测试授权码{% if settings.auth_online_link != "" %} <button type="button" class="btn btn-success btn-sm" onclick="f_link('{{ settings.auth_online_link }}')" style="margin-left: 5px; " >生成授权码</button>{% endif %}</p>
-                    <p style="margin-top: 20px;">（2）第二种购买加密锁授权{% if settings.auth_buy_link != "" %} <button type="button" class="btn btn-success btn-sm"  onclick="f_link('{{ settings.auth_buy_link }}')" style="margin-left: 5px; ">购买加密锁</button>{% endif %}</p>
+                    <p style="margin-top: 20px;">（1）第一种 {% if settings.auth_online_link != "" %} <button type="button" class="btn btn-primary btn-sm" onclick="f_link('{{ settings.auth_online_link }}')" style="margin-left: 5px; " >生成测试授权码</button>{% endif %}</p>
+                    <p style="margin-top: 20px;">（2）第二种 {% if settings.auth_buy_link != "" %} <button type="button" class="btn btn-primary btn-sm"  onclick="f_link('{{ settings.auth_buy_link }}')" style="margin-left: 5px; ">购买授权加密锁</button>{% endif %}</p>
                   </div>
                 </div>
                <div class="ln_solid"></div>

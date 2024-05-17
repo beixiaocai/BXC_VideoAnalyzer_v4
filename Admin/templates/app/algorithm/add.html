@@ -376,7 +376,8 @@ function f_select_algorithm_type() {
     });
 }
 function f_docs() {
-    window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/添加基础算法");
+    let url= "{{ settings.docs.algorithmAdd }}";
+    window.open(url);
 }
 function updateTimer() {
     mTimerSpendSecond++;

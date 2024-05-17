@@ -11,21 +11,30 @@
 ### 软件介绍
 * 基于C++开发的视频行为分析系统v4版本，可以在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等。
 
+### 仓库提交记录删除原因说明
+* 因为gitee或github对代码仓库的存储上限均是1G，因此每隔一段时间仓库容量都会用尽，所以每隔一段时间都需要清空一次仓库
+* 为了方便大家下载视频行为分析系统v4历史版本，下面提供了历史版本下载表
+* [历史版本下载表](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/历史版本下载表)
+
 ### 版本介绍
 | 操作系统 | 硬件 | 推理引擎 | 下载地址 |
 | :----: | :----: | :----: | :----- |
-| Windows10/11 | Intel | OpenVINO | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4) |
-| Windows10/11 | Intel+Nvidia | OpenVINO,TensorRT | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本) |
-| Ubuntu20/21/22 | Intel+Nvidia | OpenVINO,TensorRT | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本) |
-| Ubuntu20/21/22 | RK3588 | RKNPU | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本) |
+| Windows10/11 | intel | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows版本) |
+| Windows10/11 | intel+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本) |
+| Windows10/11 | amd,,, | onnxruntime | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持onnxruntime的版本) |
+| Ubuntu20/22 | intel+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本) |
+| Ubuntu20/22 | rk3588 | rknpu | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本) |
+
 
 ### 使用说明
 * [启动配置](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
 * [支持哪些硬件](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/支持哪些硬件)
-* [Windows版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows版本)
-* [Ubuntu版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本)
-* [RK3588版本使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本)
-* [FFmpeg推流模拟摄像头使用说明](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
+* [windows+openvino版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows版本)
+* [windows+tensorrt版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本)
+* [windows+onnxruntime版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持onnxruntime的版本)
+* [ubuntu+tensorrt版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本)
+* [ubuntu+rk3588版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本)
+* [ffmpeg推流模拟摄像头](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
 * [算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/算法管理)
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
 * [行为算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理)
@@ -36,7 +45,14 @@
 
 
 # 版本历史
-### v4.412
+### v4.413
+* 发布时间 2024.05.17
+* （1）新增用户模块模块，区分管理员和普通用户，管理员可以增删改查用户
+* （2）提升配置扩展能力，配置参数全部转移至配置文件，下载地址，文档地址，logo，作者链接等均可以修改
+* （3）修复此前版本报警过滤器的bug
+* （4）统一软件启动图标
+
+#### v4.412
 * 发布时间 2024.05.14
 * （1）优化此前串行算法流的性能问题，此前的检测->分类或检测->追踪均有大幅度性能提升
 * （2）修复分析器多进程的bug

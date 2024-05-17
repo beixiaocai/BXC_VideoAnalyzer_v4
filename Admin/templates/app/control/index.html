@@ -549,7 +549,8 @@
         f_getIndex(temp_cur_page,temp_cur_page_size);
     }
     function f_docs() {
-        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理");
+        let url= "{{ settings.docs.controlAdd }}";
+        window.open(url);
     }
     window.onload = function (){
         f_getIndex(temp_cur_page,temp_cur_page_size);

@@ -1,0 +1,29 @@
+{
+    "name": "视频行为分析系统",
+    "welcome": "欢迎",
+    "logo_url": "/static/images/user.png",
+    "bottom_name": "视频行为分析系统",
+    "is_show_author": true,
+    "author": "北小菜",
+    "author_link": "https://space.bilibili.com/487906612",
+    "auth_online_link": "https://www.beixiaocai.com",
+    "auth_buy_link": "https://item.taobao.com/item.htm?id=762119975982",
+    "check_version_app_key": "public",
+    "check_version_app_secret": "xc",
+    "check_version_download_url": "http://www.beixiaocai.com",
+    "docs": {
+        "alarmIndex": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/",
+        "alarmInterfaceAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警接口",
+        "alarmFilterAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警过滤器",
+        "streamAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/添加摄像头",
+        "algorithmFlowAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/添加算法",
+        "algorithmAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/添加基础算法",
+        "behaviourAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/添加行为算法",
+        "controlAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/添加布控",
+        "controlPatrolAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控轮巡功能",
+        "audioAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/音频管理/添加音频",
+        "userAdd": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/用户管理/添加用户",
+        "openIndex": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口",
+        "versionIndex": "https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/系统功能/关于系统"
+    }
+}

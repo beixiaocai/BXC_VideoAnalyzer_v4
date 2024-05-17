@@ -12,7 +12,7 @@
     </div>
     <div class="profile_info">
       <span>{{ settings.welcome }},</span>
-      <h2>admin</h2>
+      <h2>{{request.session.user.username }}</h2>
     </div>
   </div>
   <!-- /menu profile quick info -->
@@ -93,6 +93,15 @@
               </ul>
            </li>
 
+
+          <li><a><i class="fa fa-user"></i> 用户管理 <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                  <li><a href="/user/index">用户管理</a></li>
+                  <li><a href="/user/add">添加用户</a></li>
+                  <li><a href="/user/edit">编辑用户</a></li>
+              </ul>
+           </li>
+
           <li><a><i class="fa fa-folder-open"></i> 开放接口 <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                   <li><a href="/open/index">开放接口</a></li>
@@ -100,9 +109,7 @@
            </li>
            <li><a><i class="fa fa-gear"></i> 系统功能 <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                  <li><a href="/user/index">个人信息</a></li>
                   <li><a href="/system/index">系统维护</a></li>
-                  <li><a href="/system/settings">系统设置</a></li>
                   <li><a href="/auth/index">系统授权</a></li>
                   <li><a href="/version/index">关于系统</a></li>
               </ul>

@@ -973,7 +973,8 @@
     }
 
     function f_docs() {
-        window.open("https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/添加布控");
+        let url= "{{ settings.docs.controlAdd }}";
+        window.open(url);
     }
     function initCanvasData(){
            if (old_control_polygon !== "") {//编辑布控->绘制周界区域存在
