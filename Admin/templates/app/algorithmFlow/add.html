@@ -54,7 +54,7 @@
                 </div>
 
                     <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择算法模式 <span class="required" style="color: red;">*</span></label></label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择算法流程模式 <span class="required" style="color: red;">*</span></label></label>
 
                           <div class="col-md-9 col-sm-9 col-xs-12">
 
@@ -82,7 +82,7 @@
 
 
                     <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测算法 <span class="required" style="color: red;">*</span></label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测算法 </label>
 
                           <div class="col-md-9 col-sm-9 col-xs-12">
 
@@ -95,21 +95,14 @@
                                             "code":algorithmDetectCode,
                                             "algorithm_type":'{{ algorithm.algorithm_type }}',
                                             "name":'{{ algorithm.name }}',
-                                            "way_code":'{{ algorithm.way_code }}',
                                             "model_class_names":'{{ algorithm.model_class_names }}'
                                         }
 
                                     </script>
 
-                                    {% if algorithm.way_code == "MODEL" %}
-                                        <option {% if algorithm.code == flow.algorithm_detect_code %} selected {% endif %} value="{{ algorithm.code }}">
-                                            {{ algorithm.name }}（{{ algorithm.way_code }}/{{ algorithm.framework }}/{{ algorithm.inference }}）
-                                        </option>
-                                    {% else %}
-                                        <option {% if algorithm.code == flow.algorithm_detect_code %} selected {% endif %} value="{{ algorithm.code }}">
-                                            {{ algorithm.name }}（{{ algorithm.way_code }}）
-                                        </option>
-                                    {% endif %}
+                                    <option {% if algorithm.code == flow.algorithm_detect_code %} selected {% endif %} value="{{ algorithm.code }}">
+                                        {{ algorithm.name }}（{{ algorithm.framework }}/{{ algorithm.inference }}/{{ algorithm.inference_device}} ）
+                                    </option>
 
                                 {% endfor %}
                             </select>
@@ -118,7 +111,7 @@
                     </div>
 
                     <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测目标 <span class="required" style="color: red;">*</span></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测目标 </label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                         <select id="select_detect_class_name"  class="select2_multiple form-control" required="required"  multiple="multiple" >
                             <option value="0">---请选择检测目标(可多选)---</option>
@@ -141,21 +134,16 @@
                                             "code":algorithmClassifyCode,
                                             "algorithm_type":'{{ algorithm.algorithm_type }}',
                                             "name":'{{ algorithm.name }}',
-                                            "way_code":'{{ algorithm.way_code }}',
                                             "model_class_names":'{{ algorithm.model_class_names }}'
                                         }
 
                                     </script>
 
-                                    {% if algorithm.way_code == "MODEL" %}
-                                        <option {% if algorithm.code == flow.algorithm_classify_code %} selected {% endif %} value="{{ algorithm.code }}">
-                                            {{ algorithm.name }}（{{ algorithm.way_code }}/{{ algorithm.framework }}/{{ algorithm.inference }}）
-                                        </option>
-                                    {% else %}
-                                        <option {% if algorithm.code == flow.algorithm_classify_code %} selected {% endif %} value="{{ algorithm.code }}">
-                                            {{ algorithm.name }}（{{ algorithm.way_code }}）
-                                        </option>
-                                    {% endif %}
+
+                                    <option {% if algorithm.code == flow.algorithm_classify_code %} selected {% endif %} value="{{ algorithm.code }}">
+                                        {{ algorithm.name }}（{{ algorithm.framework }}/{{ algorithm.inference }}/{{ algorithm.inference_device }}）
+                                    </option>
+
 
                                 {% endfor %}
                             </select>
@@ -184,20 +172,14 @@
                                             "code":algorithmTrackCode,
                                             "algorithm_type":'{{ algorithm.algorithm_type }}',
                                             "name":'{{ algorithm.name }}',
-                                            "way_code":'{{ algorithm.way_code }}',
                                             "model_class_names":'{{ algorithm.model_class_names }}'
                                         }
 
                                     </script>
-                                    {% if algorithm.way_code == "MODEL" %}
-                                        <option {% if algorithm.code == flow.algorithm_track_code %} selected {% endif %} value="{{ algorithm.code }}">
-                                            {{ algorithm.name }}（{{ algorithm.way_code }}/{{ algorithm.framework }}/{{ algorithm.inference }}）
-                                        </option>
-                                    {% else %}
-                                        <option {% if algorithm.code == flow.algorithm_track_code %} selected {% endif %} value="{{ algorithm.code }}">
-                                            {{ algorithm.name }}（{{ algorithm.way_code }}）
-                                        </option>
-                                    {% endif %}
+
+                                    <option {% if algorithm.code == flow.algorithm_track_code %} selected {% endif %} value="{{ algorithm.code }}">
+                                        {{ algorithm.name }}（{{ algorithm.framework }}/{{ algorithm.inference }}/{{ algorithm.inference_device }}）
+                                    </option>
 
                                 {% endfor %}
                             </select>
@@ -205,7 +187,7 @@
                         </div>
 
                    <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择行为算法 <span class="required" style="color: red;">*</span></label></label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择行为算法 <span class="required" style="color: red;">*</span></label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
                             <select id="select_behaviour"  class="select2_single form-control" required="required" >
                                 <option value="0">请选择</option>
@@ -228,21 +210,21 @@
                           </div>
                         </div>
 
-                  <div class="form-group way_code_MODEL">
+                  <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">分析进程 <span class="required" style="color: red;">*</span></label>
                             <div class="col-md-3 col-sm-3 col-xs-12">
                                 <input type="number" name="deploy_process_index" value="{{ flow.deploy_process_index }}"  class="form-control">
                             </div>
                         </div>
 
-                  <div class="form-group way_code_MODEL">
+                  <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">模型最大实例数 <span class="required" style="color: red;">*</span></label>
                             <div class="col-md-3 col-sm-3 col-xs-12">
                             <input type="number" name="max_concurrency" value="{{ flow.max_concurrency }}"  class="form-control">
                           </div>
                         </div>
 
-          <div class="form-group way_code_MODEL">
+                <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">实例增长单位 <span class="required" style="color: red;">*</span></label>
                     <div class="col-md-3 col-sm-3 col-xs-12">
                     <input type="number" name="concurrency_unit_length" value="{{ flow.concurrency_unit_length }}"  class="form-control">
@@ -274,7 +256,7 @@
                     <div class="form-group">
                       <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                         <button type="button" onclick="window.history.go(-1)" class="btn btn-primary">返回</button>
-                        <button type="button" onclick="f_handle()" class="btn btn-success">提交</button>
+                        <button type="button" onclick="f_submit()" class="btn btn-success">提交</button>
                       </div>
                     </div>
 
@@ -291,7 +273,6 @@
   {{ block.super }}
 
 <script>
-
     let flow_code= '{{ flow.code }}';// 布控编号
     let old_flow_algorithm_detect_code = '{{ flow.algorithm_detect_code }}';// 布控原始基础算法编号
     let old_flow_detect_class_names = '{{ flow.detect_class_names }}';// 布控原始检测算法目标
@@ -305,28 +286,22 @@
     let ele_input_max_concurrency= $("input[name='max_concurrency']");
     let ele_input_concurrency_unit_length= $("input[name='concurrency_unit_length']");
 
-    //检测算法
+    //算法流程模式
     let eleSelectFlow= $("#select_mode");// select 流程模式
+    //检测算法
     let eleSelectAlgorithmDetect = $("#select_algorithm_detect");// select 检测算法
-    let selectedAlgorithmDetectWayCode = "";
     let eleSelectDetectClassName = $("#select_detect_class_name");// select 检测算法目标
-
     //分类算法
     let eleSelectAlgorithmClassify = $("#select_algorithm_classify");// select 分类算法
-    let selectedAlgorithmClassifyWayCode = "";
     let eleSelectClassifyClassName = $("#select_classify_class_name");// select 分类算法目标
-
     //追踪算法
     let eleSelectAlgorithmTrack = $("#select_algorithm_track");// select 追踪算法
-
     //行为算法
     let eleSelectBehaviour = $("#select_behaviour");// select 行为算法
-
     let eleTextarea_extend_params = $("textarea[name='extend_params']");//扩展参数
     let eleTextarea_remark = $("textarea[name='remark']");
-
     function f_showDetectOptions(algorithm_code,selected_class_names) {
-       console.log("f_showDetectOptions->",algorithm_code,selected_class_names)
+       console.log("f_showDetectOptions->",algorithm_code,"selected_class_names->",selected_class_names)
 
         let html = "<option value=\"0\">---请选择检测目标(可多选)---</option>";
 
@@ -334,75 +309,54 @@
         if (algorithm === undefined){
             //不存在当前编号
         }else{
-            selectedAlgorithmDetectWayCode = algorithm["way_code"];
-            if(selectedAlgorithmDetectWayCode==="MODEL"){
-                //需要显示选择目标
-                eleSelectDetectClassName.removeAttr("disabled");
-                let model_class_names = algorithm["model_class_names"];
-                let model_class_names_array = model_class_names.split(",");
-                let selected_class_names_array = selected_class_names.split(",");
-                for (let i = 0; i < model_class_names_array.length; i++) {
-                    let class_name = model_class_names_array[i];
-                    let match = selected_class_names_array.indexOf(class_name);
-                    if(match > -1){
-                        html += "<option selected value=\""+class_name+"\">"+class_name+"</option>";
-                    }else{
-                        html += "<option value=\""+class_name+"\">"+class_name+"</option>";
-                    }
+
+            //需要显示选择目标
+            eleSelectDetectClassName.removeAttr("disabled");
+            let model_class_names = algorithm["model_class_names"];
+            let model_class_names_array = model_class_names.split(",");
+            let selected_class_names_array = selected_class_names.split(",");
+            for (let i = 0; i < model_class_names_array.length; i++) {
+                let class_name = model_class_names_array[i];
+                let match = selected_class_names_array.indexOf(class_name);
+                if(match > -1){
+                    html += "<option selected value=\""+class_name+"\">"+class_name+"</option>";
+                }else{
+                    html += "<option value=\""+class_name+"\">"+class_name+"</option>";
                 }
-                //需要使用行为算法
-                eleSelectBehaviour.removeAttr("disabled");
-            }else if(selectedAlgorithmDetectWayCode==="API"){
-                //不需要显示选择目标
-                eleSelectDetectClassName.attr("disabled","disabled");
-                //不需要使用行为算法start
-                eleSelectBehaviour.attr("disabled","disabled");
-                eleSelectBehaviour.val("0")
-                //不需要使用行为算法end
-            }else{
-                //预留
             }
+            //需要使用行为算法
+            eleSelectBehaviour.removeAttr("disabled");
+
         }
 
 
         eleSelectDetectClassName.html(html);
     }
     function f_showClassifyOptions(algorithm_code,selected_class_names) {
-        console.log("f_showClassifyOptions->",algorithm_code,selected_class_names)
+       console.log("f_showClassifyOptions->",algorithm_code,"selected_class_names->",selected_class_names)
         let html = "<option value=\"0\">---请选择分类目标(可多选)---</option>";
         let algorithm = algorithmClassifyDict[algorithm_code];
         if (algorithm === undefined){
             //不存在当前编号
         }else{
-            selectedAlgorithmClassifyWayCode = algorithm["way_code"];
-            if(selectedAlgorithmClassifyWayCode==="MODEL"){
-                //需要显示选择目标
-                eleSelectClassifyClassName.removeAttr("disabled");
-                let model_class_names = algorithm["model_class_names"];
-                let model_class_names_array = model_class_names.split(",");
-                let selected_class_names_array = selected_class_names.split(",");
-                for (let i = 0; i < model_class_names_array.length; i++) {
-                    let class_name = model_class_names_array[i];
-                    let match = selected_class_names_array.indexOf(class_name);
-                    if(match > -1){
-                        html += "<option selected value=\""+class_name+"\">"+class_name+"</option>";
-                    }else{
-                        html += "<option value=\""+class_name+"\">"+class_name+"</option>";
-                    }
-                }
-                //需要使用行为算法
-                eleSelectBehaviour.removeAttr("disabled");
 
-            }else if(selectedAlgorithmClassifyWayCode==="API"){
-                //不需要显示选择目标
-                eleSelectClassifyClassName.attr("disabled","disabled");
-                //不需要使用行为算法start
-                eleSelectBehaviour.attr("disabled","disabled");
-                eleSelectBehaviour.val("0")
-                //不需要使用行为算法end
-            }else{
-                //预留
+            //需要显示选择目标
+            eleSelectClassifyClassName.removeAttr("disabled");
+            let model_class_names = algorithm["model_class_names"];
+            let model_class_names_array = model_class_names.split(",");
+            let selected_class_names_array = selected_class_names.split(",");
+            for (let i = 0; i < model_class_names_array.length; i++) {
+                let class_name = model_class_names_array[i];
+                let match = selected_class_names_array.indexOf(class_name);
+                if(match > -1){
+                    html += "<option selected value=\""+class_name+"\">"+class_name+"</option>";
+                }else{
+                    html += "<option value=\""+class_name+"\">"+class_name+"</option>";
+                }
             }
+            //需要使用行为算法
+            eleSelectBehaviour.removeAttr("disabled");
+
         }
 
         eleSelectClassifyClassName.html(html);
@@ -423,7 +377,7 @@
              f_showClassifyOptions(code,"");
         }
     });
-    function f_options_s(options_array) {
+    function f_calcuOptionStr(options_array) {
         let options_s = "";
         if(options_array===null){
             //不能为空
@@ -438,12 +392,12 @@
                 options_s = temp.join(",");
             }
         }
-        console.log("options_array->",typeof options_array,options_array)
-        console.log("options_s->",typeof options_s,options_s)
+        //console.log("options_array->",typeof options_array,options_array)
+        //console.log("options_s->",typeof options_s,options_s)
         return options_s;
     }
 
-    function f_handle() {
+    function f_submit() {
         let name_s = ele_input_name.val().trim();
         if(name_s === ""){
             myAlert("请输入算法名称","error");
@@ -454,54 +408,149 @@
             myAlert("请选择算法模式","error");
             return;
         }
-        algorithmDetectCode = eleSelectAlgorithmDetect.val().trim();//typeof string
-        if(algorithmDetectCode==="0"){
-            myAlert("请选择检测算法","error");
-            return;
-        }
-        algorithmClassifyCode= eleSelectAlgorithmClassify.val().trim();//typeof string
-        algorithmTrackCode = eleSelectAlgorithmTrack.val().trim();//typeof string
+        modeId = parseInt(modeId)
+        let algorithmDetectCode_s = "";//检测算法编号 typeof string
+        let algorithmClassifyCode_s = "";//分类算法编号 typeof string
+        let algorithmTrackCode_s = "";//跟踪算法编号 typeof string
+        let behaviourCode_s = "";//行为算法编号 typeof string
+        let detectClassNames_s = ""; //检测算法的目标 例如: person,dog,cat,,,
+        let classifyClassNames_s = "";//分类算法的目标 例如: person,dog,cat,,,
 
-        let detectClassNames_s = ""; //选择目标判断 person,dog,cat,,,
-        let classifyClassNames_s = "";
-        let behaviourCode_s = "";
+        switch (modeId) {
+            case 1:{
+                //检测算法>>行为算法，Detect_Behaviour
+                algorithmDetectCode_s = eleSelectAlgorithmDetect.val().trim();
+                if(algorithmDetectCode_s==="0"){
+                    myAlert("请选择检测算法","error");
+                    return;
+                }
+                //检测算法目标option
+                detectClassNames_s = f_calcuOptionStr(eleSelectDetectClassName.val());// eleSelectDetectClassName.val();//typeof object, array
+                if(detectClassNames_s === ""){
+                    myAlert("请至少选择1个检测目标","error");
+                    return;
+                }
+                //行为算法判断
+                behaviourCode_s = eleSelectBehaviour.val().trim();//typeof string
+                if(behaviourCode_s==="0"){
+                    myAlert("请选择行为算法","error");
+                    return;
+                }
+                break
+            }
+            case 2:{
+                //检测算法>>追踪算法>>行为算法，Detect_Track_Behaviour
+                algorithmDetectCode_s = eleSelectAlgorithmDetect.val().trim();
+                if(algorithmDetectCode_s==="0"){
+                    myAlert("请选择检测算法","error");
+                    return;
+                }
 
-        if(selectedAlgorithmDetectWayCode === "MODEL"){
-            //检测算法目标options
-            detectClassNames_s = f_options_s(eleSelectDetectClassName.val());// eleSelectDetectClassName.val();//typeof object, array
-            if(detectClassNames_s === ""){
-                myAlert("请至少选择1个检测目标","error");
+                //检测算法目标option
+                detectClassNames_s = f_calcuOptionStr(eleSelectDetectClassName.val());// eleSelectDetectClassName.val();//typeof object, array
+                if(detectClassNames_s === ""){
+                    myAlert("请至少选择1个检测目标","error");
+                    return;
+                }
+                //判断追踪算法
+                algorithmTrackCode_s = eleSelectAlgorithmTrack.val().trim();
+                if(algorithmTrackCode_s==="0"){
+                    myAlert("请选择追踪算法","error");
+                    return;
+                }
+
+                //行为算法判断
+                behaviourCode_s = eleSelectBehaviour.val().trim();//typeof string
+                if(behaviourCode_s==="0"){
+                    myAlert("请选择行为算法","error");
+                    return;
+                }
+
+                break
+            }
+            case 3:{
+                //检测算法>>分类算法>>行为算法，Detect_Classify_Behaviour
+                algorithmDetectCode_s = eleSelectAlgorithmDetect.val().trim();
+                if(algorithmDetectCode_s==="0"){
+                    myAlert("请选择检测算法","error");
+                    return;
+                }
+                //检测算法目标option
+                detectClassNames_s = f_calcuOptionStr(eleSelectDetectClassName.val());// eleSelectDetectClassName.val();//typeof object, array
+                if(detectClassNames_s === ""){
+                    myAlert("请至少选择1个检测目标","error");
+                    return;
+                }
+                //判断分类算法
+                algorithmClassifyCode_s= eleSelectAlgorithmClassify.val().trim();
+                if(algorithmClassifyCode_s==="0"){
+                    myAlert("请选择分类算法","error");
+                    return;
+                }
+                //分类算法目标option
+                classifyClassNames_s = f_calcuOptionStr(eleSelectClassifyClassName.val());
+                if(classifyClassNames_s === ""){
+                    myAlert("请至少选择1个分类目标","error");
+                    return;
+                }
+                //行为算法判断
+                behaviourCode_s = eleSelectBehaviour.val().trim();//typeof string
+                if(behaviourCode_s==="0"){
+                    myAlert("请选择行为算法","error");
+                    return;
+                }
+                break
+            }
+            case 4:{
+                //分类算法>>行为算法，Classify_Behaviour
+                //判断分类算法
+                algorithmClassifyCode_s= eleSelectAlgorithmClassify.val().trim();
+                if(algorithmClassifyCode_s==="0"){
+                    myAlert("请选择分类算法","error");
+                    return;
+                }
+                //分类算法目标option
+                classifyClassNames_s = f_calcuOptionStr(eleSelectClassifyClassName.val());
+                if(classifyClassNames_s === ""){
+                    myAlert("请至少选择1个分类目标","error");
+                    return;
+                }
+
+                //行为算法判断
+                behaviourCode_s = eleSelectBehaviour.val().trim();//typeof string
+                if(behaviourCode_s==="0"){
+                    myAlert("请选择行为算法","error");
+                    return;
+                }
+                break
+            }
+            case 5:{
+                //行为算法，Behaviour
+
+                //行为算法判断
+                behaviourCode_s = eleSelectBehaviour.val().trim();//typeof string
+                if(behaviourCode_s==="0"){
+                    myAlert("请选择行为算法","error");
+                    return;
+                }
+                break
+            }
+            default: {
+                //其他类型
+                myAlert("请选择正确的算法流程模式","error");
                 return;
             }
-            //分类算法目标options
-            classifyClassNames_s = f_options_s(eleSelectClassifyClassName.val());
-
-            //行为算法判断
-            behaviourCode_s = eleSelectBehaviour.val().trim();//typeof string
-            if(behaviourCode_s==="0"){
-                myAlert("请选择行为算法","error");
-                return;
-            }
-        }else if(selectedAlgorithmDetectWayCode === "API"){
-            //不需要选择目标&行为算法
-
-        }else{
-            //预留
-
         }
 
-
-
-
-        let deploy_process_index = parseInt(ele_input_deploy_process_index.val());
+        let deploy_process_index = parseInt(ele_input_deploy_process_index.val());//分析进程序号
         let max_concurrency = parseInt(ele_input_max_concurrency.val());
         let concurrency_unit_length = parseInt(ele_input_concurrency_unit_length.val());
 
         let extend_params = eleTextarea_extend_params.val();
-        let remark = eleTextarea_remark.val();
         if(extend_params===undefined){
             extend_params = "";
         }
+        let remark = eleTextarea_remark.val();
         if(remark===undefined){
             remark = "";
         }
@@ -510,12 +559,12 @@
             "name":name_s,
             "mode":modeId,
             "flow_code":flow_code,
-            "algorithm_detect_code":algorithmDetectCode,
-            "algorithm_classify_code":algorithmClassifyCode,
-            "algorithm_track_code":algorithmTrackCode,
+            "algorithm_detect_code":algorithmDetectCode_s,
+            "algorithm_classify_code":algorithmClassifyCode_s,
+            "algorithm_track_code":algorithmTrackCode_s,
+            "behaviour_code":behaviourCode_s,
             "detect_class_names":detectClassNames_s,
             "classify_class_names":classifyClassNames_s,
-            "behaviour_code":behaviourCode_s,
             "deploy_process_index":deploy_process_index,
             "max_concurrency":max_concurrency,
             "concurrency_unit_length":concurrency_unit_length,
@@ -532,7 +581,6 @@
             return;
         }
 
-
         $.ajax({
            url: handleUrl,
            type: "post",
@@ -546,9 +594,9 @@
            success: function (res) {
                if(1000 === res.code){
                    myAlert(res.msg,"success",1000);
-                   setTimeout(function () {
-                        //window.location.href= "/algorithmFlow/index";
-                    }, 1000);
+                   //setTimeout(function () {
+                   //   window.location.href= "/algorithmFlow/index";
+                   //}, 1000);
                }else{
                     myAlert(res.msg,"error");
                }

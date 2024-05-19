@@ -1,52 +1,116 @@
-import tornado.ioloop
-import tornado.httpserver
-import tornado.options
-import tornado.web
-import tornado.log
-import platform
-from controllers.IndexHandler import IndexHandler
-from controllers.BehaviourHandler import BehaviourHandler
+import json
 
-def api_behaviour(ip, port, debug=True):
-    print("api_behaviour http://%s:%d start" % (ip, port))
+from flask import Flask, request,jsonify
+import os
+import time
+from datetime import datetime
+import numpy as np
+import base64
+import cv2
 
-    conf = dict(
-        # template_path=os.path.join(root_path,"app/templates"),
-        # static_path=os.path.join(root_path,"app/statics"),
-        # ui_modules={"Entry": EntryModule},
-        xsrf_cookies=False,
-        cookie_secret="api_behaviour",
-        # login_url="/auth/login",
-        autoreload=False,
-        debug=debug
-    )
+app = Flask(__name__)
 
-    if debug:
-        conf["autoreload"] = False
-        num_processes = 1
-    else:
-        num_processes = 0
+@app.route('/', methods=['GET'])
+def index():
+    return "index"
 
-    if "Windows" == platform.system() or "windows" == platform.system():
-        reuse_port = False # Windows平台不支持端口复用
-    else:
-        reuse_port = True
+@app.route('/modex', methods=['POST', 'GET'])
+def modex():
+    print("modex")
 
-    app = tornado.web.Application([
-        (r"/", IndexHandler),
-        (r"/behaviour", BehaviourHandler),
-    ], **conf)
+    ret = False
+    msg = "未知错误"
 
-    max_buffer_size = 1024 * 1024 * 10 # 文件最大上传字节长度（10M）
+    happen = False
+    happenScore = 0.0
+    indices = []
+    try:
+        request_params = request.get_json()
+        print("request_params=", datetime.now(), request_params)
 
-    server = tornado.httpserver.HTTPServer(app, max_buffer_size=max_buffer_size)
-    server.bind(port=port,reuse_port=reuse_port)
-    server.start(num_processes=num_processes)  # tornado将按照cpu核数来fork进程，自定义num_processes需要关闭debug模式，否则会出错
-    tornado.ioloop.IOLoop.instance().start()
+        detects = request_params.get("detects")
+        if detects:
+            indices = list(range(min(len(detects), 3)))  # 模拟只取前三个目标的序号
+        else:
+            indices = []
 
-if __name__ == "__main__":
-    # tornado.options.parse_command_line()
-    api_behaviour(ip="0.0.0.0", port=8070, debug=True)
+    except Exception as e:
+        msg = str(e)
+
+    response_data = {
+        "code": 1000 if ret else 0,
+        "msg": msg,
+        "result": {
+            "happen": happen,
+            "happenScore": happenScore,
+            "indices": indices
+        }
+    }
+    return jsonify(response_data)
+
+@app.route('/mode5', methods=['POST', 'GET'])
+def mode5():
+    print("mode5")
+
+    ret = False
+    msg = "未知错误"
+
+    happen = False
+    happenScore = 0.0
+    detects = []
+
+    try:
+        request_params = request.get_json()
+        # print("request_params=", datetime.now(), request_params)
+
+        image_base64 = request_params.get("image_base64", None)  # 接收base64编码的图片并转换成cv2的图片格式
+        if image_base64:
+            encoded_image_byte = base64.b64decode(image_base64)
+            image_array = np.frombuffer(encoded_image_byte, np.uint8)
+            # image = turboJpeg.decode(image_array)  # turbojpeg 解码
+            image = cv2.imdecode(image_array, cv2.COLOR_RGB2BGR)  # opencv 解码
+
+            # video_height,video_width,video_channels = image.shape # 输入图像的的高，宽，channel
+            print(image.shape)
+
+            detects.append({
+                "x1": 100,
+                "y1": 100,
+                "x2": 500,
+                "y2": 500,
+                "class_score": 0.93456,
+                "class_id": 0,
+                "class_name": "test"
+            })
+
+            ret = True
+            msg = "success"
+
+            happen = True
+            happenScore = 0.97
+
+    except Exception as e:
+        msg = str(e)
+
+    response_data = {
+        "code": 1000 if ret else 0,
+        "msg": msg,
+        "result": {
+            "happen": happen,
+            "happenScore": happenScore,
+            "detects": detects
+        }
+    }
+    # return json.dumps(response_data)
+    return jsonify(response_data)
 
 
+if __name__ == '__main__':
+    # app.debug = True
 
+    # 接口列表
+    # http://127.0.0.1:8070
+    # http://127.0.0.1:8070/modex
+    # http://127.0.0.1:8070/mode5
+
+    app.run(host='0.0.0.0', port=8070, debug=True)
