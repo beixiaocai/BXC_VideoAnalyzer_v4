@@ -502,24 +502,24 @@
                success: function (res) {
                    if(res.code === 1000){
                         let info = res.info;
-                        let dongle_status = info.dongle_status;
+                        let dongle_status = info.dongle_status;//加密锁授权状态
+                        let verify = parseInt(info["verify"]);//机器授权码授权状态
                         if(dongle_status===1){
-                            //加密锁授权通过
                             eleStateStr.html("<span class='sun-state-success'>加密锁授权中</span>");
                             eleExpireHour.html("永久有效");
-                        }else{
-                            let verify = parseInt(info["verify"]);
+                        }else if(verify === 1){
                             let verify_expire_hour = parseInt(info["verify_expire_hour"]);
                             let create_date_str = info["create_date_str"];
                             let expire_date_str = info["expire_date_str"];
-
                             if(isNaN(verify)||isNaN(verify_expire_hour)||create_date_str===""||expire_date_str===""){
                                 f_showMachineVerifyInfo(-1,-1,-1,-1,-1)
                             }else{
                                 f_showMachineVerifyInfo(verify,info["verify_remark"],verify_expire_hour,create_date_str,expire_date_str);
                             }
                         }
-
+                        else{
+                            f_showMachineVerifyInfo(-2,-1,-1,-1,-1)
+                        }
                    }else{
                         f_showMachineVerifyInfo(-2,-1,-1,-1,-1)
                    }
