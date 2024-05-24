@@ -29,11 +29,12 @@
 ### 使用说明
 * [启动配置](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
 * [支持哪些硬件](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/支持哪些硬件)
+* [支持OEM贴牌](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/软件如何贴牌)
 * [Windows10/11+openvino版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows版本)
 * [Windows10/11+tensorrt版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本)
 * [Windows10/11+onnxruntime版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持onnxruntime的版本)
 * [Ubuntu20/22+tensorrt版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本)
-* [Ubuntu20+rk3588版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本)
+* [Ubuntu20/22+rk3588版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本)
 * [ffmpeg推流模拟摄像头](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
 * [算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/算法管理)
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
@@ -42,10 +43,18 @@
 * [报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警接口)
 * [报警过滤器](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警过滤器)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
-
+* [软件性能优化](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/软件性能优化)
+* [咨询问题模板](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/咨询问题模板)
 
 # 版本历史
-### v4.414
+### v4.415
+* 发布时间 2024.05.24
+* （1）新增支持用户添加动态库类型行为算法功能（二次开发算法非常有用的功能）
+* （2）优化分析器授权验证功能，并移至动态库实现
+* （3）优化分析器有关std::move的使用场景，提高性能
+* （4）优化布控报错时提示内容，日志记录内容
+
+#### v4.414
 * 发布时间 2024.05.19
 * （1）新增算法流程模式，截止当前版本，一共支持5种算法流程模式，分别如下：
 * （1-1）模式1：检测算法>>行为算法

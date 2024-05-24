@@ -202,7 +202,7 @@
                                     </script>
 
                                     <option {% if behaviour.code == flow.behaviour_code %} selected {% endif %} value="{{ behaviour.code }}">
-                                        {{ behaviour.name }}（{{ behaviour.way_code }}）
+                                        {{ behaviour.name }}（{{ behaviour.way_code }}/{{ behaviour.way_value }}）
                                     </option>
                                 {% endfor %}
 
