@@ -118,9 +118,9 @@
                   <div style="margin-left: 5px;"  class="col-md-3 col-sm-3 col-xs-12">
                     <select id="select_stream" class="select2_group form-control">
                         <option value="0">请选择视频流</option>
-                        {% for outside_item in group_streams %}
-                          <optgroup label="{{ outside_item.group_name }}">
-                             {% for stream in outside_item.streams %}
+                        {% for gitem in group_streams %}
+                          <optgroup label="{{ gitem.group_name_ch }}">
+                             {% for stream in gitem.streams %}
                                    <script>
                                         streamCode = '{{ stream.code }}';
                                         streamCodeDict[streamCode] = {
@@ -340,33 +340,40 @@
             return false;
         }
         let stream = streamCodeDict[streamCode];
-        let wsHost = stream["wsHost"];
-        let video_codec_name = stream["video_codec_name"];
-        let video_width = stream["video_width"];
-        let video_height = stream["video_height"];
         let app = stream["app"];
-        let name = stream["name"];
 
-        /*
-        let target_video_width = 1280;
-        let target_video_height = 720;
+        let video_url;
+        if(app === "analyzer"){
+            video_url = stream["wsMp4Url"]
+        }else{
+            let wsHost = stream["wsHost"];
+            let video_codec_name = stream["video_codec_name"];
+            let video_width = stream["video_width"];
+            let video_height = stream["video_height"];
 
-        if(mSelectedGridVideoCount===4){
-           target_video_width = 720;
-           target_video_height = 576;//576p
-        }else if(mSelectedGridVideoCount===9){
-           target_video_width = 640;
-           target_video_height = 480;//480p
-        }else if(mSelectedGridVideoCount===16){
-           target_video_width = 480;
-           target_video_height = 360;//360p
-        }*/
+            let name = stream["name"];
 
-        let target_video_width = video_width;
-        let target_video_height = video_height;
-        let target_video_codec_name = "h264";
+            /*
+            let target_video_width = 1280;
+            let target_video_height = 720;
+            if(mSelectedGridVideoCount===4){
+               target_video_width = 720;
+               target_video_height = 576;//576p
+            }else if(mSelectedGridVideoCount===9){
+               target_video_width = 640;
+               target_video_height = 480;//480p
+            }else if(mSelectedGridVideoCount===16){
+               target_video_width = 480;
+               target_video_height = 360;//360p
+            }
+            */
 
-        let video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height,target_video_codec_name);
+            let target_video_width = video_width;
+            let target_video_height = video_height;
+            let target_video_codec_name = "h264";
+
+            video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height,target_video_codec_name);
+        }
 
         if(typeof video_url === "undefined" || !video_url.startsWith("ws://") || !video_url.endsWith(".mp4")){
             myAlert("视频流地址格式不正确！","error");

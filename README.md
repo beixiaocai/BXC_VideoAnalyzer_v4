@@ -21,7 +21,7 @@
 | :----: | :----: | :----: | :----- |
 | Windows10/11 | intel | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows版本) |
 | Windows10/11 | intel+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持TensorRT的版本) |
-| Windows10/11 | amd,,, | onnxruntime | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持onnxruntime的版本) |
+| Windows10/11 | 所有硬件 | onnxruntime | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/下载Windows支持onnxruntime的版本) |
 | Ubuntu20/22 | intel+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu版本) |
 | Ubuntu20/22 | rk3588 | rknpu | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本) |
 
@@ -47,7 +47,12 @@
 * [咨询问题模板](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/咨询问题模板)
 
 # 版本历史
-### v4.415
+### v4.416
+* 发布时间 2024.05.26
+* （1）新增支持动态编码算法流功能（大幅度提升性能，有效降低CPU的计算消耗）
+* （2）优化接口安全验证
+
+#### v4.415
 * 发布时间 2024.05.24
 * （1）新增支持用户添加动态库类型行为算法功能（二次开发算法非常有用的功能）
 * （2）优化分析器授权验证功能，并移至动态库实现

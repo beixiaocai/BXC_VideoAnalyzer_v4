@@ -106,19 +106,19 @@
                   <button type="button" onclick="f_clickPlayStart()" class="btn btn-success btn-sm"><i class="fa fa-play"></i> 播放 </button>
                   <button type="button" onclick="f_clickPlayStop()" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> 停止 </button>
                   <button type="button" onclick="f_clearVideoCanvas()" class="btn btn-default btn-sm"><i class="fa fa-paint-brush"></i> 清空区域</button>
-                  <button type="button" onclick="change(1)" class="btn btn-default">绘制矩形区域</button>
+                  <button type="button" onclick="change(1)" class="btn btn-default">绘制周界区域</button>
                   <button type="button" onclick="change(4)" class="btn btn-default">绘制越界区域</button>
               
                 </div>
                     <div class="div_canvas_menu show_content" >
-                        <div class="item">绘制矩形区域案例</div>
+                        <div class="item">绘制周界区域案例</div>
                         <div class="item">
                             <img class="img" src="/static/images/control-rect.jpg"/>
                         </div>
                         <div class="item"><button type="button" onclick="f_docs()" class="btn btn-default btn-sm">文档</button></div>
                     </div>
                     <div class="div_canvas_menu show_content">
-                        <div class="item">绘制越线区域案例</div>
+                        <div class="item">绘制越界区域案例</div>
                         <div class="item">
                             <img class="img" src="/static/images/control-crossline.jpg" />
                         </div>
@@ -313,26 +313,6 @@
                           </div>
                     </div>
 
-                       <div class="form-group">
-                           <label class="control-label col-md-3 col-sm-3 col-xs-12">是否推流 <i class="bxc_introduce fa fa-info-circle" title="实时分析视频时是否推流"></i></label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-
-                            <div class="radio">
-                              <label>
-                                <input type="radio" {% if control.push_stream == 0 %} checked="checked" {% endif %} value="0" name="push_stream"> 算法处理的视频不推流
-                              </label>
-                            </div>
-
-                            <div class="radio">
-                              <label>
-                                <input type="radio" {% if control.push_stream == 1 %} checked="checked" {% endif %} value="1" name="push_stream"> 算法处理的视频推流
-                              </label>
-                            </div>
-
-                          </div>
-                        </div>
-
-
 
                   <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">报警间隔 <i class="bxc_introduce fa fa-info-circle" title="1路视频最小报警间隔时长（单位秒）"></i></label>
@@ -342,25 +322,19 @@
                     </div>
 
                   <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">重叠比例 <i class="bxc_introduce fa fa-info-circle" title="目标被检测的部分占目标本身的比例"></i></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">周界比例 <i class="bxc_introduce fa fa-info-circle" title="检测目标位于周界区域部分占目标整体的比例"></i></label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                            <input id="overlap_thresh"  type="number" value="{{ control.overlap_thresh }}" class="form-control" >
                       </div>
                     </div>
 
                   <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">图片数量 <i class="bxc_introduce fa fa-info-circle" title="触发报警行为时间范围内合成图片数量"></i></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">图片数量 <i class="bxc_introduce fa fa-info-circle" title="触发报警时上报图片数量"></i></label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                            <input name="alarm_image_count"  type="number" value="{{ control.alarm_image_count }}" class="form-control" >
                       </div>
                     </div>
 
-                  <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">时间范围 <i class="bxc_introduce fa fa-info-circle" title="触发报警行为的时间范围（单位秒，v4.413之后不再使用）"></i></label>
-                      <div class="col-md-9 col-sm-9 col-xs-12">
-                           <input name="alarm_monitor_duration"  type="number" value="{{ control.alarm_monitor_duration }}" class="form-control" >
-                      </div>
-                    </div>
 
                 <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">画框选项 <i class="bxc_introduce fa fa-info-circle" title="合成报警视频画框类型"></i></label>
@@ -469,14 +443,9 @@
     let eleInputMinInterval = $("#min_interval");
     let eleInputOverlapThresh = $("#overlap_thresh");
 
-    //是否推流
-    let eleRadioPushStream = $('input[type=radio][name=push_stream]');//radio
-    let pushStream = $('input[type=radio][name=push_stream]:checked').val();
 
     // 报警图片数量
     let eleInputAlarmImageCount= $("input[type=number][name='alarm_image_count']");
-    let eleInputAlarmMonitorDuration= $("input[type=number][name='alarm_monitor_duration']");
-
     // 报警视频是否画框
     let eleRadioAlarmDrawType = $('input[type=radio][name=alarm_draw_type]');//radio
     let alarmDrawType = $('input[type=radio][name=alarm_draw_type]:checked').val();
@@ -673,9 +642,6 @@
         }
     });
 
-    eleRadioPushStream.change(function () {
-        pushStream = $(this).val();
-    });
     eleRadioAlarmDrawType.change(function () {
        alarmDrawType = $(this).val();
     });
@@ -797,22 +763,6 @@
         }
          //报警合成图片数量end
 
-        //触发报警行为的时间范围（单位秒）start
-        let alarmMonitorDuration = parseInt(eleInputAlarmMonitorDuration.val());
-        if(isNaN(alarmMonitorDuration)){
-            myAlert("时间范围不能为空","error");
-            return;
-        }
-        if(alarmMonitorDuration<10){
-            myAlert("时间范围不能小于10秒","error");
-            return;
-        }
-        if(alarmMonitorDuration>600){
-            myAlert("时间范围不能大于600秒","error");
-            return;
-        }
-         //触发报警行为的时间范围（单位秒）end
-
         let osd_params = eleTextarea_osd_params.val().trim();
         let extend_params = eleTextarea_extend_params.val().trim();
         let remark = eleTextarea_remark.val().trim();
@@ -915,13 +865,11 @@
             "audioCode":audioCode,
             "alarmInterfaceCode":m_alarmInterfaceCode,
             "alarmFilterCode":m_alarmFilterCode,
-            "pushStream":pushStream,
             "polygon":polygon,
             "minInterval":minInterval,
             "overlapThresh":overlapThresh,
             "alarmDrawType":alarmDrawType,
             "alarmImageCount":alarmImageCount,
-            "alarmMonitorDuration":alarmMonitorDuration,
             "osd_params":osd_params,
             "extend_params":extend_params,
             "remark":remark,

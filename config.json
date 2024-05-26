@@ -14,6 +14,9 @@
   "storageDir": "Admin\\static\\storage",
   "autoAddAllForward": true,
   "autoManagePatrolForward": false,
+  "checkStreamInterval": 15,
+  "transCodeStreamMaxCount": 16,
+  "algorithmStreamMaxCount": 16,
   "analyzer": {
 	  "cacheModelMaxDuration": 120000,
 	  "enableHardwareDecode": false,

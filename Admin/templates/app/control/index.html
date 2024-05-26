@@ -403,12 +403,7 @@
                                   item_html += "<td><span class='sun-state-error'>离线</span> "+d["stream_nickname"]+"</td>";
                                 }
 
-                               if(0===d["push_stream"]){
-                                   item_html += "<td><span class='sun-state-error'>未开启</span></td>";
-                               }else{
-                                   item_html += "<td><a class='sun-a-label' style='font-size: 12px;' href=\"javascript:f_open_player('"+d["push_stream_app"]+"','"+d["push_stream_name"]+"')\" ><i class=\"fa fa-play\"></i> "+
-                                                "算法流"+"</a></td>";
-                               }
+                                item_html += "<td><a class='sun-a-label' style='font-size: 12px;' href=\"javascript:f_open_player('"+d["push_stream_app"]+"','"+d["push_stream_name"]+"')\" ><i class=\"fa fa-play\"></i>算法流</a></td>";
 
                                 if(0===d["flow_nickname"]){//算法已被删除
                                     item_html += "<td><span class='sun-state-error'>已删除</span></td>";
