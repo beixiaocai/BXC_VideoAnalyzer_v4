@@ -20,11 +20,11 @@
               <form class="form-horizontal form-label-left"  method="post"  data-parsley-validate >
 
                   <div class="form-group">
-                  <div class="col-md-6 col-sm-6 col-md-offset-3">
-                      <h3>系统授权有两种方式</h3>
-                    <p style="margin-top: 20px;">（1）第一种 {% if settings.auth_online_link != "" %} <button type="button" class="btn btn-primary btn-sm" onclick="f_link('{{ settings.auth_online_link }}')" style="margin-left: 5px; " >生成测试授权码</button>{% endif %}</p>
-                    <p style="margin-top: 20px;">（2）第二种 {% if settings.auth_buy_link != "" %} <button type="button" class="btn btn-primary btn-sm"  onclick="f_link('{{ settings.auth_buy_link }}')" style="margin-left: 5px; ">购买授权加密锁</button>{% endif %}</p>
-                  </div>
+                      <div class="col-md-6 col-sm-6 col-md-offset-3">
+                          <h3>系统授权有两种方式</h3>
+                        <p style="margin-top: 20px;">（1）第一种 {% if settings.auth_online_link != "" %} <button type="button" class="btn btn-primary btn-sm" onclick="f_link('{{ settings.auth_online_link }}')" style="margin-left: 5px; " >申请机器授权码</button> （支持免费申请）{% endif %}</p>
+                        <p style="margin-top: 20px;">（2）第二种 {% if settings.auth_buy_link != "" %} <button type="button" class="btn btn-primary btn-sm"  onclick="f_link('{{ settings.auth_buy_link }}')" style="margin-left: 5px; ">购买授权加密锁</button>{% endif %}</p>
+                      </div>
                 </div>
                <div class="ln_solid"></div>
 
@@ -49,7 +49,7 @@
                 <div class="form-group">
                   <div class="col-md-6 col-sm-6 col-md-offset-3" style="border: 1px solid #169F85;border-radius: 3px;">
 
-                      <h5>机器授权状态：<small id="machine_verify_msg">未授权</small></h5>
+                      <h5>授权码状态：<small id="machine_verify_msg">未授权</small></h5>
                     <div>
                         <div class="starrr stars"></div>
                         授权码生效时间： <span id="create_date">无</span>
@@ -84,6 +84,7 @@
                 <div class="form-group">
                   <div class="col-md-6 col-sm-6 col-md-offset-3" style="border: 1px solid #169F85;border-radius: 3px;">
                       <h5>加密锁授权状态：<small id="dongle_verify_msg">未授权</small></h5>
+                      <h5>加密锁备注：<small style="font-size: 14px;color: black;" id="dongle_remark">无</small></h5>
                   </div>
                 </div>
                <div class="ln_solid"></div>
@@ -116,6 +117,7 @@
     let eleTextareaActiveCode= $("#active_code");
 
     let eleDongleVerifyMsg= $("#dongle_verify_msg");//加密锁授权状态
+    let eleDongleRemark= $("#dongle_remark");//加密锁备注
     let eleMachineVerifyMsg= $("#machine_verify_msg");
     let eleActiveCodeMac= $("#active_code_mac");
     let eleActiveCodeFlag= $("#active_code_flag");
@@ -180,7 +182,7 @@
             eleExpireDate.html(expire_date_str)
         }
     }
-    function f_showDongleVerifyInfo(dongle_status) {
+    function f_showDongleVerifyInfo(dongle_status,dongle_remark) {
         let verifyMsg;
         if(-1===dongle_status){
             verifyMsg = "<span class='sun-state-error'>检测加密锁失败！原因：分析器模块未正常运行</span";
@@ -191,11 +193,17 @@
         }else if(2===dongle_status){
             verifyMsg = "<span class='sun-state-error'>已过期</span";
         }else if(3===dongle_status){
-            verifyMsg = "<span class='sun-state-error'>验证失败</span";
+            verifyMsg = "<span class='sun-state-error'>版本标记不支持</span";
+        }else if(4===dongle_status){
+            verifyMsg = "<span class='sun-state-error'>读取失败</span";
+        }else if(5===dongle_status){
+            verifyMsg = "<span class='sun-state-error'>增强验证失败</span";
         }else{
-            verifyMsg ="<span class='sun-state-error'>验证失败</span>";
+            verifyMsg ="<span class='sun-state-error'>未知错误</span>";
         }
+
         eleDongleVerifyMsg.html(verifyMsg)
+        eleDongleRemark.html(dongle_remark)
 
     }
     function f_getAuthInfo() {
@@ -215,7 +223,7 @@
                     let info = res.info;
 
                     //显示加密锁授权验证结果start
-                    f_showDongleVerifyInfo(info.dongle_status);
+                    f_showDongleVerifyInfo(info.dongle_status,info.dongle_remark);
                     //显示加密锁授权验证结果end
 
                    //显示机器授权验证结果start

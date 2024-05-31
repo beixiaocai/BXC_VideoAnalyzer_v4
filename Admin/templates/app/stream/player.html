@@ -210,7 +210,7 @@
                        let snapshot_msg = info["snapshot_msg"]
                        if(snapshot_ret===true){
                            let snapshot_filename = info["snapshot_filename"]
-                           let download_url = "/nvr/getDownload?filename="+snapshot_filename;
+                           let download_url = "/storage/download?filename="+snapshot_filename;
                            window.open(download_url);
                        }else{
                            myAlert(snapshot_msg,"error");
@@ -251,7 +251,7 @@
                        let record_msg = info["record_msg"]
                        if(record_ret===true){
                            let record_video_filename = info["record_video_filename"]
-                           let download_url = "/nvr/getDownload?filename="+record_video_filename;
+                           let download_url = "/storage/download?filename="+record_video_filename;
                            window.open(download_url);
                        }else{
                            myAlert(record_msg,"error");

@@ -37,7 +37,6 @@
                  </h2>
 
                     <button style="margin-left:10px;" onclick="f_refreshStream()" class="btn btn-primary btn-sm">刷新</button>
-
                     <button data-toggle="modal" data-target="#ImportFileDialog"  class="btn btn-primary btn-sm">批量导入</button>
                     <button onclick="f_postHandleAllForward('add')" class="btn btn-default btn-sm">开启全部转发</button>
                     <button onclick="f_postHandleAllForward('del')" class="btn btn-default btn-sm">关闭全部转发</button>
@@ -132,7 +131,6 @@
                       <div class="modal-body">
                         <div style="padding: 5px 20px;">
                           <form class="form-horizontal calender" role="form">
-
                               <div class="form-group">
                               <label class="col-sm-3 control-label">文件模板</label>
                               <div class="col-sm-9">
@@ -202,7 +200,7 @@
         window.open("/stream/player?app="+stream_app+"&name="+stream_name);
     }
     function f_downloadCameraTemplate() {
-        let url= "/static/upload/temp/camera20240418.xlsx"
+        let url= "/static/resource/camera20240418.xlsx"
         window.open(url);
     }
     function f_edit(code) {
@@ -238,7 +236,6 @@
     function f_postImportFile() {
 
         if (eleFile[0].files.length > 0){
-
           let file = eleFile[0].files[0];
           console.log("file",file)
            let importRemark = eleTextareaImportRemark.val().trim();
