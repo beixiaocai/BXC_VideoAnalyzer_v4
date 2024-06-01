@@ -15,9 +15,9 @@
 | 架构 | 操作系统 | 硬件 | 推理引擎 | 下载地址 |
 | :----: | :----: | :----: | :----: | :----- |
 | x86 | Windows10/11 | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows基础版) |
-| x86 | Windows10/11 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows支持TensorRT的版本) |
-| x86 | Ubuntu20/22 | intel,amd | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu基础版) |
-| x86 | Ubuntu20/22 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu支持TensorRT的版本) |
+| x86 | Windows10/11 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows高性能版) |
+| x86 | Ubuntu20/22 | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu基础版) |
+| x86 | Ubuntu20/22 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu高性能版) |
 | arm | Ubuntu20/22 | rk3588 | rknpu | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本) |
 
 ### 使用说明
@@ -26,9 +26,9 @@
 * [支持oem贴牌](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/软件如何贴牌)
 * [硬件推荐](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/硬件推荐)
 * [x86架构Windows10/11基础版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows基础版)
-* [x86架构Windows10/11支持TensorRT的版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows支持TensorRT的版本)
+* [x86架构Windows10/11高性能版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows高性能版)
 * [x86架构Ubuntu20/22基础版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu基础版)
-* [x86架构Ubuntu20/22支持TensorRT的版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu支持TensorRT的版本)
+* [x86架构Ubuntu20/22高性能版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu高性能版)
 * [arm架构Ubuntu20/22支持RK3588的版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本)
 * [ffmpeg推流模拟摄像头](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
 * [算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/算法管理)
