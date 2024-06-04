@@ -35,6 +35,7 @@
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
 * [行为算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理)
 * [布控管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理)
+* [报警管理设置自动播放声音](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/浏览器设置网页自动播放声音)
 * [报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警接口)
 * [报警过滤器](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警过滤器)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
@@ -51,6 +52,7 @@
 * 发布时间 2024.06.04
 * （1）优化动态库类型行为算法二次开发扩展能力
 * （2）修复授权逻辑bug
+* （3）新增支持报警管理页面设置自动播放声音
 
 #### v4.417
 * 发布时间 2024.05.31

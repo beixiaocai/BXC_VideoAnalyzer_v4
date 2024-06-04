@@ -117,8 +117,8 @@
                 <button onclick="f_handle('delete')" class="btn btn-primary btn-sm">删除</button>
                 <button onclick="f_handle('allDelete')" class="btn btn-default btn-sm"> 全部删除</button>
                 <button onclick="f_handle('clear')" class="btn btn-default btn-sm"> 清理报警缓存</button>
-                <button id="top_open_audio" class="btn btn-default btn-sm"><i class="fa fa-bell-slash-o"></i> 启动报警声音</button>
-                <audio id="top_audio"  controls loop style="display: block;float: right; position: relative;height: 34px; "  >
+                <button id="top_open_audio" class="btn btn-default btn-sm"><i class="fa fa-bell-o"></i> 关闭报警声音</button>
+                <audio id="top_audio"  controls style="display: block;float: right; position: relative;height: 34px; "  >
                     浏览器不支持音频播放
                   </audio>
 
@@ -178,7 +178,7 @@
     let eleCheckAll = $(".check_all");
     let eleAudioPlayer = document.querySelector("#top_audio");
     let ele_btn_open_audio = $("#top_open_audio");
-    let temp_audioPlayer_isOpen = false;
+    let temp_audioPlayer_isOpen = true;
 
     let temp_cur_page = 1;//当前页面
     let temp_cur_page_size = 10;
@@ -220,7 +220,7 @@
                     eleAudioPlayer.pause();
                 }
             }catch (e) {
-                console.log("audio.pause() error:",e)
+                console.log("eleAudioPlayer.pause() error:",e)
             }
         }else{//当前关闭中，点击则开启
             temp_audioPlayer_isOpen = true;
@@ -316,7 +316,7 @@
     function f_getCheckNewData() {
         setTimeout(function () {
             __f_getCheckNewDataTimeout();
-        }, 5000);
+        }, 3000);
     }
     function __f_getCheckNewDataTimeout() {
         //检查新数据
@@ -324,7 +324,6 @@
             url: '/alarm/getCheckNewData',
             type: "get",
             async: true,
-            data: {},
             dataType: "json",
             timeout: "3000",
             error: function () {
@@ -338,7 +337,6 @@
 
                     //播放声音start
                     if(temp_audioPlayer_isOpen) {//开启了播放声音
-                        console.log("开启了播放声音")
                         let audio_path = info["audio_path"];
                         let audio_url = uploadAudioDir_www + audio_path
                         try {
