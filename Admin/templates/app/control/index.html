@@ -436,10 +436,10 @@
                                         }else{
                                             item_html += "<button data-code='" + d["code"] + "'  data-handle='add'onclick=\"f_postHandleControl(this)\"class=\"btn btn-primary btn-sm\">执行布控</button>";
                                         }
-                                      item_html += "<button onclick=\"f_edit('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"编辑\"><i class=\"fa fa-edit\"></i></button>";
-                                      item_html += "<button onclick=\"f_del('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"删除\"><i class=\"fa fa-remove\"></i></button>";
-                                      item_html += "<button onclick=\"f_copy('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"复制\"><i class=\"fa fa-copy\"></i></button>";
-                                      item_html += "<button onclick=\"f_log('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"日志\"><i class=\"fa fa-chain\"></i></button>";
+                                      item_html += "<button onclick=\"f_edit('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" title=\"编辑\"><i class=\"fa fa-edit\"></i></button>";
+                                      item_html += "<button onclick=\"f_del('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" title=\"删除\"><i class=\"fa fa-remove\"></i></button>";
+                                      item_html += "<button onclick=\"f_copy('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" title=\"复制\"><i class=\"fa fa-copy\"></i></button>";
+                                      item_html += "<button onclick=\"f_log('"+d["code"]+"')\" class=\"btn btn-sm btn-default\" type=\"button\" title=\"日志\"><i class=\"fa fa-chain\"></i></button>";
                                     item_html += "</div>";
 
                                item_html += "</td></tr>";
