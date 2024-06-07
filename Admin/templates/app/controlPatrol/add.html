@@ -39,7 +39,7 @@
                      <input type="hidden" name="control_codes"  value="{{ obj.control_codes }}">
 
                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">编号 </label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">轮巡编号 </label>
                   <div class="col-md-3 col-sm-3 col-xs-12">
                      <input type="text"  value="{{ obj.code }}" class="form-control" disabled="disabled">
                   </div>
@@ -57,7 +57,7 @@
                     <select id="control_codes" style="height: 200px;"  class="select2_multiple form-control" required="required"  multiple="multiple" >
                         <option value="0">---请选择布控(可多选)---</option>
                         {% for control in controls %}
-                          <option value="{{ control.code }}" {% if 1 == control.is_selected %} selected {% endif %} >{{ control.stream_nickname }} 【{{ control.flow_code }}】</option>
+                          <option value="{{ control.code }}" {% if 1 == control.is_selected %} selected {% endif %} >{{ control.id }} / {{ control.code }} 【 {{ control.stream_nickname }} / {{ control.flow_code }}】</option>
                          {% endfor %}
                     </select>
                   </div>

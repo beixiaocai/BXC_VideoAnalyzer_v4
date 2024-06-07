@@ -53,15 +53,16 @@
 
                           <td>{{ d.last_update_time }}</td>
                         <td>
-                            {% if d.is_run == 1 %}
-                                <button onclick="f_postHandle('{{ d.code }}','cancel')" class="btn btn-dark btn-xs"><i class="fa fa-close"></i>取消轮巡</button>
-                           {% else %}
-                                <button onclick="f_postHandle('{{ d.code }}','add')" class="btn btn-primary btn-xs"><i class="fa fa-hand-o-right"></i>执行轮巡</button>
-                            {% endif %}
-
-                            <a href="javascript:f_view('{{ d.code }}')"  class='sun-a-label' ><i class="fa fa-play"></i>预览</a>
-                            <a href="javascript:f_edit('{{ d.code }}')"  class='sun-a-label' ><i class="fa fa-edit"></i>编辑</a>
-                            <a href="javascript:f_del('{{ d.code }}')"  class='sun-a-label' ><i class="fa fa-remove"></i>删除</a>
+                            <div class="btn-group">
+                                {% if d.is_run == 1 %}
+                                    <button onclick="f_postHandle('{{ d.code }}','cancel')" class="btn btn-dark btn-sm">取消轮巡</button>
+                               {% else %}
+                                    <button onclick="f_postHandle('{{ d.code }}','add')" class="btn btn-primary btn-sm">执行轮巡</button>
+                                {% endif %}
+                                <button onclick="f_view('{{ d.code }}')" class="btn btn-sm btn-default" type="button" title="预览"><i class="fa fa-play-circle"></i></button>
+                                <button onclick="f_edit('{{ d.code }}')" class="btn btn-sm btn-default" type="button" title="编辑"><i class="fa fa-edit"></i></button>
+                                <button onclick="f_del('{{ d.code }}')" class="btn btn-sm btn-default" type="button" title="删除"><i class="fa fa-remove"></i></button>
+                            </div>
                         </td>
                       </tr>
                     {% endfor %}
