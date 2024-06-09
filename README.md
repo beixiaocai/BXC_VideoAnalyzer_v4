@@ -11,13 +11,13 @@
 ### 软件介绍
 * C++开发的视频行为分析系统v4版本，可以在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等。
 
-### 版本介绍
+### 公开版兼容的架构系统介绍
 | 架构 | 操作系统 | 硬件 | 推理引擎 | 下载地址 |
 | :----: | :----: | :----: | :----: | :----- |
-| x86 | Windows10/11 | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows基础版) |
-| x86 | Windows10/11 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows高性能版) |
-| x86 | Ubuntu20/22 | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu基础版) |
-| x86 | Ubuntu20/22 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu高性能版) |
+| x86 | Windows10/11 | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows-ov版) |
+| x86 | Windows10/11 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows-ovtrt版) |
+| x86 | Ubuntu20/22 | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu-ov版) |
+| x86 | Ubuntu20/22 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu-ovtrt版) |
 | arm | Ubuntu20/22 | rk3588 | rknpu | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本) |
 
 ### 使用说明
@@ -25,11 +25,11 @@
 * [支持哪些硬件](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/支持哪些硬件)
 * [支持oem贴牌](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/软件如何贴牌)
 * [硬件推荐](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/硬件推荐)
-* [x86架构Windows10/11基础版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows基础版)
-* [x86架构Windows10/11高性能版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows高性能版)
-* [x86架构Ubuntu20/22基础版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu基础版)
-* [x86架构Ubuntu20/22高性能版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu高性能版)
-* [arm架构Ubuntu20/22支持RK3588的版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本)
+* [x86架构Windows-ov版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows-ov版)
+* [x86架构Windows-ovtrt版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows-ovtrt版)
+* [x86架构Ubuntu-ov版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu-ov版)
+* [x86架构Ubuntu-ovtrt版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu-ovtrt版)
+* [arm架构RK3588版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本)
 * [ffmpeg推流模拟摄像头](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
 * [算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/算法管理)
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
