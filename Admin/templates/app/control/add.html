@@ -64,7 +64,7 @@
     let streamCodeDict = {};//视频流字典
     let streamCode;
 
-    let flowDict = {};//基础算法字典
+    let flowDict = {};//算法字典
     let flowCode;
 
     let audioCodeDict = {}; //音频字典
@@ -145,7 +145,7 @@
                         </div>
 
                     <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择视频流</label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择视频流<span class="required" style="color: red;">*</span></label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             {% if  "add" == handle %}
                               <select  id="select_stream" class="select2_single form-control" required="required" >
@@ -214,13 +214,13 @@
 
 
                     <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择算法
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择算法<span class="required" style="color: red;">*</span>
                           </label>
 
                           <div class="col-md-9 col-sm-9 col-xs-12">
 
                             <select id="select_flow"  class="select2_single form-control" required="required" >
-                                <option value="0">请选择基础算法</option>
+                                <option value="0">请选择算法</option>
                                 {% for flow in flows %}
                                    <script>
                                         flowCode = '{{ flow.code }}';
@@ -240,7 +240,7 @@
 
 
                         <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择音频 <i class="bxc_introduce fa fa-info-circle" title="触发报警时播放的音频"></i>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择音频<span class="required" style="color: red;">*</span>
                           </label>
 
                           <div class="col-md-9 col-sm-9 col-xs-12">
@@ -266,7 +266,7 @@
                     </div>
 
                       <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">报警接口
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">报警接口<span class="required" style="color: red;">*</span>
                           </label>
 
                           <div class="col-md-9 col-sm-9 col-xs-12">
@@ -315,21 +315,21 @@
 
 
                   <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">报警间隔 <i class="bxc_introduce fa fa-info-circle" title="1路视频最小报警间隔时长（单位秒）"></i></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">报警间隔<span class="required" style="color: red;">*</span> <i class="bxc_introduce fa fa-info-circle" title="1路视频最小报警间隔时长（单位秒）"></i></label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                            <input id="min_interval"  type="number" value="{{ control.min_interval }}" class="form-control" >
                       </div>
                     </div>
 
                   <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">周界比例 <i class="bxc_introduce fa fa-info-circle" title="检测目标位于周界区域部分占目标整体的比例"></i></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">周界比例<span class="required" style="color: red;">*</span> <i class="bxc_introduce fa fa-info-circle" title="检测目标位于周界区域部分占目标整体的比例"></i></label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                            <input id="overlap_thresh"  type="number" value="{{ control.overlap_thresh }}" class="form-control" >
                       </div>
                     </div>
 
                   <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">图片数量 <i class="bxc_introduce fa fa-info-circle" title="触发报警时上报图片数量"></i></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">图片数量<span class="required" style="color: red;">*</span> <i class="bxc_introduce fa fa-info-circle" title="触发报警时上报图片数量"></i></label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                            <input name="alarm_image_count"  type="number" value="{{ control.alarm_image_count }}" class="form-control" >
                       </div>
@@ -337,7 +337,7 @@
 
 
                 <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">画框选项 <i class="bxc_introduce fa fa-info-circle" title="合成报警视频画框类型"></i></label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">画框选项<span class="required" style="color: red;">*</span> <i class="bxc_introduce fa fa-info-circle" title="合成报警视频画框类型，无特殊原因强烈不建议开启同时保存画框和不画框"></i></label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
 
                           <div class="radio">

@@ -147,17 +147,6 @@
                 </div>
 
 
-             <div class="form-group">
-                 <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                      <p>1，TensorRT推理引擎支持onnx或engine格式的模型</p>
-                      <p>2，推理引擎选择TensorRT+上传模型选择onnx格式时，后台会自动将onnx转换为适应本机显卡的加密后的engine格式。在不同的英伟达显卡上进行模型转换时，耗时不同，大约1-8分钟不等，提交过程中请勿关闭页面。相同的onnx模型在不同型号英伟达显卡上转换出来的engine模型文件是不通用的</p>
-                      <p>3，推理引擎选择TensorRT+上传模型选择engine格式时，用户需要对engine加密后上传 <a href="javascript:f_docs()">模型加密参考文档</a></p>
-                      <p>4，OpenVINO推理引擎支持tar格式模型文件，tar模型文件就是OpenVINO支持的.bin+.xml模型文件经过tar压缩后的文件</p>
-                      <p>5，在英特尔处理器上产生的tar模型，在不同型号的英特尔处理器上通用</p>
-                  </div>
-                </div>
-
 {% elif "edit" == handle %}
                 <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">模型目标数量</label>
@@ -281,7 +270,7 @@ ele_select_algorithm_type.change(function () {
     selectedAlgorithmTypeCode = $(this).val();
     f_select_algorithm_type()
 });
-function f_show_algorithm_type_info(info) {
+function f_show_algorithm_type(info) {
     //设置算法框架下拉框
     let html = "<option value=\"0\">请选择</option>";
     let frameworks = info["frameworks"];
@@ -320,7 +309,7 @@ function f_select_algorithm_type() {
        success: function (res) {
             if(res.code === 1000){
                 let info = res.info;
-                f_show_algorithm_type_info(info);
+                f_show_algorithm_type(info);
             }else{
                 ele_select_framework.html("");
                 ele_select_inference.html("");
@@ -436,6 +425,13 @@ function f_submit() {
                     return false;
                 }
             }
+            else if(inference_s === "ONNXRuntime"){
+                if(!fs_name.endsWith(".onnx")){
+                    myAlert("ONNXRuntime仅支持onnx格式的模型","error");
+                    return false;
+                }
+            }
+
             if(fs_size_m > 1000){
                 myAlert("模型文件不能超过（1000）M："+String(fs_size_m),"error");
                 return false;

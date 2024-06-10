@@ -14,41 +14,46 @@
 ### 公开版兼容的架构系统介绍
 | 架构 | 操作系统 | 硬件 | 推理引擎 | 下载地址 |
 | :----: | :----: | :----: | :----: | :----- |
-| x86 | Windows10/11 | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows-ov版) |
-| x86 | Windows10/11 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows-ovtrt版) |
-| x86 | Ubuntu20/22 | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu-ov版) |
-| x86 | Ubuntu20/22 | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu-ovtrt版) |
-| arm | Ubuntu20/22 | rk3588 | rknpu | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本) |
+| x86 | Windows | intel,amd | openvino+ort | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/x86-Windows-ov版) |
+| x86 | Windows | intel,amd+nvidia | openvino+tensorrt+ort | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/x86-Windows-ovtrt版) |
+| x86 | Ubuntu | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/x86-Ubuntu-ov版) |
+| x86 | Ubuntu | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/x86-Ubuntu-ovtrt版) |
+| arm | Ubuntu | rk3588 | rknpu | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/arm-RK3588版) |
+| arm | 麒麟/欧拉/UOS | 不限 |  | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/其他版本) |
+| x86 | Centos | 不限 |  | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/其他版本) |
+
+* [下载x86架构Windows-ov版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/x86-Windows-ov版)
+* [下载x86架构Windows-ovtrt版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/x86-Windows-ovtrt版)
+* [下载x86架构Ubuntu-ov版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/x86-Ubuntu-ov版)
+* [下载x86架构Ubuntu-ovtrt版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/x86-Ubuntu-ovtrt版)
+* [下载arm架构RK3588版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/arm-RK3588版)
+* [下载其他版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/其他版本)
 
 ### 使用说明
 * [启动配置](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/启动配置)
 * [支持哪些硬件](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/支持哪些硬件)
 * [支持oem贴牌](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/软件如何贴牌)
 * [硬件推荐](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/硬件推荐)
-* [x86架构Windows-ov版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows-ov版)
-* [x86架构Windows-ovtrt版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/Windows-ovtrt版)
-* [x86架构Ubuntu-ov版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu-ov版)
-* [x86架构Ubuntu-ovtrt版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/Ubuntu-ovtrt版)
-* [arm架构RK3588版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/RK3588版本)
-* [ffmpeg推流模拟摄像头](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
 * [算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/算法管理)
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
 * [行为算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理)
 * [布控管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理)
-* [浏览器设置网页自动播放声音](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/浏览器设置网页自动播放声音)
 * [报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警接口)
 * [报警过滤器](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警过滤器)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
 * [软件性能优化](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/软件性能优化)
 * [咨询问题模板](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/咨询问题模板)
+* [ffmpeg推流模拟摄像头](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/视频流管理/FFmpeg推流模拟摄像头)
+* [浏览器设置网页自动播放声音](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/浏览器设置网页自动播放声音)
 
-### 仓库提交记录删除原因说明
-* 因为gitee或github对代码仓库的存储上限均是1G，因此每隔一段时间仓库容量都会用尽，所以每隔一段时间都需要清空一次仓库
-* 为了方便大家下载视频行为分析系统v4历史版本，下面提供了历史版本下载表
-* [历史版本下载表](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/常见问题/历史版本下载表)
+## 版本历史
+### v4.420
+* 发布时间 2024.06.10
+* （1）新增支持ONNXRuntime推理引擎
+* （2）优化TensorRT，OpenVINO推理引擎有关std::move的的使用，提升性能
+* （3）去除基础算法模型推理参数的dimension参数，后续版本不再需要填写该参数
 
-# 版本历史
-### v4.419
+#### v4.419
 * 发布时间 2024.06.06
 * （1）修复报警视频弹窗的bug
 * （2）修复模块之间安全验证逻辑的bug
