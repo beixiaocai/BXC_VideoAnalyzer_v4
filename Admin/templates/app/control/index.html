@@ -21,8 +21,8 @@
                 <button style="margin-left:5px;" onclick="f_docs()" class="btn btn-primary btn-sm">文档</button>
 
             <button onclick="f_reload()" class="btn btn-primary btn-sm"> 刷新</button>
-            <button onclick="f_postHandleAllControl('add')" class="btn btn-default btn-sm">执行全部布控</button>
-            <button onclick="f_postHandleAllControl('cancel')" class="btn btn-default btn-sm">取消全部布控</button>
+            <button onclick="f_postHandleControls('add')" class="btn btn-default btn-sm">执行全部布控</button>
+            <button onclick="f_postHandleControls('cancel')" class="btn btn-default btn-sm">取消全部布控</button>
             <span id="top_info" style="float: right; font-size: 13px;color: #00A000;margin-top: 6px; margin-right: 50px;"></span>
           <div class="clearfix"></div>
         </div>
@@ -455,14 +455,14 @@
             });
 
     }
-    function f_postHandleAllControl(handle) {
+    function f_postHandleControls(handle) {
         //执行全部布控 或 取消全部布控
         ele_top_loading.show();
         $.ajax({
-               url: '/inner/handleAllControl',
+               url: '/control/postHandleControls',
                type: "post",
                async: true,
-               data: {"handle":handle,"batch_state":10},
+               data: {"handle":handle, "state":10},
                dataType: "json",
                timeout: 0,
                error: function () {

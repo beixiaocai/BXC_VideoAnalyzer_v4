@@ -1,0 +1,195 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} 人脸管理 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+    <link rel="stylesheet" href="/static/lib/jquery/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <style>
+
+.image_container{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 6px;
+}
+.image_container img{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.face_container{
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    border: 1px solid #6d8494;
+    position: relative;
+    border-radius: 6px;
+}
+.face_container img{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+               <h2>人脸管理
+                    <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
+                    <span id="top_msg">{{top_msg}}</span>
+               </h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <!--<p><code>说明</code> 系统支持的行为算法</p>-->
+
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr class="headings">
+                        <th class="column-title">ID</th>
+                        <th class="column-title">编号</th>
+                        <th class="column-title">名称</th>
+                        <th class="column-title">人员照片</th>
+                        <th class="column-title">人脸特征图</th>
+                        <th class="column-title">更新时间</th>
+                          <th class="column-title no-link last"><span class="nobr">操作</span></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                    {%  for d  in data %}
+                      <tr class="even pointer">
+                        <td>{{ d.id }}<!--{{forloop.counter}}--></td>
+                        <td width="10%">{{ d.code }}</td>
+                        <td>{{ d.name }}</td>
+                        <td>
+                            <div class="image_container">
+                                 <img src="{{ uploadFacedbDir_www }}{{ d.image_dir }}/{{ d.image_name }}" title="照片">
+                            </div>
+
+                        </td>
+                       <td>
+                           <div class="face_container">
+                            <img src="{{ uploadFacedbDir_www }}{{ d.image_dir }}/{{ d.face_image_name }}" title="人脸">
+                           </div>
+                        </td>
+                          <td>{{ d.last_update_time }}</td>
+                          <td>
+                              <div class="btn-group">
+                              <button onclick="f_edit('{{ d.code }}')" class="btn btn-sm btn-primary" type="button"><i class="fa fa-edit"></i> 编辑</button>
+                              <button onclick="f_del('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="删除"><i class="fa fa-remove"></i></button>
+                            </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
+
+                    </tbody>
+                  </table>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <ul class="pagination">
+                <li>
+                    <span style="margin-right:10px;color:#000;">共<span>{{ pageData.page_num}}</span>页 / <span>{{pageData.count}}</span >条</span>
+                </li>
+
+                {%  for d  in pageData.pageLabels%}
+                  {% if d.cur == 1 %}
+                    <li class="paginate_button active"><a href="#"  >{{ d.name }}</a></li>
+                  {% else %}
+                    <li class="paginate_button "><a href="/facedb/index?p={{d.page}}&ps={{pageData.page_size}}" >{{ d.name }}</a></li>
+                  {% endif %}
+                {% endfor %}
+
+              <!--
+              <li class="paginate_button previous" ><a href="#" data-dt-idx="0" >上一页</a></li>
+              <li class="paginate_button active"><a href="#" data-dt-idx="1" >1</a></li>
+
+              <li class="paginate_button "><a href="#" data-dt-idx="2">2</a></li>
+              <li class="paginate_button "><a href="#" data-dt-idx="3">3</a></li>
+              <li class="paginate_button "><a href="#" data-dt-idx="4">4</a></li>
+              <li class="paginate_button "><a href="#" data-dt-idx="5" >5</a></li>
+              <li class="paginate_button "><a href="#" data-dt-idx="6" >6</a></li>
+              <li class="paginate_button next"><a href="#" data-dt-idx="7" >下一页</a></li>
+              -->
+            </ul>
+
+          </div>
+       </div>
+
+
+    </div>
+  </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+<script src="/static/lib/jquery/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+<script>
+    let ele_top_loading = $("#top_loading");
+    let ele_top_msg= $("#top_msg");
+
+
+    function f_edit(code) {
+        let url = "/facedb/edit?code="+code;
+        window.location.href = url;
+    }
+    function f_del(code){
+        ele_top_loading.show();
+        $.ajax({
+               url: '/facedb/postDel',
+               type: "post",
+               async: true,
+               data: {"code":code},
+               dataType: "json",
+               timeout: 0,
+               error: function () {
+                   ele_top_loading.hide();
+                   myAlert("网络异常，请确定网络正常！","error");
+               },
+               success: function (res) {
+                   ele_top_loading.hide();
+                   if(1000 === res.code){
+                        window.location.reload();
+                   }else{
+                        myAlert(res.msg,"error");
+                   }
+               }
+            });
+
+    }
+    $(document).ready(function () {
+        $('img').click(function () {
+            $.fancybox.open({
+                src: $(this).attr('src'),
+                type: 'image'
+            });
+        });
+    });
+</script>
+
+{% endblock javascripts %}
+
