@@ -6,7 +6,7 @@
 * 微信：bilibili_bxc
 * 哔哩哔哩主页：https://space.bilibili.com/487906612
 * gitee地址：https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4
-* github地址：https://github.com/any12345com/BXC_VideoAnalyzer_v4
+* github地址：https://github.com/beixiaocai/BXC_VideoAnalyzer_v4
 
 ### 软件介绍
 * C++开发的视频行为分析系统v4版本，可以在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等。
