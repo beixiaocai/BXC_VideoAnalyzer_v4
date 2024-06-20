@@ -18,6 +18,7 @@
 | x86 | Windows | intel,amd+nvidia | openvino+tensorrt+ort | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/x86-Windows-ovtrt版) |
 | x86 | Ubuntu | intel,amd | openvino | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/x86-Ubuntu-ov版) |
 | x86 | Ubuntu | intel,amd+nvidia | openvino+tensorrt | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/x86-Ubuntu-ovtrt版) |
+| arm | Ubuntu | 昇腾 | cann | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/arm-昇腾版) |
 | arm | Ubuntu | rk3588 | rknpu | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/arm-RK3588版) |
 | arm | 麒麟/欧拉/UOS | 不限 |  | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/其他版本) |
 | x86 | Centos | 不限 |  | [下载](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/其他版本) |
@@ -26,6 +27,7 @@
 * [下载x86架构Windows-ovtrt版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Windows版本/x86-Windows-ovtrt版)
 * [下载x86架构Ubuntu-ov版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/x86-Ubuntu-ov版)
 * [下载x86架构Ubuntu-ovtrt版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/x86-Ubuntu-ovtrt版)
+* [下载arm架构昇腾版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/arm-昇腾版)
 * [下载arm架构RK3588版](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/arm-RK3588版)
 * [下载其他版本](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/Linux版本/其他版本)
 
@@ -47,7 +49,13 @@
 * [浏览器设置网页自动播放声音](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/浏览器设置网页自动播放声音)
 
 ## 版本历史
-### v4.421
+### v4.422
+* 发布时间 2024.06.20
+* （1）优化动态库类型行为算法，进一步提升可二次开发能力
+* （2）分析器新增兼容算法动态库，所有国产硬件的算法兼容均放在该动态库进行实现
+* （3）后台管理基础算法模块新增添加RK3588模型，昇腾模型的功能
+
+#### v4.421
 * 发布时间 2024.06.12
 * （1）优化动态库类型行为算法，使用全局统一目标检测类型，避免对象拷贝，提升性能
 * （2）优化API类型行为算法，解决参数在传递过程中过度的拷贝，提升性能
