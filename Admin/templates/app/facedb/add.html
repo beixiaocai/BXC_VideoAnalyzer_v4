@@ -46,9 +46,16 @@
                 </div>
 
                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">人脸名称 <span class="required" style="color: red;">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">名称 <span class="required" style="color: red;">*</span></label>
               <div class="col-md-3 col-sm-3 col-xs-12">
                     <input type="text" name="name" value="{{ facedb.name }}" required="required"  class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">人员编号 <span class="required" style="color: red;">*</span></label>
+              <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="text" name="person_code" value="{{ facedb.person_code }}" required="required"  class="form-control">
                   </div>
                 </div>
 
@@ -126,8 +133,8 @@ $(document).ready(function () {
                 let fs_size = parseInt(file.size);//文件字节大小
                 let fs_size_m = parseInt(fs_size / 1024 / 1024); //换算成M单位
 
-                if(fs_size_m > 5){
-                    myAlert("人脸照片文件不能超过5M:"+String(fs_size_m),"error");
+                if(fs_size_m > 10){
+                    myAlert("人脸照片文件不能超过10M:"+String(fs_size_m),"error");
                     return false;
                 }
            }else{

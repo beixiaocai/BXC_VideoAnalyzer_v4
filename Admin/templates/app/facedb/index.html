@@ -51,6 +51,9 @@
                     <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
                     <span id="top_msg">{{top_msg}}</span>
                </h2>
+                 <button style="margin-left:5px;" onclick="f_docs()" class="btn btn-primary btn-sm">文档</button>
+                 <button onclick="f_reload()" class="btn btn-primary btn-sm"> 刷新</button>
+                 <button onclick="f_postUpdateAll()" class="btn btn-default btn-sm">全量更新人脸库</button>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
@@ -64,6 +67,7 @@
                         <th class="column-title">ID</th>
                         <th class="column-title">编号</th>
                         <th class="column-title">名称</th>
+                        <th class="column-title">人员编号</th>
                         <th class="column-title">人员照片</th>
                         <th class="column-title">人脸特征图</th>
                         <th class="column-title">更新时间</th>
@@ -77,6 +81,7 @@
                         <td>{{ d.id }}<!--{{forloop.counter}}--></td>
                         <td width="10%">{{ d.code }}</td>
                         <td>{{ d.name }}</td>
+                        <td>{{ d.person_code }}</td>
                         <td>
                             <div class="image_container">
                                  <img src="{{ uploadFacedbDir_www }}{{ d.image_dir }}/{{ d.image_name }}" title="照片">
@@ -92,6 +97,7 @@
                           <td>
                               <div class="btn-group">
                               <button onclick="f_edit('{{ d.code }}')" class="btn btn-sm btn-primary" type="button"><i class="fa fa-edit"></i> 编辑</button>
+                              <button onclick="f_postUpdate('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="更新人脸库"><i class="fa fa-chevron-circle-up"></i></button>
                               <button onclick="f_del('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="删除"><i class="fa fa-remove"></i></button>
                             </div>
                         </td>
@@ -151,8 +157,59 @@
 <script>
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
-
-
+    function f_postUpdate(code) {
+        ele_top_loading.show();
+        $.ajax({
+           url: '/facedb/postUpdate',
+           type: "post",
+           async: true,
+           data: {"code":code},
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+                ele_top_loading.hide();
+                myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               ele_top_loading.hide();
+               if(1000 === res.code){
+                   myAlert(res.msg,"success",2000);
+               }else{
+                   myAlert(res.msg,"error");
+               }
+           }
+        });
+    }
+    function f_postUpdateAll() {
+        ele_top_loading.show();
+        $.ajax({
+           url: '/facedb/postUpdateAll',
+           type: "post",
+           async: true,
+           data: {},
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+                ele_top_loading.hide();
+                myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               ele_top_loading.hide();
+               if(1000 === res.code){
+                   myAlert(res.msg,"success",2000);
+               }else{
+                   myAlert(res.msg,"error");
+               }
+           }
+        });
+    }
+    function f_reload() {
+        window.location.reload();
+    }
+    function f_docs() {
+        let url= "{{ settings.docs.facedbAdd }}";
+        window.open(url);
+    }
     function f_edit(code) {
         let url = "/facedb/edit?code="+code;
         window.location.href = url;
