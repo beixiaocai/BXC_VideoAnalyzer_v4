@@ -40,6 +40,7 @@
 * [基础算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/基础算法管理)
 * [行为算法管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/算法管理/行为算法管理)
 * [布控管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/布控管理/布控管理)
+* [人脸管理](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/人脸管理/人脸管理)
 * [报警接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警接口)
 * [报警过滤器](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/报警过滤器)
 * [开放接口](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/开放接口/开放接口)
@@ -49,7 +50,12 @@
 * [浏览器设置网页自动播放声音](https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4/wikis/报警管理/浏览器设置网页自动播放声音)
 
 ## 版本历史
-### v4.423
+### v4.424
+* 发布时间 2024.06.29
+* （1）修复算法推流的回帧问题，统一算法推流的编码帧率，进一步提升编码和推流的性能
+* （2）人脸疲劳检测算法支持扩展参数
+
+#### v4.423
 * 发布时间 2024.06.25
 * （1）新增支持人脸库管理功能，人脸识别算法，人脸疲劳检测算法
 * （2）优化兼容算法动态库
