@@ -6,6 +6,7 @@
   {{ block.super }}
 
 <link rel="stylesheet" href="/static/lib/jquery/fancybox/3.5.7/jquery.fancybox.min.css" />
+<link rel="stylesheet" href="/static/lib/jquery/daterangepicker/daterangepicker.min.css"/>
 <style>
         .alarm_item {
             display: block;
@@ -103,28 +104,79 @@
 
       <div class="row">
         <div class="col-md-12">
-          <div class="x_panel">
-            <div class="x_title">
-              <h2>报警视频管理
-                  <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
-                  <span id="top_msg"></span>
-              </h2>
 
-              <label style="margin-left:20px;padding-top:5px;">
-                <input type="checkbox" class="check_all">
-              </label>
-                <button style="margin-left:5px;" onclick="f_handle('read')" class="btn btn-primary btn-sm"> 已读</button>
-                <button onclick="f_handle('delete')" class="btn btn-primary btn-sm">删除</button>
-                <button onclick="f_handle('allDelete')" class="btn btn-default btn-sm"> 全部删除</button>
-                <button onclick="f_handle('clear')" class="btn btn-default btn-sm"> 清理报警缓存</button>
+            <div class="x_panel">
+
+                <div class="x_title">
+                  <h2>报警视频管理
+                      <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
+                      <span style="display: none;" id="top_msg"></span>
+                  </h2>
+
+                <button style="margin-left: 10px;" onclick="f_handle('allDelete')" class="btn btn-default btn-sm"> 全部删除</button>
+                <button onclick="f_handle('clear')" class="btn btn-default btn-sm"> 清理缓存</button>
                 <button id="top_open_audio" class="btn btn-default btn-sm"><i class="fa fa-bell-o"></i> 关闭报警声音</button>
                 <audio id="top_audio"  controls style="display: block;float: right; position: relative;height: 34px; "  >
                     浏览器不支持音频播放
                   </audio>
-
-
               <div class="clearfix"></div>
             </div>
+
+          </div>
+
+          <div class="x_panel">
+
+            <div class="x_title">
+             <div class="col-sm-12">
+               <div style="float: left;">
+                <label style="padding-top:5px;">
+                    <input type="checkbox" class="check_all">
+                  </label>
+                    <button style="margin-left:5px;" onclick="f_handle('read')" class="btn btn-primary btn-sm"> 已读</button>
+                    <button onclick="f_handle('delete')" class="btn btn-primary btn-sm">删除</button>
+                    </div>
+                     <div style="float: left;margin-left: 10px;">
+                                        <label style="text-align: left;">布控&nbsp;
+                                            <select id="select_control"  class="input-sm">
+                                                <option value="0">选择全部</option>
+                                                {% for control in controls %}
+                                                    <option value="{{ control.code }}">{{ control.code }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </label>
+                                    </div>
+
+
+                    <div style="float: left;margin-left: 10px;">
+                                        <label style="text-align: left;">视频流&nbsp;
+                                            <select id="select_stream" class="input-sm">
+                                                 <option value="0">选择全部</option>
+                                                {% for stream in streams %}
+                                                    <option value="{{ stream.code }}">{{ stream.nickname }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </label>
+                                    </div>
+
+
+                                <div style="float: left;margin-left: 10px;">
+                                        <label style="text-align: left;">算法&nbsp;
+                                          <select id="select_flow" class="input-sm">
+                                            <option value="0">选择全部</option>
+                                                {% for flow in flows %}
+                                                    <option value="{{ flow.code }}">{{ flow.name }}</option>
+                                                {% endfor %}
+                                           </select>
+                                        </label>
+                                    </div>
+
+                                  <div style="float: left;margin-left: 10px;">
+                                    <input type="text" style="width: 200px;height: 30px;" id="input_dateRange" class="form-control" value="{{ startDate }} to {{ endDate }}">
+                                  </div>
+
+                    </div>
+                </div>
+
             <div class="x_content">
              <div class="row" id="data">
               </div>
@@ -167,6 +219,9 @@
   {{ block.super }}
 
 <script src="/static/lib/jquery/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+<script src="/static/vendors/moment/min/moment.min.js"></script>
+<script src="/static/lib/jquery/daterangepicker/jquery.daterangepicker.js"></script>
+
 <script>
     let uploadAudioDir_www = '{{ uploadAudioDir_www }}';
 
@@ -181,7 +236,7 @@
     let temp_audioPlayer_isOpen = true;
 
     let temp_cur_page = 1;//当前页面
-    let temp_cur_page_size = 10;
+    let temp_cur_page_size = 10;//page size
 
     //报警弹窗专用start
     let eleBxcDialogMask = $("#bxc_dialog_mask")
@@ -193,6 +248,19 @@
     let temp_cur_alarm_count = 0;
     let temp_cur_alarm_image_count = 0;
     //报警弹窗专用end
+
+
+    // 筛选条件 2024/7/4 新增
+    let eleSelectControl = $("#select_control");// select  选择布控
+    let eleSelectStream = $("#select_stream");// select  选择视频流
+    let eleSelectFlow = $("#select_flow");// select  选择算法流
+    let eleInputDateRange = $('#input_dateRange');//日期范围
+
+    let temp_controlCode = "0";//默认选择全部 string 0
+    let temp_streamCode = "0";//默认选择全部 string 0
+    let temp_flowCode = "0";//默认选择全部 string 0
+    let temp_startDate = "";
+    let temp_endDate = "";
 
     function f_showDialog() {
         eleBxcDialogMask.show();
@@ -412,7 +480,7 @@
 
             for (let i = 0; i < pageLabels.length; i++) {
                 let cur = pageLabels[i]["cur"];
-                console.log(typeof cur,cur)
+                console.log("f_show_pageData",typeof cur,cur)
                 if(cur === 1){
                     html+="<li class=\"paginate_button active\"><a href=\"#\"  >"+pageLabels[i]["name"]+"</a></li>";
                 }else{
@@ -424,6 +492,9 @@
         elePageData.html(html);
     }
     function f_getIndex(page,page_size) {
+        let dateRange = eleInputDateRange.val();
+        console.log("f_getIndex()",page,page_size,temp_controlCode,temp_streamCode,temp_flowCode,"dateRange=",dateRange)
+
         temp_cur_page = page;
         temp_cur_page_size = page_size;
 
@@ -432,7 +503,14 @@
                url: '/alarm/getIndex',
                type: "get",
                async: true,
-               data: {"p":page,"ps":page_size},
+               data: {
+                   "p":page,
+                   "ps":page_size,
+                   "controlCode":temp_controlCode,
+                   "streamCode":temp_streamCode,
+                   "flowCode":temp_flowCode,
+                   "dateRange":dateRange,
+               },
                dataType: "json",
                timeout: 0,
                error: function () {
@@ -497,9 +575,39 @@
             });
 
     }
-    window.onload = function (){
+
+    eleSelectControl.change(function () {
+        temp_controlCode = $(this).val();
         f_getIndex(1,temp_cur_page_size);
-        f_getCheckNewData();
+    });
+    eleSelectStream.change(function () {
+        temp_streamCode = $(this).val();
+        f_getIndex(1,temp_cur_page_size);
+    });
+    eleSelectFlow.change(function () {
+        temp_flowCode = $(this).val();
+        f_getIndex(1,temp_cur_page_size);
+    });
+    eleInputDateRange.dateRangePicker(
+        {
+            language:'cn',//cn,en
+            //minDays: 3,
+		    //maxDays: 7,
+            //format: 'YYYY-MM-DD',
+            //startDate: '2024-07-01',
+		    //endDate: '2024-08-31'
+            //yearSelect: true,
+            //startDate: moment().subtract(3, 'months').format('YYYY-MM-DD'),
+            //endDate: moment().endOf('day').format('YYYY-MM-DD'),
+        }
+    ).bind('datepicker-apply',function(event,obj)
+        {
+            f_getIndex(1,temp_cur_page_size);
+        });
+
+    window.onload = function (){
+        f_getIndex(1,temp_cur_page_size);//首次进入 刷新页面
+        f_getCheckNewData();//检测新报警
 
     };
 
