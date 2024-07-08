@@ -27,6 +27,10 @@
 	  "hardwareEncodeMaxCount": 1,
 	  "hardwareEncoder": "h264_nvenc"
   },
+  "face": {
+	  "dbMaxSize": 10,
+	  "modelConCurrenNum": 2
+  },
   "sipServer": {
 	  "sipServerIp": "127.0.0.1",
       "sipServerPort":15060,
