@@ -29,7 +29,8 @@
   },
   "face": {
 	  "dbMaxSize": 10,
-	  "modelConCurrenNum": 2
+	  "modelConCurrenNum": 2,
+	  "modelDir": "Admin\\static\\upload\\face"
   },
   "sipServer": {
 	  "sipServerIp": "127.0.0.1",
