@@ -50,12 +50,11 @@
                                 <th class="column-title">ID</th>
                                 <!--<th>编号</th>-->
 
+                                    <th class="column-title">编号</th>
                                     <th class="column-title">接入协议</th>
                                     <th class="column-title">名称</th>
                                     <th class="column-title">IP</th>
                                     <th class="column-title">状态</th>
-                                    <th class="column-title">摄像头名称</th>
-                                    <th class="column-title">厂商</th>
                                     <th class="column-title">添加时间</th>
                                <th class="column-title no-link last"><span class="nobr">操作</span></th>
                               </tr>
@@ -64,7 +63,7 @@
                               {%  for d  in data %}
                                   <tr class="even pointer">
                                     <th scope="row">{{ d.id }}</th><!-- {{forloop.counter}} -->
-                                    <!--<td>{{ d.code }}</td>-->
+                                    <td>{{ d.code }}</td>
 
                                       <td>
                                           {% if d.pull_stream_type == 1 %}
@@ -100,9 +99,6 @@
                                         {% endif %}
                                     {% endif %}
                                     </td>
-
-                                    <td>{{ d.camera_name }}</td>
-                                    <td>{{ d.camera_manufacturer }}</td>
                                     <td>{{ d.create_time }}</td>
 
                                       <td>

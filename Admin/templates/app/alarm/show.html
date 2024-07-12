@@ -42,13 +42,19 @@
                             <div class="col-sm-4 invoice-col">
                             <b class="bxc_line_b">分组编号:</b> {{ alarm.flag }}
                             <br>
+
                             <b class="bxc_line_b">报警编号:</b> {{ alarm.code }}
                             <br>
                             <b class="bxc_line_b">报警时间:</b> {{ alarm.create_time }}
-                             <br>
-                            <b class="bxc_line_b">关联布控:</b> <a href="javascript:f_control_edit('{{ alarm.control_code }}')">{{ alarm.control_code }}</a>
-                             <br>
+                                <br>
 
+                                <b class="bxc_line_b">视频流:</b> {{ alarm.stream_code }}
+                             <br>
+                  <b class="bxc_line_b">关联布控:</b> <a href="javascript:f_control_edit('{{ alarm.control_code }}')">{{ alarm.control_code }}</a>
+                            <br>
+
+                  <b class="bxc_line_b">关联算法:</b> <a href="javascript:f_flow_edit('{{ alarm.flow_code }}')">{{ alarm.flow_code }}</a>
+                             <br>
                           </div>
                         </div>
                       </div>
@@ -138,11 +144,14 @@
         let url = "/alarm/show?code="+code;
         window.location.href = url;
     }
-    function f_control_edit(controlCode) {
-        let url = "/control/edit?code="+controlCode;
+    function f_control_edit(code) {
+        let url = "/control/edit?code="+code;
         window.location.href = url;
     }
-
+        function f_flow_edit(code) {
+        let url = "/algorithmFlow/edit?code="+code;
+        window.location.href = url;
+    }
     $('img').click(function() {
         $.fancybox.open({
             src  : $(this).attr('src'),
