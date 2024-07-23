@@ -103,12 +103,14 @@
                 </div>
 
                 <div class="div_canvas_menu">
-                  <button type="button" onclick="f_clickPlayStart()" class="btn btn-success btn-sm"><i class="fa fa-play"></i> 播放 </button>
-                  <button type="button" onclick="f_clickPlayStop()" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> 停止 </button>
+                  <button type="button" onclick="f_clickPlayStart()" class="btn btn-success"><i class="fa fa-play"></i> 播放 </button>
+                  <button type="button" onclick="f_clickPlayStop()" class="btn btn-default"><i class="fa fa-stop"></i> 停止 </button>
                   <button type="button" onclick="f_clearVideoCanvas()" class="btn btn-default btn-sm"><i class="fa fa-paint-brush"></i> 清空区域</button>
-                  <button type="button" onclick="change(1)" class="btn btn-default">绘制周界区域</button>
-                  <button type="button" onclick="change(4)" class="btn btn-default">绘制越界区域</button>
-              
+                  <div class="btn-group" style="margin-bottom: 5px;">
+                      <button type="button" id="btn_draw_type1" class="btn btn-default btn-sm">矩形</button>
+                      <button type="button" id="btn_draw_type2" class="btn btn-default btn-sm">多边形</button>
+                      <button type="button" id="btn_draw_type4" class="btn btn-default btn-sm">方向线</button>
+                  </div>
                 </div>
                     <div class="div_canvas_menu show_content" >
                         <div class="item">绘制周界区域案例</div>
@@ -403,31 +405,21 @@
 
 {% block javascripts %}
   {{ block.super }}
-
 <script src="/static/lib/wsPlayer/mp4box.all.min.js"></script>
 <script src="/static/lib/wsPlayer/wsPlayer.js"></script>
-    <!-- \static\vendors\canvas_select -->
-    <script src="/static/vendors/canvas_select/canvas-select.min.js"></script>
+<script src="/static/vendors/canvas_select/canvas-select.min.js"></script>
 <script>
-
     let controlCode= '{{ control.code }}';// 布控编号
-    let old_control_polygon = '{{ control.polygon }}';// 布控多边形坐标点
-    let old_control_polygon_type = '{{ control.polygon_type }}';// string类型
-
+    let mPolygon = '{{ control.polygon }}';// 布控多边形坐标点
+    let mPolygonType = parseInt('{{ control.polygon_type }}');// string类型->int 0:未绘制 1:矩形 2:方向线 3:多边形
+    if(isNaN(mPolygonType)){
+        mPolygonType = 1;//默认是矩形类型
+    }
     let handle = '{{ handle }}';// 操作类型 add 或 edit
-
-    let eleCanvas=document.getElementById("canvas");
-    //得到画布的上下文,上下文有两个 2d和3d
-    //所有的图形绘制都是通过ctx属性或者方法进行设置的，和canvas标签没有关系了
-    let ctx = eleCanvas.getContext("2d");
-    let recognitionRegionLineArray = [];//存储多边形的每一条边
-    let recognitionRegionLineMaxCount = 4;//多边形的边数
-    let tempPolygonLine = null;//多边形的边，临时变量
-
     let mWsVideoPlayer = null;
     let eleVideoPlayerJqueryObj = $("#video_player");
     let eleVideoPlayerJsObj= document.getElementById("video_player");
-    let videoContent=document.querySelector('.div_canvas_box')
+    let eleDivCanvasBox=document.querySelector('.div_canvas_box')
     let mVideoUrl = null;
 
     let eleSelectStream = $("#select_stream");// select  选择视频流
@@ -453,129 +445,165 @@
     let eleTextarea_osd_params = $("textarea[name='osd_params']");
     let eleTextarea_extend_params = $("textarea[name='extend_params']");
     let eleTextarea_remark = $("textarea[name='remark']");
-            canvas.width= eleVideoPlayerJsObj.clientWidth
-            canvas.height = eleVideoPlayerJsObj.clientHeight
-       let img = canvas.toDataURL();
-        let instance = new CanvasSelect("#canvas", img);
-        let option = [];
-        instance.labelMaxLen = 10;
-     //   instance.setData(option);
 
-      instance.on("load", (src) => {
-        });
-        // 添加
-        instance.on("add", (info) => {
- 
-            // 有一个 并且是1 就不让画
-               let flag = false
-            if (info.type == 4) {
-                change(6)
-            }
-            for (let i = 0; i < option.length; i++) {
-                if (option[i].type == info.type) {
-                    flag = true
+    let eleBtnDrawType1 = $("#btn_draw_type1");
+    let eleBtnDrawType2 = $("#btn_draw_type2");
+    let eleBtnDrawType4 = $("#btn_draw_type4");
+
+    let eleCanvas=document.getElementById("canvas");
+    canvas.width= eleVideoPlayerJsObj.clientWidth
+    canvas.height = eleVideoPlayerJsObj.clientHeight
+    let instance = new CanvasSelect("#canvas", canvas.toDataURL());
+    let option = [];
+    instance.labelMaxLen = 10;
+    //   instance.setData(option);
+    function f_changeCreateType(createType) {
+        console.log("f_changeCreateType->",createType)
+        instance.createType = createType; // 0 不创建(默认)，1创建矩形，2创建多边形，3点标注，4折线标注，5圆形标注，6网格标注
+        if(createType === 1){
+            mPolygonType = 1;//矩形
+        }else if(createType === 2){
+            mPolygonType = 3;//多边形
+        }else if(createType === 4 || createType === 6){
+            mPolygonType = 2;//方向线
+        }else{
+            mPolygonType = 0;//未绘制或不支持的绘制类型
+        }
+
+        //调整显示按钮
+        if(mPolygonType===1){
+            eleBtnDrawType1.removeClass("btn-default");
+            eleBtnDrawType1.addClass("btn-primary");
+            eleBtnDrawType2.removeClass("btn-primary");
+            eleBtnDrawType2.addClass("btn-default");
+            eleBtnDrawType4.removeClass("btn-primary");
+            eleBtnDrawType4.addClass("btn-default");
+        }else if(mPolygonType === 3){
+            eleBtnDrawType1.removeClass("btn-primary");
+            eleBtnDrawType1.addClass("btn-default");
+            eleBtnDrawType2.removeClass("btn-default");
+            eleBtnDrawType2.addClass("btn-primary");
+            eleBtnDrawType4.removeClass("btn-primary");
+            eleBtnDrawType4.addClass("btn-default");
+        }else if(mPolygonType === 2){
+            eleBtnDrawType1.removeClass("btn-primary");
+            eleBtnDrawType1.addClass("btn-default");
+            eleBtnDrawType2.removeClass("btn-primary");
+            eleBtnDrawType2.addClass("btn-default");
+            eleBtnDrawType4.removeClass("btn-default");
+            eleBtnDrawType4.addClass("btn-primary");
+        }
+    }
+
+    eleBtnDrawType1.click(function () {
+        f_changeCreateType(1);
+    })
+    eleBtnDrawType2.click(function () {
+        f_changeCreateType(2);
+    })
+    eleBtnDrawType4.click(function () {
+        f_changeCreateType(4);
+    })
+
+    instance.on("load", (src) => {
+    });
+    // 添加
+    instance.on("add", (info) => {
+        console.log("add->info.type",info.type);
+        if(info.type === 1){//绘制矩形，支持多个矩形
+            option.push(info);
+        }else if(info.type === 2){//绘制多边形，支持多个多边形
+            option.push(info);
+        }else if(info.type === 4 || info.type === 6){//绘制方向线，仅支持绘制一个方向线
+            if(option.length > 0){
+                if(option[0].type === 4){//第一个图形必须是类型4
+                }else{
+                    f_clearVideoCanvas();
+                    f_changeCreateType(4);
+                    alert("绘制类型不正确，请重试");
+                    return;
                 }
+            }
+            if (info.type === 4) {
+                f_changeCreateType(6)
             }
             option.push(info);
-               if (option.length == 2) {
-                let fItem = option[0]
-                if (fItem.type == 1) {
-                    option.pop()
-                    instance.setData(option);
-                    change(0)
-                } else if (info.type == 1) {
-                    option.shift()
-                    instance.setData(option);
-                    change(0)
-                } else if (info.type == 6) {
+            let info_type = info.type.toString();
+            if (option.length === 2) {
+                if(info.type === 6) {
                     let ind = option.length
                     let line = option[ind - 2] // 拿到直线
-                    let res = doLinesIntersect(line.coor[0], line.coor[1], info.coor[0], info.coor[1]);
+                    let res = f_calcuTwoLineIntersect(line.coor[0], line.coor[1], info.coor[0], info.coor[1]);
                     if (!res) {
-                        alert("方向线不合规，重新标注")
+                        alert("方向线交叉不合规c1-"+info_type);
                         option.pop()
                         instance.setData(option);
-                        flag = false
-                        change(0)
+                        
                     }
+                }else{
+                    f_clearVideoCanvas();
+                    f_changeCreateType(4);
+                    alert("方向线类型不合规c1-"+info_type);
                 }
-            } else if (option.length == 3) {
-                if (info.type == 6) {
+            } else if (option.length === 3) {
+                if (info.type === 6) {
                     let ind = option.length
                     let line = option[ind - 2] // 拿到直线
-                    let res = doLinesIntersect(line.coor[0], line.coor[1], info.coor[0], info.coor[1]);
+                    let res = f_calcuTwoLineIntersect(line.coor[0], line.coor[1], info.coor[0], info.coor[1]);
                     if (!res) {
-                        alert("方向线不合规，重新标注")
+                        alert("方向线交叉不合规c2-"+info_type);
                         option.pop()
                         instance.setData(option);
-                        flag = false
-                        change(0)
+                        
                     }
-                } else if (info.type == 4) {
-                    flag = true
                 } else {
-                    option.pop()
-                    instance.setData(option);
-                    change(0)
+                    f_clearVideoCanvas();
+                    f_changeCreateType(4);
+                    alert("方向线类型不合规c2-"+info_type);
                 }
             }
-            if (flag) {
-                myAlert("已存在该类型，清除后重新标注", "error");
-                option.pop()
-                instance.setData(option);
-                if (info.type == 4) {
-                    change(6)
-                } else {
-                    change(0)
-                }
-                flag = false
-            }
-        });
-        // 删除
-        instance.on("delete", (info) => {
-            window.info = info;
-        });
-        // 选中
-        instance.on("select", (shape) => {
-            window.shape = shape;
-        });
-        instance.on("updated", (result) => {
-          //   myAlert("请选择视频流", "error");
-            const list = [...result];
-
-            list.sort((a, b) => a.index - b.index);
-        });
-
-        function change(num) {
-            instance.createType = num;
         }
+    });
+    // 删除
+    instance.on("delete", (info) => {
+        window.info = info;
+    });
+    // 选中
+    instance.on("select", (shape) => {
+        window.shape = shape;
+    });
+    instance.on("updated", (result) => {
+      //   myAlert("请选择视频流", "error");
+        const list = [...result];
+
+        list.sort((a, b) => a.index - b.index);
+    });
+
+
     //清空绘制区域数据
     function f_clearVideoCanvas() {
-        ctx.clearRect(0,0, videoContent.clientWidth, videoContent.clientHeight);
-        recognitionRegionLineArray = [];
+        console.log("f_clearVideoCanvas() 清空绘制区域数据");
+        console.log("instance->",instance)
         option = [];
         instance.setData(option);
-        change(0)
+        
     }
-    //窗口对齐->清空绘制区域数据
+    //窗口对齐（对齐后需要清空绘制区域数据）
     function f_adjustVideoCanvas() {
+        console.log("f_adjustVideoCanvas() 窗口对齐（对齐后需要清空绘制区域数据）");
         //执行窗口对齐以后，此前的绘制区域数据，可能不在对应，因此需要删除
         let w = eleVideoPlayerJsObj.offsetWidth;
         let h = eleVideoPlayerJsObj.offsetHeight;
-        w = w - 1.8;
-       h = h - 2.2;
-       eleCanvas.style.width = String(w)+"px";
-       eleCanvas.style.height = String(h)+"px";
-       instance.setData(option);
-       change(0)
+        //w = w - 1.8;
+        //h = h - 2.2;
+        eleCanvas.style.width = String(w)+"px";
+        eleCanvas.style.height = String(h)+"px";
+
+        instance.setData(option);
         
     }
-    function f_reDrawVideoCanvas() {
-        return 
-        ctx.clearRect(0,0, videoContent.clientWidth, videoContent.clientHeight);
-    }
-
-  function doLinesIntersect(p1, q1, p2, q2) {
+    //计算两条直线是否相交
+    function f_calcuTwoLineIntersect(p1, q1, p2, q2) {
         // 计算直线1和直线2的a, b, c
         const a1 = q1[1] - p1[1];
         const b1 = p1[0] - q1[0];
@@ -662,7 +690,8 @@
         }
 	    mWsVideoPlayer = new wsPlayer("video_player", video_url);
         mWsVideoPlayer.open();
-        initCanvasData()
+
+        f_initShowPolygon()
     }
     function f_playStop(){
         if(mWsVideoPlayer){
@@ -767,97 +796,110 @@
         let extend_params = eleTextarea_extend_params.val().trim();
         let remark = eleTextarea_remark.val().trim();
 
-        let __polygon_point_array = [];// x1,y1,x2,y2,x3,y3,x4,y4 ->顺时针
-        if(recognitionRegionLineArray.length === 0){
-            __polygon_point_array.push(0);
-            __polygon_point_array.push(0);
+        //canvas绘制区域
+        let canvas_box_width = eleDivCanvasBox.clientWidth;
+        let canvas_box_height = eleDivCanvasBox.clientHeight
 
-            __polygon_point_array.push(1);
-            __polygon_point_array.push(0);
+        console.log("canvas_box_width->",canvas_box_width)
+        console.log("canvas_box_height->",canvas_box_height)
+        console.log("canvas_width->",eleCanvas.width)
+        console.log("canvas_height->",eleCanvas.height)
+        console.log("option.length->",option.length,option)
+        console.log("instance.createType->",instance.createType)
+        console.log("mPolygonType->",mPolygonType)
 
-            __polygon_point_array.push(1);
-            __polygon_point_array.push(1);
+        let polygon_array=[]
+        if(mPolygonType === 1){//矩形
+            if(option.length > 0){
+                for (let i = 0; i < option.length; i++) {
+                    let info = option[i];
+                    let topL = info.coor[0];
+                    let botR = info.coor[1];
+                    let topR = [botR[0], topL[1]];
+                    let botL = [topL[0], botR[1]];
+                    // 四个点
+                    let item = []
+                    item.push((topL[0]/canvas_box_width).toFixed(4));
+                    item.push((topL[1]/canvas_box_height).toFixed(4));
+                    item.push((topR[0]/canvas_box_width).toFixed(4));
+                    item.push((topR[1]/canvas_box_height).toFixed(4));
+                    item.push((botR[0]/canvas_box_width).toFixed(4));
+                    item.push((botR[1]/canvas_box_height).toFixed(4));
+                    item.push((botL[0]/canvas_box_width).toFixed(4));
+                    item.push((botL[1]/canvas_box_height).toFixed(4));
+                    polygon_array.push(item.join(","))
+                }
+            }else{
+                //矩形未绘制->全屏
+                let item = []
+                item.push(0);
+                item.push(0);
+                item.push(0);
+                item.push(1);
+                item.push(1);
+                item.push(1);
+                item.push(1);
+                item.push(0);
+                polygon_array.push(item.join(","))
+            }
+        }else if(mPolygonType === 2){//方向线
+            if(option.length === 2){
+                let info1 = option[0];
+                let info2 = option[1];
+                let topL= info1.coor[0];
+                let topR= info1.coor[1];
+                let botL= info2.coor[0];
+                let botR= info2.coor[1];
+                  // 四个点
+                let item = []
+                item.push((topL[0] / canvas_box_width).toFixed(4));
+                item.push((topL[1] / canvas_box_height).toFixed(4));
+                item.push((topR[0] / canvas_box_width).toFixed(4));
+                item.push((topR[1] / canvas_box_height).toFixed(4));
+                item.push((botR[0] / canvas_box_width).toFixed(4));
+                item.push((botR[1] / canvas_box_height).toFixed(4));
+                item.push((botL[0] / canvas_box_width).toFixed(4));
+                item.push((botL[1] / canvas_box_height).toFixed(4));
 
-            __polygon_point_array.push(0);
-            __polygon_point_array.push(1);
-
-        }else{
-            if(recognitionRegionLineArray.length!==recognitionRegionLineMaxCount){
-                myAlert("绘制算法识别区域需要形成闭环！","error");
+                polygon_array.push(item.join(","))
+            }else{
+                myAlert("方向线类型必须是两条直线","error");
                 return;
             }
-            let canvas_width = eleCanvas.width;
-            let canvas_height = eleCanvas.height
-            for (let i = 0; i < recognitionRegionLineArray.length; i++) {
-                let line = recognitionRegionLineArray[i];
-                __polygon_point_array.push((line.x/canvas_width).toFixed(4));
-                __polygon_point_array.push((line.y/canvas_height).toFixed(4));
+        }else if(mPolygonType === 3){//多边形
+            if(option.length > 0){
+                for (let i = 0; i < option.length; i++) {
+                    let info = option[i];
+                    // 至少3个点
+                    let item = []
+                    for (let j = 0; j < info.coor.length; j++) {
+                        item.push((info.coor[j][0]/canvas_box_width).toFixed(4));
+                        item.push((info.coor[j][1]/canvas_box_height).toFixed(4));
+                    }
+                    polygon_array.push(item.join(","))
+
+                }
+            }else{
+                //多边形未绘制->全屏
+                let item = []
+                item.push(0);
+                item.push(0);
+                item.push(0);
+                item.push(1);
+                item.push(1);
+                item.push(1);
+                item.push(1);
+                item.push(0);
+                polygon_array.push(item.join(","))
             }
-        }
-
-
-        // 在这里发送数据
-        let rePolygon = []
-        for(let i=0;i<option.length;i++){
-            let item=option[i];
-            if(item.type){
-
-            }
-        }
-       // let polygon = __polygon_point_array.join(",");
-       // 收集点
-        let canvas_width = videoContent.clientWidth;
-        let canvas_height = videoContent.clientHeight
-        let polygonArr=[]
-        let polygon_type=0
-        if(option.length===1){
-            let rItem=option[0];
-            let topL=rItem.coor[0];
-            let botR = rItem.coor[1];
-
-            let topR = [botR[0], topL[1]];
-            let botL = [topL[0], botR[1]];
-            // 四个点
-            polygonArr.push((topL[0]/canvas_width).toFixed(4));
-            polygonArr.push((topL[1]/canvas_height).toFixed(4));
-            polygonArr.push((topR[0]/canvas_width).toFixed(4));
-            polygonArr.push((topR[1]/canvas_height).toFixed(4));
-            polygonArr.push((botR[0]/canvas_width).toFixed(4));
-            polygonArr.push((botR[1]/canvas_height).toFixed(4));
-            polygonArr.push((botL[0]/canvas_width).toFixed(4));
-            polygonArr.push((botL[1]/canvas_height).toFixed(4));
-            polygon_type=1
-        }else if(option.length===2){
-            let FItem = option[0];
-            let LItem = option[1];
-            let topL= FItem.coor[0];
-            let topR= FItem.coor[1];
-            let botL= LItem.coor[0];
-            let botR= LItem.coor[1];
-              // 四个点
-            polygonArr.push((topL[0] / canvas_width).toFixed(4));
-            polygonArr.push((topL[1] / canvas_height).toFixed(4));
-            polygonArr.push((topR[0] / canvas_width).toFixed(4));
-            polygonArr.push((topR[1] / canvas_height).toFixed(4));
-            polygonArr.push((botR[0] / canvas_width).toFixed(4));
-            polygonArr.push((botR[1] / canvas_height).toFixed(4));
-            polygonArr.push((botL[0] / canvas_width).toFixed(4));
-            polygonArr.push((botL[1] / canvas_height).toFixed(4));
-
-            polygon_type = 2
         }else{
-               // 四个点
-            polygonArr.push(0);
-            polygonArr.push(0);
-            polygonArr.push(0);
-            polygonArr.push(1);
-            polygonArr.push(1);
-            polygonArr.push(1);
-            polygonArr.push(1);
-            polygonArr.push(0);
-            polygon_type = 1
+            myAlert("绘制类型错误:"+mPolygonType.toString(),"error");
+            return;
         }
-        let polygon = polygonArr.join(",");
+        console.log("polygon_array.length->",polygon_array.length)
+        console.log("polygon_array->",polygon_array)
+        
+        let polygon = polygon_array.join("#");
         // 判断类型
         let data = {
             "controlCode":controlCode,
@@ -866,14 +908,14 @@
             "alarmInterfaceCode":m_alarmInterfaceCode,
             "alarmFilterCode":m_alarmFilterCode,
             "polygon":polygon,
+            "polygon_type": mPolygonType,
             "minInterval":minInterval,
             "overlapThresh":overlapThresh,
             "alarmDrawType":alarmDrawType,
             "alarmImageCount":alarmImageCount,
             "osd_params":osd_params,
             "extend_params":extend_params,
-            "remark":remark,
-            "polygon_type": polygon_type
+            "remark":remark
         }
 
         let handleUrl;
@@ -906,7 +948,6 @@
            success: function (res) {
                if(1000 === res.code){
                     myAlert(res.msg,"success");
-                 //    f_clearVideoCanvas()
                }else{
                     myAlert(res.msg,"error",3000);
                }
@@ -923,63 +964,95 @@
         let url= "{{ settings.docs.controlAdd }}";
         window.open(url);
     }
-    function initCanvasData(){
-           if (old_control_polygon !== "") {//编辑布控->绘制周界区域存在
+    function f_initShowPolygon(){
+        if (mPolygon !== "") {//编辑布控
             f_adjustVideoCanvas();
-            let canvas_width = videoContent.clientWidth;
-            let canvas_height = videoContent.clientHeight
-            let polygonData = old_control_polygon.split(',')
-
-            let ind = polygonData.length
-            option = []
-
-            if (old_control_polygon_type == 1) {
-                let topLx = parseInt(polygonData[0] * canvas_width)
-                let topLy = parseInt(polygonData[1] * canvas_height)
-                let bomRx = parseInt(polygonData[ind - 4] * canvas_width)
-                let bomRy = parseInt(polygonData[ind - 3] * canvas_height)
-                let topL = [topLx, topLy];
-                let bomR = [bomRx, bomRy];
-                let obj = {
-                    type: 1,
-                    coor: [topL, bomR]
-                }
-                option.push(obj)
-                instance.setData(option)
-                console.log(option, 'option');
-                change(0)
-            } else if (old_control_polygon_type == 2) {
-                let objL = {
-                    "coor": [],
-                    "type": 4
-                }
-                let objLa = {
-                    "coor": [],
-                    "type": 6
-                }
-                for (let i = 0; i < polygonData.length; i++) {
-                    if (i % 2 === 0) {
-                        if (i > 3) {
-                            let x = polygonData[i] * canvas_width
-                            let y = polygonData[i + 1] * canvas_height
-                            objLa.coor.unshift([x, y])
-                        } else {
-                            let x = polygonData[i] * canvas_width
-                            let y = polygonData[i + 1] * canvas_height
-                            objL.coor.push([x, y])
-                        }
+            let canvas_box_width = eleDivCanvasBox.clientWidth;
+            let canvas_box_height = eleDivCanvasBox.clientHeight
+            let polygon_array = mPolygon.split('#')
+            let polygon_item_length = polygon_array.length
+            if (mPolygonType === 1)
+            {
+                option = []
+                for (let i = 0; i < polygon_item_length; i++) {
+                    let item = polygon_array[i].split(",");
+                    let topLx = parseInt(item[0] * canvas_box_width)
+                    let topLy = parseInt(item[1] * canvas_box_height)
+                    let bomRx = parseInt(item[4] * canvas_box_width)
+                    let bomRy = parseInt(item[5] * canvas_box_height)
+                    let topL = [topLx, topLy];
+                    let bomR = [bomRx, bomRy];
+                    let obj = {
+                        type: 1,
+                        coor: [topL, bomR]
                     }
+                    option.push(obj)
                 }
-
-                option.push(objL)
-                option.push(objLa)
                 instance.setData(option)
-                change(0)
+            }else if (mPolygonType === 2)
+            {
+                if(polygon_item_length === 1){
+                    option = []
+                    for (let i = 0; i < polygon_item_length; i++) {
+                        let item = polygon_array[i].split(",");
+                        let objL = {
+                            "coor": [],
+                            "type": 4
+                        }
+                        let objLa = {
+                            "coor": [],
+                            "type": 6
+                        }
+                        for (let i = 0; i < item.length; i++) {
+                            if (i % 2 === 0) {
+                                if (i > 3) {
+                                    let x = item[i] * canvas_box_width
+                                    let y = item[i + 1] * canvas_box_height
+                                    objLa.coor.unshift([x, y])
+                                } else {
+                                    let x = item[i] * canvas_box_width
+                                    let y = item[i + 1] * canvas_box_height
+                                    objL.coor.push([x, y])
+                                }
+                            }
+                        }
+
+                        option.push(objL)
+                        option.push(objLa)
+
+                    }
+                    instance.setData(option)
+                }
+            }else if (mPolygonType === 3)
+            {
+                option = []
+                for (let i = 0; i < polygon_item_length; i++) {
+                    let item = polygon_array[i].split(",");
+                    let line_count = item.length / 2;
+                    let obj = {
+                        type: 2,//多边形类型
+                        coor: []
+                    }
+                    for (let j = 0; j < line_count; j++) {
+                        let x = parseInt(item[j * 2] * canvas_box_width)
+                        let y = parseInt(item[j * 2 + 1] * canvas_box_height)
+                        obj.coor.push([x,y])
+                    }
+                    option.push(obj)
+                }
+                instance.setData(option)
             }
-            f_reDrawVideoCanvas();
         }
     }
     $(function() {
+        if(mPolygonType === 1){
+            f_changeCreateType(1);
+        }else if(mPolygonType === 2){
+            f_changeCreateType(4);
+        }else if(mPolygonType === 3){
+            f_changeCreateType(2);
+        }
+
         if(handle==="edit"){
             //编辑 start
             let is_online = parseInt("{{ control_stream.is_online }}");
@@ -1014,7 +1087,7 @@
         }
 
         setTimeout( () =>{
-         initCanvasData()
+            f_initShowPolygon()
         }, 1200);
 
     });
