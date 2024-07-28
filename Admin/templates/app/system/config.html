@@ -1,0 +1,275 @@
+{% extends "app/base_site.html" %}
+{% block title %} 启动配置 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+    <style>
+
+    .my_radio_label{
+        font-size: 12px;
+        color: black;
+        padding: 4px;
+    }
+    .my_radio_label input{
+        padding-left: 4px;
+    }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>启动配置
+                <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
+                <span id="top_msg">{{top_msg}}</span>
+              </h2>
+              <button style="margin-left:5px;" onclick="f_docs()" class="btn btn-primary btn-sm">文档</button>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="form-horizontal form-label-left">
+
+                              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件安装路径 <span class="required" style="color: red;">*</span>
+                  </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="install" required="required" value="{{config.install}}" class="form-control">
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >主机IP <span class="required" style="color: red;">*</span>
+                  </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="host" required="required" value="{{config.host}}" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >自启动全部摄像头转发 <span class="required" style="color: red;">*</span>
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                     <label class="my_radio_label">开启&nbsp;&nbsp;<input type="radio" name="autoAddAllForward" value="1" class="flat"  {% if 1 == config.autoAddAllForward %}checked="checked"{% endif %} >
+                    </label>
+                    <label  class="my_radio_label">关闭&nbsp;&nbsp;<input type="radio" name="autoAddAllForward" value="0" class="flat"  {% if 0 == config.autoAddAllForward %}checked="checked"{% endif %} >
+                    </label>
+                  </div>
+                </div>
+
+                              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >轮巡自动管理转发 <span class="required" style="color: red;">*</span>
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <label class="my_radio_label">开启&nbsp;&nbsp;<input type="radio" name="autoManagePatrolForward" value="1" class="flat"  {% if 1 == config.autoManagePatrolForward %}checked="checked"{% endif %} >
+                    </label>
+                    <label class="my_radio_label">关闭&nbsp;&nbsp;<input type="radio" name="autoManagePatrolForward" value="0" class="flat"  {% if 0 == config.autoManagePatrolForward %}checked="checked"{% endif %}  >
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件自启动 <span class="required" style="color: red;">*</span>
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                      <label class="my_radio_label">开启&nbsp;&nbsp;<input type="radio" name="autoStart" value="1" class="flat"  {% if 1 == config.autoStart %}checked="checked"{% endif %} >
+                    </label>
+                    <label class="my_radio_label">关闭&nbsp;&nbsp;<input type="radio" name="autoStart" value="0"  class="flat" {% if 0 == config.autoStart %}checked="checked"{% endif %}  >
+                    </label>
+
+                  </div>
+                </div>
+
+              <!-- analyzer -->
+
+                  <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >模型缓存时长<span class="required" style="color: red;">*</span>
+                  </label>
+                   <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="number" name="cacheModelMaxDuration" value="{{config.analyzer.cacheModelMaxDuration}}" required="required" class="form-control">
+                  </div>
+                </div>
+<div class="ln_solid"></div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >是否支持硬件解码 <span class="required" style="color: red;">*</span>
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                      <label class="my_radio_label">开启&nbsp;&nbsp;<input type="radio" name="enableHardwareDecode" value="1" class="flat"  {% if 1 == config.analyzer.enableHardwareDecode %}checked="checked"{% endif %} >
+                    </label>
+                    <label class="my_radio_label">关闭&nbsp;&nbsp;<input type="radio" name="enableHardwareDecode" value="0"  class="flat" {% if 0 == config.analyzer.enableHardwareDecode %}checked="checked"{% endif %}  >
+                    </label>
+                  </div>
+                </div>
+
+                  <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >支持硬件解码最大路数<span class="required" style="color: red;">*</span>
+                  </label>
+                   <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="number" name="hardwareDecodeMaxCount" value="{{config.analyzer.hardwareDecodeMaxCount}}" required="required" class="form-control">
+                  </div>
+                </div>
+
+                  <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >h264硬件解码器
+                  </label>
+                   <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="hardwareH264Decoder" value="{{config.analyzer.hardwareH264Decoder}}" required="required" class="form-control">
+                  </div>
+                </div>
+
+                                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >h265硬件解码器
+                  </label>
+                   <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="hardwareH265Decoder" value="{{config.analyzer.hardwareH265Decoder}}" required="required" class="form-control">
+                  </div>
+                </div>
+<div class="ln_solid"></div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >是否支持硬件编码 <span class="required" style="color: red;">*</span>
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                         <label class="my_radio_label">开启&nbsp;&nbsp;<input type="radio" name="enableHardwareEncode" value="1" class="flat"  {% if 1 == config.analyzer.enableHardwareEncode %}checked="checked"{% endif %} >
+                    </label>
+                    <label class="my_radio_label">关闭&nbsp;&nbsp;<input type="radio" name="enableHardwareEncode" value="0"  class="flat" {% if 0 == config.analyzer.enableHardwareEncode %}checked="checked"{% endif %}  >
+                    </label>
+
+                  </div>
+                </div>
+
+                                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">支持硬件编码最大路数<span class="required" style="color: red;">*</span>
+                  </label>
+                   <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="number" name="hardwareEncodeMaxCount" value="{{config.analyzer.hardwareDecodeMaxCount}}" required="required" class="form-control">
+                  </div>
+                </div>
+
+                  <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">硬件编码器
+                  </label>
+                   <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="hardwareEncoder" value="{{config.analyzer.hardwareEncoder}}" class="form-control">
+                  </div>
+                </div>
+              <!--
+                <div class="ln_solid"></div>
+            -->
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <button type="button" onclick="f_handle()"  class="btn btn-success">保存</button>
+                    <button type="button" onclick="f_reboot()"  class="btn btn-danger">重启操作系统</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+<script>
+    let ele_top_loading = $("#top_loading");
+    let ele_top_msg= $("#top_msg");
+
+    function f_docs() {
+        let url= "{{ settings.docs.systemConfig }}";
+        window.open(url);
+    }
+    function f_handle() {
+        let ele_install = $("input[name='install']");
+        let ele_host = $("input[name='host']");
+        let ele_autoAddAllForward = $("input[type=radio][name='autoAddAllForward']:checked");
+        let ele_autoManagePatrolForward = $("input[type=radio][name='autoManagePatrolForward']:checked");
+        let ele_autoStart = $("input[type=radio][name='autoStart']:checked");
+        let ele_cacheModelMaxDuration = $("input[name='cacheModelMaxDuration']");
+        let ele_enableHardwareDecode = $("input[type=radio][name='enableHardwareDecode']:checked");
+        let ele_hardwareDecodeMaxCount = $("input[name='hardwareDecodeMaxCount']");
+        let ele_hardwareH264Decoder = $("input[name='hardwareH264Decoder']");
+        let ele_hardwareH265Decoder = $("input[name='hardwareH265Decoder']");
+        let ele_enableHardwareEncode = $("input[type=radio][name='enableHardwareEncode']:checked");
+        let ele_hardwareEncodeMaxCount = $("input[name='hardwareEncodeMaxCount']");
+        let ele_hardwareEncoder = $("input[name='hardwareEncoder']");
+
+
+        let install = ele_install.val().trim();
+        let host = ele_host.val().trim();
+        let autoAddAllForward = parseInt(ele_autoAddAllForward.val());
+        let autoManagePatrolForward = parseInt(ele_autoManagePatrolForward.val());
+        let autoStart = parseInt(ele_autoStart.val());
+        let cacheModelMaxDuration = parseInt(ele_cacheModelMaxDuration.val());
+        let enableHardwareDecode = parseInt(ele_enableHardwareDecode.val());
+        let hardwareDecodeMaxCount = parseInt(ele_hardwareDecodeMaxCount.val());
+        let hardwareH264Decoder = ele_hardwareH264Decoder.val().trim();
+        let hardwareH265Decoder = ele_hardwareH265Decoder.val().trim();
+        let enableHardwareEncode = parseInt(ele_enableHardwareEncode.val());
+        let hardwareEncodeMaxCount = parseInt(ele_hardwareEncodeMaxCount.val());
+        let hardwareEncoder = ele_hardwareEncoder.val().trim();
+
+        $.ajax({
+           url: "/system/config",
+           type: "post",
+           async: true,
+           data: {
+               "install":install,
+               "host":host,
+               "autoAddAllForward":autoAddAllForward,
+               "autoManagePatrolForward":autoManagePatrolForward,
+               "autoStart":autoStart,
+               "cacheModelMaxDuration":cacheModelMaxDuration,
+               "enableHardwareDecode":enableHardwareDecode,
+               "hardwareDecodeMaxCount":hardwareDecodeMaxCount,
+               "hardwareH264Decoder":hardwareH264Decoder,
+               "hardwareH265Decoder":hardwareH265Decoder,
+               "enableHardwareEncode":enableHardwareEncode,
+               "hardwareEncodeMaxCount":hardwareEncodeMaxCount,
+               "hardwareEncoder":hardwareEncoder
+           },
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+                myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               if(1000 === res.code){
+                   myAlert(res.msg,"success",2000);
+               }else{
+                    myAlert(res.msg,"error");
+               }
+           }
+        });
+    }
+    function f_reboot() {
+        $.ajax({
+           url: "/system/reboot",
+           type: "post",
+           async: true,
+           data: {
+           },
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+                myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               if(1000 === res.code){
+                   myAlert(res.msg,"success",2000);
+               }else{
+                   myAlert(res.msg,"error");
+               }
+           }
+        });
+    }
+
+</script>
+
+{% endblock javascripts %}
