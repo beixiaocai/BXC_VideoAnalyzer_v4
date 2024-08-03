@@ -112,12 +112,16 @@
             myAlert("用户名格式不正确","error");
             return false;
         }
+        if(password.length < 5){
+            myAlert("密码格式不正确","error");
+            return false;
+        }
+        /*
         if(!validate_password(password)){
             myAlert("密码格式不正确","error");
             return false;
         }
 
-        /*
         let verify_code = eleVerifyCode.val().trim();
         if(verify_code.length !== 4){
             myAlert("验证码格式不正确!","error");

@@ -7,6 +7,7 @@
     "mediaRtspPort": 9554,
     "videoAnalyzerPort": 9555,
     "mediaSecret": "aqxY9ps21fyhyKNRyYpGvJCTp1JBeGOM",
+	"install": "D:\\Project\\xcms",
     "trtexec": "Analyzer\\trtexec.exe",
     "ffmpeg": "Analyzer\\ffmpeg.exe",
     "fontPath": "Analyzer\\fonts\\tsimhei.ttf",
@@ -14,6 +15,7 @@
     "storageDir": "Admin\\static\\storage",
     "autoAddAllForward": true,
     "autoManagePatrolForward": false,
+	"autoStart": false,
     "checkStreamInterval": 15,
     "transCodeStreamMaxCount": 16,
     "algorithmStreamMaxCount": 16,
@@ -38,7 +40,5 @@
         "sipServerTimeout": 1800,
         "sipServerExpiry": 3600,
         "rtpTransferMode": 0
-    },
-    "install": "D:\\Project\\bxc\\BXC_VideoAnalyzer_v4",
-    "autoStart": false
+    }
 }
