@@ -10,7 +10,6 @@
           <div class="x_panel">
             <div class="x_title">
               <h2>{% if  "add" == handle %}添加{% else %}编辑{% endif %}用户 <span id="top_msg">{{top_msg}}</span></h2>
-              <button style="margin-left:5px;" onclick="f_docs()" class="btn btn-primary btn-sm">文档</button>
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -105,10 +104,6 @@
   <script src="/static/vendors/validator/validator.js"></script>
 <script>
     let ele_top_msg= $("#top_msg");
-    function f_docs() {
-        let url= "{{ settings.docs.userAdd }}";
-        window.open(url);
-    }
 </script>
 
 {% endblock javascripts %}

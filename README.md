@@ -10,8 +10,11 @@
 
 ## 简介
 * C++开发的视频行为分析系统v4版本，可以在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，开发自己的算法插件，就可以轻松实现出任何想要的视频行为检测，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等。
-* 视频行为分析系统的简称 xcms
 * 通过本开源平台直接克隆/下载的版本是x86-Windows-ov版
+* 视频行为分析系统的简称 xcms
+
+## 更新记录
+* [更新记录](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/qchculv81t93orwh)
 
 ## 软件支持的运行环境介绍
 | 架构 | 操作系统 | 硬件 | 推理引擎 | 下载地址 |
@@ -34,9 +37,9 @@
 * [下载x86其他版本](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e382620e4df52bd7628d3fd141a7112d)
 * [下载arm其他版本](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e382620e4df52bd7628d3fd141a7112d)
 
+
 ## 使用手册
 * [简介](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e05dce83e5129785b9f316978a14b896)
-* [版本历史](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/qchculv81t93orwh)
 * [软件贴牌](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e45770b681f5d0a2e0300b94672de1ae)
 * [硬件推荐](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/5f5b8c534610b075a56f0dddea6f5bea)
 * [软件启动配置](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/7ea49eddd8294dd0b66742647d76bb10)
