@@ -393,9 +393,9 @@
             type: "get",
             async: true,
             dataType: "json",
-            timeout: "3000",
+            timeout: 10000,
             error: function () {
-                myAlert("网络异常，请确定网络正常！", "error");
+                //myAlert("网络异常，请确定网络正常！", "error");
                 //网络异常也要继续检测
                 f_getCheckNewData();
             },
@@ -467,7 +467,6 @@
                 f_getCheckNewData();
             }
         });
-
 
     }
 
