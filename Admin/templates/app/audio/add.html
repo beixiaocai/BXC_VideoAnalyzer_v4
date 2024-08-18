@@ -39,14 +39,14 @@
 
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">音频编号 </label>
-                  <div class="col-md-3 col-sm-3 col-xs-12">
+                  <div class="col-md-6 col-sm-6 col-xs-12">
                      <input type="text"  value="{{ audio.code }}" class="form-control" disabled="disabled">
                   </div>
                 </div>
 
                <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">音频名称 <span class="required" style="color: red;">*</span></label>
-              <div class="col-md-3 col-sm-3 col-xs-12">
+              <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="name" value="{{ audio.name }}" required="required"  class="form-control">
                   </div>
                 </div>
@@ -54,7 +54,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">音频文件 <span class="required" style="color: red;">*</span></label>
 
-                    <div class="col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
                       <input type="file" name="file" accept="audio/wav,audio/mpeg" {% if "edit" == handle %}disabled="disabled"{% endif %}  class="form-control" placeholder="音频文件" >
                     </div>
 
@@ -64,7 +64,7 @@
 
                   <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">音频文件路径</label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
+                  <div class="col-md-6 col-sm-6 col-xs-12">
                      <input type="text" value="{{ absolute_audio_path }}" readonly  class="form-control">
                   </div>
                 </div>
@@ -74,7 +74,7 @@
                   <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">扩展参数
                   </label>
-                  <div class="col-md-3 col-sm-3 col-xs-12">
+                  <div class="col-md-6 col-sm-6 col-xs-12">
                       <input type="text" name="extend_params" value="{{ audio.extend_params }}"  class="form-control">
                   </div>
                 </div>
@@ -82,7 +82,7 @@
                   <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">备注
                   </label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="remark" value="{{ audio.remark }}"  class="form-control">
                   </div>
                 </div>

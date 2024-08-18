@@ -48,7 +48,7 @@
 
                               <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">算法名称 <span class="required" style="color: red;">*</span></label>
-              <div class="col-md-3 col-sm-3 col-xs-12">
+              <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="name" value="{{ flow.name }}" required="required"  class="form-control">
                   </div>
                 </div>
@@ -56,7 +56,7 @@
                     <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">选择算法流程模式 <span class="required" style="color: red;">*</span></label></label>
 
-                          <div class="col-md-9 col-sm-9 col-xs-12">
+                         <div class="col-md-6 col-sm-6 col-xs-12">
 
                             <select id="select_mode"  class="select2_single form-control" required="required" >
                                 <option value="0">请选择</option>
@@ -84,7 +84,7 @@
                     <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测算法 </label>
 
-                          <div class="col-md-9 col-sm-9 col-xs-12">
+                          <div class="col-md-6 col-sm-6 col-xs-12">
 
                             <select id="select_algorithm_detect"  class="select2_single form-control" required="required" >
                                 <option value="0">请选择</option>
@@ -112,7 +112,7 @@
 
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">选择检测目标 </label>
-                      <div class="col-md-9 col-sm-9 col-xs-12">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
                         <select id="select_detect_class_name"  class="select2_multiple form-control" required="required"  multiple="multiple" >
                             <option value="0">---请选择检测目标(可多选)---</option>
                         </select>
@@ -123,7 +123,7 @@
                       <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">选择分类算法 </label>
 
-                          <div class="col-md-9 col-sm-9 col-xs-12">
+                         <div class="col-md-6 col-sm-6 col-xs-12">
 
                             <select id="select_algorithm_classify"  class="select2_single form-control" required="required" >
                                 <option value="0">请选择</option>
@@ -153,7 +153,7 @@
 
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">选择分类目标 </label>
-                      <div class="col-md-9 col-sm-9 col-xs-12">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
                         <select id="select_classify_class_name"  class="select2_multiple form-control" required="required"  multiple="multiple" >
                             <option value="0">---请选择分类目标(可多选)---</option>
                         </select>
@@ -162,7 +162,7 @@
 
                     <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">选择追踪算法</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
+                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="select_algorithm_track"  class="select2_single form-control" required="required" >
                                 <option value="0">请选择</option>
                                 {% for algorithm in algorithm_track_data %}
@@ -188,7 +188,7 @@
 
                    <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">选择行为算法 <span class="required" style="color: red;">*</span></label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
+                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="select_behaviour"  class="select2_single form-control" required="required" >
                                 <option value="0">请选择</option>
 
@@ -212,21 +212,21 @@
 
                   <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">分析进程 <span class="required" style="color: red;">*</span></label>
-                            <div class="col-md-3 col-sm-3 col-xs-12">
+                          <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input type="number" name="deploy_process_index" value="{{ flow.deploy_process_index }}"  class="form-control">
                             </div>
                         </div>
 
                   <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">模型最大实例数 <span class="required" style="color: red;">*</span></label>
-                            <div class="col-md-3 col-sm-3 col-xs-12">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="number" name="max_concurrency" value="{{ flow.max_concurrency }}"  class="form-control">
                           </div>
                         </div>
 
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">实例增长单位 <span class="required" style="color: red;">*</span></label>
-                    <div class="col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="number" name="concurrency_unit_length" value="{{ flow.concurrency_unit_length }}"  class="form-control">
                   </div>
                 </div>
@@ -235,7 +235,7 @@
                   <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">扩展参数
                       </label>
-                      <div class="col-md-9 col-sm-9 col-xs-12">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
                         <textarea rows="2" name="extend_params" class="form-control col-md-7 col-xs-12">{{ flow.extend_params }}</textarea>
 
                       </div>

@@ -40,13 +40,13 @@
 
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">编号 </label>
-                  <div class="col-md-3 col-sm-3 col-xs-12">
+                  <div class="col-md-6 col-sm-6 col-xs-12">
                      <input type="text"  value="{{ obj.code }}" class="form-control" disabled="disabled">
                   </div>
                 </div>
                <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">名称 <span class="required" style="color: red;">*</span></label>
-              <div class="col-md-3 col-sm-3 col-xs-12">
+             <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="name" value="{{ obj.name }}" required="required" class="form-control">
                   </div>
                 </div>
@@ -54,13 +54,13 @@
 
                <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">请求地址 <span class="required" style="color: red;">*</span></label>
-                    <div class="col-md-3 col-sm-3 col-xs-12">
+                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="url" value="{{ obj.url }}" required="required"  class="form-control">
                   </div>
                 </div>
           <div class="form-group">
                <label class="control-label col-md-3 col-sm-3 col-xs-12">状态 <span class="required" style="color: red;">*</span></label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
+                  <div class="col-md-6 col-sm-6 col-xs-12">
                      <div class="radio">
                       <label>
                         <input type="radio" {% if obj.state == 1 %} checked="checked" {% endif %} value="1" name="state"> 启用
@@ -77,7 +77,7 @@
 
                              <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">扩展参数 <span class="required" style="color: red;">*</span></label>
-                    <div class="col-md-3 col-sm-3 col-xs-12">
+                   <div class="col-md-6 col-sm-6 col-xs-12">
                         <textarea name="extend_params" class="form-control" rows="3" >{{ obj.extend_params }}</textarea>
                   </div>
                 </div>
@@ -85,7 +85,7 @@
                   <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">备注
                   </label>
-                    <div class="col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="remark" value="{{ obj.remark }}"  class="form-control">
                   </div>
 

@@ -76,10 +76,10 @@
     function f_open_player(stream_app,stream_name){
         window.open("/stream/player?app="+stream_app+"&name="+stream_name);
     }
-    function f_getOnline() {
+    function f_getOnlineStream() {
         ele_top_loading.show();
         $.ajax({
-               url: '/stream/getOnline',
+               url: '/stream/getOnlineStream',
                type: "get",
                async: true,
                data: {},
@@ -126,7 +126,7 @@
                                eleData.append(item_html);
                            }
                         }
-                        //setTimeout(function () {f_getOnline();}, 6000);
+                        //setTimeout(function () {f_getOnlineStream();}, 6000);
 
                    }else{
                         //ele_top_msg.html(res.msg);
@@ -137,7 +137,7 @@
 
     }
     window.onload = function (){
-        f_getOnline();
+        f_getOnlineStream();
     };
 
 

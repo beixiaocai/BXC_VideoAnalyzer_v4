@@ -50,17 +50,6 @@
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >自启动全部摄像头转发 <span class="required" style="color: red;">*</span>
-                  </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                     <label class="my_radio_label">开启&nbsp;&nbsp;<input type="radio" name="autoAddAllForward" value="1" class="flat"  {% if 1 == config.autoAddAllForward %}checked="checked"{% endif %} >
-                    </label>
-                    <label  class="my_radio_label">关闭&nbsp;&nbsp;<input type="radio" name="autoAddAllForward" value="0" class="flat"  {% if 0 == config.autoAddAllForward %}checked="checked"{% endif %} >
-                    </label>
-                  </div>
-                </div>
-
                               <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12" >轮巡自动管理转发 <span class="required" style="color: red;">*</span>
                   </label>
@@ -203,9 +192,18 @@
 
                   </div>
                 </div>
-              <!--
+
                 <div class="ln_solid"></div>
-            -->
+
+            <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">映射表</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                              <textarea rows="5" name="mapping" class="form-control col-md-7 col-xs-12">{{ mapping }}</textarea>
+                      </div>
+                </div>
+
+
+
                 <div class="form-group">
                   <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <button type="button" onclick="f_handle()"  class="btn btn-success">保存</button>
@@ -235,7 +233,6 @@
     function f_handle() {
         let ele_install = $("input[name='install']");
         let ele_host = $("input[name='host']");
-        let ele_autoAddAllForward = $("input[type=radio][name='autoAddAllForward']:checked");
         let ele_autoManagePatrolForward = $("input[type=radio][name='autoManagePatrolForward']:checked");
         let ele_autoStart = $("input[type=radio][name='autoStart']:checked");
 
@@ -254,11 +251,11 @@
         let ele_sipServerRealm = $("input[name='sipServerRealm']");
         let ele_sipServerPass = $("input[name='sipServerPass']");
         let ele_rtpTransferMode = $("input[type=radio][name='rtpTransferMode']:checked");
+        let ele_mapping= $("textarea[name='mapping']");
 
 
         let install = ele_install.val().trim();
         let host = ele_host.val().trim();
-        let autoAddAllForward = parseInt(ele_autoAddAllForward.val());
         let autoManagePatrolForward = parseInt(ele_autoManagePatrolForward.val());
         let autoStart = parseInt(ele_autoStart.val());
 
@@ -280,6 +277,9 @@
         let sipServerPass = ele_sipServerPass.val();
         let rtpTransferMode = parseInt(ele_rtpTransferMode.val());
 
+        //mapping参数
+        let mapping = ele_mapping.val().trim();
+
         $.ajax({
            url: "/system/config",
            type: "post",
@@ -287,7 +287,6 @@
            data: {
                "install":install,
                "host":host,
-               "autoAddAllForward":autoAddAllForward,
                "autoManagePatrolForward":autoManagePatrolForward,
                "autoStart":autoStart,
                "autoSaveAlarmDay":autoSaveAlarmDay,
@@ -304,7 +303,9 @@
                "sipServerId":sipServerId,
                "sipServerRealm":sipServerRealm,
                "sipServerPass":sipServerPass,
-               "rtpTransferMode":rtpTransferMode
+               "rtpTransferMode":rtpTransferMode,
+
+               "mapping": mapping
            },
            dataType: "json",
            timeout: 0,
