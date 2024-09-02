@@ -11,7 +11,7 @@
 ## 简介
 * C++开发的视频行为分析系统v4版本
 * 用户可以基于视频行为分析系统，在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，就可以轻松做出任何需要的视频行为分析算法，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等
-* 通过本开源平台直接克隆/下载的版本是x86-Windows-ov版
+* 通过本开源平台直接克隆/下载的版本是x86-Windows-ov版 [下载其他版本](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e05dce83e5129785b9f316978a14b896)
 * 视频行为分析系统的简称 xcms
 
 ## 更新记录
@@ -40,22 +40,15 @@
 
 
 ## 使用手册
-* [简介](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e05dce83e5129785b9f316978a14b896)
+* [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e05dce83e5129785b9f316978a14b896)
 * [软件贴牌](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e45770b681f5d0a2e0300b94672de1ae)
 * [硬件推荐](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/5f5b8c534610b075a56f0dddea6f5bea)
 * [软件启动配置](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/7ea49eddd8294dd0b66742647d76bb10)
-* [软件性能优化](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/626c74072ae1bdc63e01a04002186a92)
-* [咨询问题模板](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/4b66cc754328ce343eea09766b54c464)
-* [FFmpeg推USB摄像头](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/0deb4194d8ad8f0ca437263dd40597c0)
-* [FFmpeg推流模拟摄像头](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/60850e5f979a8cddc42d5fd4e81fc70f)
-* [FFmpeg电脑桌面推流](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/00a95632b189aa5a4e5e6e4ffb2bbd40)
+* [软件使用优化](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/626c74072ae1bdc63e01a04002186a92)
 * [浏览器设置网页自动播放声音](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/404272bee98998c7f9217a0a54824a5a)
-
-## 合作授权
-* [x86架构版合作授权](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/xmm8h3dc78506ogy)
-* [rk3588版合作授权](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/3c2075f1b0d934eac31b89f3f12383ee)
-* [昇腾版合作授权](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/qd1ten0dr3t7tn7u)
-* [定制版合作](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/ci0h3mahg4zoaa42)
+* [FFmpeg推USB摄像头](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/0deb4194d8ad8f0ca437263dd40597c0)
+* [FFmpeg推本地视频文件](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/60850e5f979a8cddc42d5fd4e81fc70f)
+* [FFmpeg电脑桌面推流](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/00a95632b189aa5a4e5e6e4ffb2bbd40)
 
 
 <img width="720" alt="控制面板" src="https://gitee.com/Vanishi/images/raw/master/BXC_VideoAnalyzer_v4/v4.409/1.png">
