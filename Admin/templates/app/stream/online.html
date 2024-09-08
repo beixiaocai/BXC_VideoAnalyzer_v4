@@ -1,6 +1,6 @@
 {% extends "app/base_site.html" %}
 
-{% block title %} 在线视频流 {% endblock title %}
+{% block title %} 在线预览 {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -15,7 +15,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2>在线视频流
+          <h2>在线预览
             <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
             <span id="top_msg"></span>
           </h2>
@@ -31,9 +31,9 @@
               <thead>
                 <tr class="headings">
                   <th class="column-title"># </th>
-                    <th class="column-title">视频来源 </th>
+                    <th class="column-title">视频源 </th>
 
-                  <th class="column-title">视频流 </th>
+                  <th class="column-title">流地址 </th>
 
                   <th class="column-title">在线人数 </th>
                   <th class="column-title">入口带宽 </th>

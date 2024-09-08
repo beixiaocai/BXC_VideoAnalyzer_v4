@@ -219,6 +219,7 @@
   {{ block.super }}
 
 <script src="/static/lib/jquery/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <!-- daterangepicker -->
 <script src="/static/vendors/moment/min/moment.min.js"></script>
 <script src="/static/lib/jquery/daterangepicker/jquery.daterangepicker.js"></script>
 
@@ -551,9 +552,9 @@
                                  let state = d["state"];
                                     if(0===state){
                         html += "<span><span style=\"background-color:#1ABB9C !important;border-radius: 2px;font-size:10px;padding:1px 2px;color:#ffffff;margin:0 3px;\">未读</span>";
-                            html += "<span style=\"border: 1px solid #ddd; border-radius: 6px; padding: 0 5px;margin-right: 2px;\">"+d["id"]+"</span><a class='sun-a-label' href='javascript:f_show(\""+d["code"]+"\")'>查看报警详情</a></span>";
+                            html += "<span style=\"border: 1px solid #ddd; border-radius: 6px; padding: 0 5px;margin-right: 2px;\">"+d["id"]+"</span> <span class='sun-state-error'>"+d["flow_name"]+"</span> <a class='sun-a-label' href='javascript:f_show(\""+d["code"]+"\")'>详情</a></span>";
                                     }else{
-                         html += "<span><span style=\"border: 1px solid #ddd; border-radius: 6px; padding: 0 5px;margin-right: 2px;\">"+d["id"]+"</span><a class='sun-a-label' href='javascript:f_show(\""+d["code"]+"\")'>查看报警详情</a></span>";
+                         html += "<span><span style=\"border: 1px solid #ddd; border-radius: 6px; padding: 0 5px;margin-right: 2px;\">"+d["id"]+"</span> <span class='sun-state-error'>"+d["flow_name"]+"</span> <a class='sun-a-label' href='javascript:f_show(\""+d["code"]+"\")'>详情</a></span>";
                                     }
                                   html += "<div style=\"position: relative; display: block;\">";
                                      html += "<label style=\"float:left;\"><input type=\"checkbox\" class=\"check_item\" value=\""+d["id"]+"\"></label>";

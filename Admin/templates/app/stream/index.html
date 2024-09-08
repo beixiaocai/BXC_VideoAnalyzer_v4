@@ -36,7 +36,6 @@
                     <span id="top_msg">{{top_msg}}</span>
                  </h2>
 
-                    <button style="margin-left:10px;" onclick="f_refreshStream()" class="btn btn-primary btn-sm">刷新</button>
                     <button data-toggle="modal" data-target="#ImportFileDialog"  class="btn btn-primary btn-sm">批量导入</button>
                     <button onclick="f_postHandleAllForward('add')" class="btn btn-default btn-sm">开启全部转发</button>
                     <button onclick="f_postHandleAllForward('del')" class="btn btn-default btn-sm">关闭全部转发</button>
@@ -336,34 +335,6 @@
                }
             });
 
-    }
-    function f_refreshStream() {
-        //刷新视频流
-        ele_top_loading.show();
-        $.ajax({
-               url: '/stream/refreshStream',
-               type: "get",
-               async: true,
-               data: {},
-               dataType: "json",
-               timeout: 0,
-               error: function () {
-                   ele_top_loading.hide();
-                   myAlert("网络异常，请确定网络正常！", "error");
-               },
-               success: function (res) {
-                    ele_top_loading.hide();
-                    if(1000 === res.code){
-                        myAlert(res.msg,"success");
-                         setTimeout(function () {
-                                window.location.reload();
-                         }, 1000);
-
-                    }else{
-                        myAlert(res.msg,"error");
-                    }
-               }
-            });
     }
 </script>
 

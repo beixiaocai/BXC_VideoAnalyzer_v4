@@ -397,7 +397,7 @@
                                item_html += "<td>"+d["id"]+"</td>";
                                //item_html += "<td>"+d["code"]+"</td>";
 
-                               if(d["stream_active"]){
+                               if(d["stream_active"] === 1){
                                   item_html += "<td><span class='sun-state-success'><i class=\"fa fa-bar-chart\"></i> 在线</span> <a class='sun-a-label' href=\"javascript:f_open_player('"+d["stream_app"]+"','"+d["stream_name"]+"')\" ><i class=\"fa fa-play\"></i> "+
                                                 d["stream_nickname"]+"</a></td>";
                                }else{

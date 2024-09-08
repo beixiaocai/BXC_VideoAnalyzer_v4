@@ -1,6 +1,40 @@
 ![ion.rangeSlider](_tmp/logo-ion-range-slider.png)
 
+[Support the plugin on GitHub sponsors](https://github.com/sponsors/IonDen)
+
 # Update History
+
+### Version 2.3.1. December 19, 2019
+* Website update
+* Minor bugfixes
+
+### Version 2.3.0. December 11, 2018
+* Website update
+* Big skins update
+* Minor bugfixes
+
+### Version 2.2.0. June 21, 2017
+* Slider has `TabIndex` support now. Issue #321
+* `keyboard_step` option removed as confusing.
+* `keyboard` controls are enabled by default now
+* `keyboard` movement is bind to step now
+* Traverse extra class names to container. Issue #318
+* Prettified values added to `result object`. Issue #356
+* It is possible to pass `scope` for callbacks now. Issue #402
+* New option `block`. Light version of `disabled` but sliders value can be send with form. Issue #242
+
+### Version 2.1.8. June 19, 2017
+* Issues resolved: #420, #423, #441, #464, #479
+
+### Version 2.1.7. March 26, 2017
+* Issues: #438
+* Reverted: #390
+
+### Version 2.1.6. December 27, 2016
+* Issues: #393, #406, #429, #431, #432
+
+### Version 2.1.5. December 12, 2016
+* Issues: #331, #332, #333, #337, #338, #343, #358, #374, #380, #389, #390, #394, #411, #412, #413
 
 ### Version 2.1.4. April 27, 2016
 * Issues: #330, #369
@@ -132,6 +166,4 @@
 
 ***
 
-Support the plugin:
-
-[![](https://pledgie.com/campaigns/25694.png?skin_name=chrome)](https://pledgie.com/campaigns/25694)
+[Support the plugin on GitHub sponsors](https://github.com/sponsors/IonDen)

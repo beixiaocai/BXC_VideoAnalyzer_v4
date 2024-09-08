@@ -85,6 +85,19 @@
                       </div>
                 </div>
 
+                 <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">音频输出 <span class="required" style="color: red;">*</span></label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select name="is_audio" class="form-control">
+                            <option value="0">请选择</option>
+                            {% for item in audio_types %}
+                                 <option  {% if item.type == stream.is_audio %} selected {% endif %}  value="{{ item.type }}">{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                  </div>
+                </div>
+
+
 
                              <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">直播流IP </label>
@@ -157,7 +170,7 @@
     let ele_input_camera_name= $("input[name='camera_name']");
     let ele_input_camera_manufacturer= $("input[name='camera_manufacturer']");
     let ele_textarea_remark= $("textarea[name='remark']");
-
+    let eleSelectIsAudio = $("select[name='is_audio']");
 
     function f_docs() {
         let url= "{{ settings.docs.streamAdd }}";
@@ -304,10 +317,12 @@
         let camera_name = ele_input_camera_name.val().trim();
         let camera_manufacturer = ele_input_camera_manufacturer.val().trim();
         let remark = ele_textarea_remark.val().trim();
+        let is_audio = parseInt(eleSelectIsAudio.val());
+
         let data = {
-            "stream_code":stream_code,
-            "stream_app":stream_app,
-            "stream_name":stream_name,
+            "code":stream_code,
+            "app":stream_app,
+            "name":stream_name,
             "nickname":nickname,
             "pull_stream_type":pull_stream_type,
             "pull_stream_url":pull_stream_url,
@@ -318,6 +333,7 @@
             "remark":remark,
             "onvif_username":onvif_username,
             "onvif_password":onvif_password,
+            "is_audio":is_audio
         };
         $.ajax({
            url: "/stream/add",
@@ -333,7 +349,7 @@
                if(1000 === res.code){
                    myAlert(res.msg,"success",1000);
                    setTimeout(function () {
-                        window.location.href= "/stream/index";
+                        //window.location.href= "/stream/index";
                     }, 1000);
                }else{
                     myAlert(res.msg,"error");

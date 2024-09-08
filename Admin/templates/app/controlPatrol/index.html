@@ -55,9 +55,9 @@
                         <td>
                             <div class="btn-group">
                                 {% if d.is_run == 1 %}
-                                    <button onclick="f_postHandleControlPatrol('{{ d.code }}','cancel')" class="btn btn-dark btn-sm">取消轮巡</button>
+                                    <button onclick="f_postHandle('{{ d.code }}','cancel')" class="btn btn-dark btn-sm">取消轮巡</button>
                                {% else %}
-                                    <button onclick="f_postHandleControlPatrol('{{ d.code }}','add')" class="btn btn-primary btn-sm">执行轮巡</button>
+                                    <button onclick="f_postHandle('{{ d.code }}','add')" class="btn btn-primary btn-sm">执行轮巡</button>
                                 {% endif %}
                                 <button onclick="f_view('{{ d.code }}')" class="btn btn-sm btn-default" type="button" title="预览"><i class="fa fa-play-circle"></i></button>
                                 <button onclick="f_edit('{{ d.code }}')" class="btn btn-sm btn-default" type="button" title="编辑"><i class="fa fa-edit"></i></button>
@@ -110,10 +110,10 @@
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
 
-    function f_postHandleControlPatrol(code,handle) {
+    function f_postHandle(code,handle) {
         ele_top_loading.show();
         $.ajax({
-               url: '/controlPatrol/postHandleControlPatrol',
+               url: '/controlPatrol/postHandle',
                type: "post",
                async: true,
                data: {"code":code,'handle':handle},

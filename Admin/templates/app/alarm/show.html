@@ -1,6 +1,6 @@
 {% extends "app/base_site.html" %}
 
-{% block title %} 查看报警视频 {% endblock title %}
+{% block title %} 查看报警详情 {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -24,7 +24,7 @@
         <div class="col-md-12">
           <div class="x_panel">
             <div class="x_title">
-              <h2>查看报警视频
+              <h2>查看报警详情
                   <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
                   <span id="top_msg"></span>
               </h2>
@@ -115,7 +115,6 @@
                           </div>
                           <div class="right">
                             <h3>视频流 <small>{{ alarm.stream_code }}</small></h3>
-                            <a href="javascript:f_show('{{ d.code }}')">{{ d.code }}</a>
                           </div>
                         </div>
 
@@ -134,7 +133,7 @@
                             <i class="fa"></i>
                           </div>
                           <div class="right">
-                            <h3>关联算法 <small><a href="javascript:f_flow_edit('{{ alarm.flow_code }}')">{{ alarm.flow_code }}</small></h3>
+                            <h3>关联算法 <small><a href="javascript:f_flow_edit('{{ flow.code }}')">{{ flow.name }}</small></h3>
 
                           </div>
                         </div>

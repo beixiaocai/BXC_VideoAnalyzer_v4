@@ -49,7 +49,7 @@
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="x_panel">
             <div class="x_title">
-                <h2>视频行为分析系统</h2>
+                <h2>运行状态</h2>
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -83,6 +83,11 @@
             <div class="x_content">
               <table class="table table-hover">
                 <tbody>
+                <tr>
+                    <th scope="row">系统</th>
+                    <th scope="row" id="os_system_name">System</th>
+                  </tr>
+
                   <tr>
                     <th scope="row">运行</th>
                     <th scope="row" id="os_run_date_str">00:00:00</th>
@@ -383,6 +388,7 @@
     let ele_videoAnalyzer_mediaserver = $("#videoAnalyzer_mediaserver");
     let ele_videoAnalyzer_analyzer = $("#videoAnalyzer_analyzer");
     //系统信息
+    let ele_os_system_name = $("#os_system_name");
     let ele_os_run_date_str = $("#os_run_date_str");
     let ele_os_cpu_used_rate = $("#os_cpu_used_rate");
     let ele_os_virtual_mem_used_rate = $("#os_virtual_mem_used_rate");
@@ -453,6 +459,8 @@
                if(res.code === 1000){
                     try {
                         let osInfo = res["osInfo"];
+
+                        let system_name = osInfo["system_name"];
                         let os_cpu_used_rate = osInfo["os_cpu_used_rate"];
                         let os_virtual_mem_used_rate = osInfo["os_virtual_mem_used_rate"];
                         let os_disk_used_rate = osInfo["os_disk_used_rate"];
@@ -463,6 +471,7 @@
 
                         let os_run_date_str = osInfo["os_run_date_str"];
 
+                        ele_os_system_name.html(system_name);
                         ele_os_run_date_str.html(os_run_date_str);
                         ele_os_cpu_used_rate.html(os_cpu_used_rate_str);
                         ele_os_virtual_mem_used_rate.html(os_virtual_mem_used_rate_str);

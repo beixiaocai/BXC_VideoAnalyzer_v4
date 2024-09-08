@@ -11,7 +11,7 @@
     video{
         width: 100%;
         height: 100%;
-        max-height: 550px;
+        max-height: 500px;
         background-color: rgba(0,0,00,1.0);
         /*object-fit: fill;*/ /*伸缩*/
         border-radius: 5px;
@@ -82,7 +82,7 @@
 
                  <div class="form-horizontal form-label-left">
 
-                    {% if is_exist_stream %}
+                    {% if is_normal %}
                         <p style="margin-top:10px;font-size: 16px;">视频流支持的所有转发协议</p>
                         <p>{{ stream.wsMp4Url }}</p>
                         <p>{{ stream.wsFlvUrl }}</p>
@@ -209,7 +209,7 @@
                        let snapshot_ret = info["snapshot_ret"]
                        let snapshot_msg = info["snapshot_msg"]
                        if(snapshot_ret===true){
-                           let snapshot_filename = info["snapshot_filename"]
+                           let snapshot_filename = info["snapshot_filename"] //绝对路径
                            let download_url = "/storage/download?filename="+snapshot_filename;
                            window.open(download_url);
                        }else{
@@ -290,8 +290,8 @@
     });
     
     $(function() {
-        let is_exist_stream = parseInt("{{ is_exist_stream }}");
-        if(is_exist_stream){
+        let is_normal = parseInt("{{ is_normal }}");
+        if(is_normal === 1){
             let is_online = parseInt("{{ stream.is_online }}");
             let video_codec_name = "{{ stream.video_codec_name }}";
             let video_width = parseInt("{{ stream.video_width }}");
