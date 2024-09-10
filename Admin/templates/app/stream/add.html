@@ -310,6 +310,7 @@
                 return false;
             }
         }
+
         let onvif_ip = ele_input_onvif_ip.val().trim();
         let onvif_username = ele_input_onvif_username.val().trim();
         let onvif_password = ele_input_onvif_password.val().trim();
@@ -349,7 +350,7 @@
                if(1000 === res.code){
                    myAlert(res.msg,"success",1000);
                    setTimeout(function () {
-                       window.location.href= "/stream/index";
+                        window.location.href= "/stream/index";
                     }, 1000);
                }else{
                     myAlert(res.msg,"error");

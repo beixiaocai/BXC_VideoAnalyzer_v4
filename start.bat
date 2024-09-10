@@ -2,13 +2,13 @@
 setlocal
 chcp 65001
 
-tasklist | findstr /i "VideoAnalyzer.exe" >nul
+tasklist | findstr /i "xcms.exe" >nul
 if errorlevel 1 (
-    echo VideoAnalyzer.exe is not running
+    echo xcms.exe is not running
 ) else (
-    echo VideoAnalyzer.exe is running
+    echo xcms.exe is running
 	
-	taskkill /IM VideoAnalyzer.exe /F
+	taskkill /IM xcms.exe /F
 )
 
 tasklist | findstr /i "Admin.exe" >nul
@@ -44,6 +44,6 @@ if errorlevel 1 (
 )
 
 
-VideoAnalyzer.exe
+xcms.exe
 
 endlocal

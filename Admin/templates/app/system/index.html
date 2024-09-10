@@ -58,13 +58,13 @@
     let eleData = $("#data");
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
-    function f_handleProcess(name,port,handle){
+    function f_handleProcess(process_name,process_port,handle){
         ele_top_loading.show();
         $.ajax({
                url: '/system/handleProcess',
                type: "get",
                async: true,
-               data: {"name":name,"port":port,"handle":handle},
+               data: {"process_name":process_name,"process_port":process_port,"handle":handle},
                dataType: "json",
                timeout: 0,
                error: function () {
@@ -118,26 +118,54 @@
                        }else{
                             for (let i = 0; i < data_length; i++) {
                                let d = data[i];
-
+                               let state = d["state"];
                                html += "<tr class=\"even pointer\">";
-                               html += "<td>"+d["name"]+"</td>";
-                               html += "<td>"+d["process_port"]+"</td>";
-                               html += "<td>"+d["create_date_str"]+"</td>";
-                               html += "<td>"+d["number"]+"</td>";
 
-                                if(d["state"]===1){ //在线
-                                       html += "<td><span class=\"btn-success btn-xs\">运行中</span></td>";
-                                       if("Admin" === d["process_name"]) {
-                                            html += "<td></td>";
-                                       }else{
-                                           html += "'<td><a class='sun-a-label'  href=\"javascript:f_handleProcess('" + d["process_name"] +"','"+d["process_port"]+ "','restart')\" ><i class=\"fa fa-hourglass-start\"></i> 重启</a>";
-                                           html += "</td>";
-                                       }
-                                       //html += "<a class='sun-a-label'  href=\"javascript:f_handleProcess('"+ d["process_name"] +"','"+d["process_port"]+"','stop')\" ><i class=\"fa fa-stop\"></i> 停止</a></td>";
+                                if(d["process_name"] === "xcms"){
+                                   html += "<td>"+d["name"]+"</td>";
+                                   html += "<td>"+d["process_port"]+"</td>";
+                                   html += "<td></td>";
+                                   html += "<td></td>";
+
+                                    if(state===1){ //在线
+                                           html += "<td><span class=\"btn-success btn-xs\">运行中</span></td>";
+                                           html += "<td></td>";
+                                    }else{
+                                           html += "<td><span class=\"btn-danger btn-xs\">未运行</span></td>";
+                                    }
+
+                                }else if(d["process_name"] === "Admin"){
+
+                                   html += "<td>"+d["name"]+"</td>";
+                                   html += "<td>"+d["process_port"]+"</td>";
+                                   html += "<td>"+d["create_date_str"]+"</td>";
+                                   html += "<td>"+d["number"]+"</td>";
+
+                                    if(state===1){ //在线
+                                           html += "<td><span class=\"btn-success btn-xs\">运行中</span></td>";
+                                           html += "<td></td>";
+                                    }else{
+                                           html += "<td><span class=\"btn-danger btn-xs\">未运行</span></td>";
+                                           html += "<td><a class='sun-a-label'  href=\"javascript:f_handleProcess('"+ d["process_name"] +"','"+d["process_port"]+"','start')\"  ><i class=\"fa fa-hourglass-start\"></i> 启动</a></td>";
+                                    }
+
                                 }else{
-                                       html += "<td><span class=\"btn-danger btn-xs\">未运行</span></td>";
-                                       html += "<td><a class='sun-a-label'  href=\"javascript:f_handleProcess('"+ d["process_name"] +"','"+d["process_port"]+"','start')\"  ><i class=\"fa fa-hourglass-start\"></i> 启动</a></td>";
+                                   html += "<td>"+d["name"]+"</td>";
+                                   html += "<td>"+d["process_port"]+"</td>";
+                                   html += "<td>"+d["create_date_str"]+"</td>";
+                                   html += "<td>"+d["number"]+"</td>";
+
+                                    if(state===1){ //在线
+                                           html += "<td><span class=\"btn-success btn-xs\">运行中</span></td>";
+                                           html += "'<td><a class='sun-a-label'  href=\"javascript:f_handleProcess('" + d["process_name"] +"','"+d["process_port"]+ "','restart')\" ><i class=\"fa fa-hourglass-start\"></i> 重启</a></td>";
+                                           //html += "<a class='sun-a-label'  href=\"javascript:f_handleProcess('"+ d["process_name"] +"','"+d["process_port"]+"','stop')\" ><i class=\"fa fa-stop\"></i> 停止</a></td>";
+                                    }else{
+                                           html += "<td><span class=\"btn-danger btn-xs\">未运行</span></td>";
+                                           html += "<td><a class='sun-a-label'  href=\"javascript:f_handleProcess('"+ d["process_name"] +"','"+d["process_port"]+"','start')\"  ><i class=\"fa fa-hourglass-start\"></i> 启动</a></td>";
+                                    }
+
                                 }
+
 
                                html += "</tr>";
                            }
