@@ -12,36 +12,36 @@ if errorlevel 1 (
 	taskkill /IM xcms.exe /F
 )
 
-tasklist | findstr /i "Admin.exe" >nul
+tasklist | findstr /i "xcms_admin.exe" >nul
 if errorlevel 1 (
-    echo Admin.exe is not running
+    echo xcms_admin.exe is not running
 ) else (
-    echo Admin.exe is running
-	taskkill /IM Admin.exe /F
+    echo xcms_admin.exe is running
+	taskkill /IM xcms_admin.exe /F
 )
 
-tasklist | findstr /i "Analyzer.exe" >nul
+tasklist | findstr /i "xcms_core.exe" >nul
 if errorlevel 1 (
-    echo Analyzer.exe is not running
+    echo xcms_core.exe is not running
 ) else (
-    echo Analyzer.exe is running
-	taskkill /IM Analyzer.exe /F
+    echo xcms_core.exe is running
+	taskkill /IM xcms_core.exe /F
 )
 
-tasklist | findstr /i "MediaServer.exe" >nul
+tasklist | findstr /i "xcms_zlm.exe" >nul
 if errorlevel 1 (
-    echo MediaServer.exe is not running
+    echo xcms_zlm.exe is not running
 ) else (
-    echo MediaServer.exe is running
-	taskkill /IM MediaServer.exe /F
+    echo xcms_zlm.exe is running
+	taskkill /IM xcms_zlm.exe /F
 )
 
-tasklist | findstr /i "MediaManager.exe" >nul
+tasklist | findstr /i "xcms_media.exe" >nul
 if errorlevel 1 (
-    echo MediaManager.exe is not running
+    echo xcms_media.exe is not running
 ) else (
-    echo MediaManager.exe is running
-	taskkill /IM MediaManager.exe /F
+    echo xcms_media.exe is running
+	taskkill /IM xcms_media.exe /F
 )
 
 endlocal

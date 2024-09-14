@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>liveplayer</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+        <!-- 引用 liveplayer-element.min.js -->
+        <script type="text/javascript" src="liveplayer-element.min.js"></script>
+    </head>
+    <body>
+            <!--
+        <live-player id="player01" video-url="http://192.168.1.8:9002/live/test.live.flv" live="true" stretch="true">
+
+        <live-player id="player01" video-url="rtmp://192.168.1.8:9935/live/test" live="true" stretch="true">
+            <div style="position:absolute;left:15px;top:15px;color:#FFF;">自定义叠加层</div>
+        </live-player>
+           -->
+
+        <!--
+        <live-player video-url="http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8" live="false" stretch="true"></live-player>
+        -->
+
+        <live-player video-url="http://192.168.1.8:9002/live/cam25959636e0.live.mp4" live="true" stretch="true"></live-player>
+
+
+        <script>
+            /*
+            window.onload = function () {
+                // 页面加载完成以后执行
+                // JavaScript 交互示例, 需要将页面代码放到 http web server 容器下, 通过浏览器 http 协议访问
+                var player = document.getElementById('player01');
+                player.addEventListener('snapOutside', evt => {
+                    console.log('获取快照 base64 数据', evt.detail[0]);
+                });
+                player.addEventListener('customButtons', evt => {
+                    console.log('自定义按钮点击回调 按钮名称', evt.detail[0]);
+                });
+                player.addEventListener('fullscreen', evt => {
+                    console.log('fullscreen', evt.detail[0]);
+                });
+                player.addEventListener('play', evt => {
+                    console.log('play, t = ', evt.detail[0] + 's', ', duration = ', player.getVueInstance().getDuration() + 's');
+                });
+                var videoUrlBak = "";
+                document.addEventListener("visibilitychange", () => {
+                    if (document.visibilityState === 'visible') {
+                        if(videoUrlBak) {
+                            console.log("标签页恢复可见, 继续播放...");
+                            player.setAttribute("video-url", videoUrlBak);
+                        }
+                    } else {
+                        console.log("标签页不可见, 停止播放...");
+                        videoUrlBak = player.getAttribute("video-url");
+                        player.setAttribute("video-url", "");
+                    }
+                });
+                setTimeout(() => {
+                    console.log("快照, 回调 snapOutside...");
+                    player.getVueInstance().snap();
+                    console.log("静音...");
+                    player.getVueInstance().setMuted(true);
+                    console.log("静音状态: " + player.getVueInstance().getMuted());
+                    console.log("暂停...");
+                    player.getVueInstance().pause();
+                    console.log("暂停状态: " + player.getVueInstance().paused());
+                    console.log("全屏状态: " + player.getVueInstance().isFullscreen());
+                    //触发全屏, 需要放置到交互事件回调中
+                    //btn.onclick = () => { player.getVueInstance().requestFullscreen(); }
+                    player.getVueInstance().setMuted(false);
+                    console.log("音量: " + player.getVueInstance().getVolume());
+                    player.getVueInstance().setVolume(0.5);
+                    console.log("音量1: " + player.getVueInstance().getVolume());
+                    player.getVueInstance().setVolume(0.3);
+                    console.log("音量2: " + player.getVueInstance().getVolume());
+                }, 3000);
+                setTimeout(() => {
+                    console.log("放音...");
+                    player.getVueInstance().setMuted(false);
+                    console.log("静音状态: " + player.getVueInstance().getMuted());
+                    console.log("播放...");
+                    player.getVueInstance().play();
+                    console.log("暂停状态: " + player.getVueInstance().paused());
+                }, 6000);
+                setTimeout(() => {
+                    console.log("切换媒体源...");
+                    player.setAttribute("video-url", "rtmp://live.hkstv.hk.lxdns.com/live/hks2");
+                }, 9000);
+            }
+            */
+        </script>
+    </body>
+</html>
