@@ -1470,13 +1470,3 @@ $(document).ready(function() {
     init_autocomplete();
 
 });
-
-function f_createTranscodeUrl(host,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height,target_video_codec_name="h264",url_suffix=".live.mp4") {
-     if(video_codec_name === "h264"){
-         return host + "/" +  app + "/" + name + url_suffix;
-     }else{
-         let extend = video_codec_name+"x"+video_width.toString()+"x"+video_height.toString()+"x"+target_video_width.toString()+"x"+target_video_height.toString()+"x"+target_video_codec_name;
-         return host + "/transcode_" +  extend + "_" + app + "/" + name + url_suffix;
-     }
-
-}

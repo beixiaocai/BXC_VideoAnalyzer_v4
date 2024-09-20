@@ -10,14 +10,14 @@
         display: flex;
         position: relative;
     }
-    .div_canvas_box>video{
+    .div_canvas_box>div{
         width: 100%;
         height: 100%;
         /*object-fit: fill;*/
         /*border-radius: 5px;*/
         /*border: 1px solid #f0f0f0;*/
     }
-    .div_canvas_box>video:focus {
+    .div_canvas_box>div:focus {
         outline: -webkit-focus-ring-color auto 0px;
     }
     .div_canvas_box>canvas{
@@ -30,27 +30,32 @@
         height: 100%;
         z-index: 6;
     }
-    .div_canvas_menu{
+    .div_left_bottom_menu{
         margin-top: 20px;
         padding: 5px;
         border: 1px solid #e5e5e5;
         color: #ffffff;
         background-color: #ffffff;
     }
-    .show_content{
+    .div_left_bottom_draw{
+        margin-top: 20px;
+        padding: 5px;
+        border: 1px solid #e5e5e5;
+        color: #ffffff;
+        background-color: #ffffff;
+
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 10px;
     }
-    .item{
+    .div_left_bottom_draw>.item{
         flex:1;
         display: flex;
          justify-content: center;
         align-items: center;
         color: #000;
     }
-    .img{
+    .div_left_bottom_draw>.item>.img{
         width: 120px;
         cursor: pointer;
     }
@@ -76,10 +81,8 @@
     let m_alarmFilterCode;
 
 </script>
-
   <div class="right_col" role="main">
     <div class="">
-
       <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="x_panel">
@@ -89,19 +92,16 @@
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
-
               <div class="col-md-8 col-sm-8 col-xs-12">
-
                 <div class="div_canvas_box">
-                    <video id="video_player" poster="/static/images/player_poster.jpg" muted controls autoplay>
-                        Your browser is too old which doesn't support h5 video
-                   </video>
+                    <div id="video_player" style="background-color: black;aspect-ratio: 16 / 9;">
+                    </div>
                    <canvas id="canvas" >
                         Your browser is too old which doesn't support h5 canvas
                    </canvas>
                 </div>
 
-                <div class="div_canvas_menu">
+                <div class="div_left_bottom_menu">
                   <button type="button" onclick="f_clickPlayStart()" class="btn btn-success"><i class="fa fa-play"></i> 播放 </button>
                   <button type="button" onclick="f_clickPlayStop()" class="btn btn-default"><i class="fa fa-stop"></i> 停止 </button>
                   <button type="button" onclick="f_clearVideoCanvas()" class="btn btn-default btn-sm"><i class="fa fa-paint-brush"></i> 清空区域</button>
@@ -112,7 +112,7 @@
                   </div>
                 </div>
 
-                    <div class="div_canvas_menu show_content" >
+                    <div class="div_left_bottom_draw" >
                         <div class="item">绘制图像参考</div>
                         <div class="item">
                             <img class="img" src="/static/images/demo.jpg"/>
@@ -398,8 +398,7 @@
 
 {% block javascripts %}
   {{ block.super }}
-<script src="/static/lib/wsPlayer/mp4box.all.min.js"></script>
-<script src="/static/lib/wsPlayer/wsPlayer.js"></script>
+<script src="/static/lib/easyPlayer/js/easyplayer-pro.js"></script>
 <script src="/static/vendors/canvas_select/canvas-select.min.js"></script>
 <script>
     let controlCode= '{{ control.code }}';// 布控编号
@@ -409,12 +408,9 @@
         mPolygonType = 1;//默认是矩形类型
     }
     let handle = '{{ handle }}';// 操作类型 add 或 edit
-    let mWsVideoPlayer = null;
-    let eleVideoPlayerJqueryObj = $("#video_player");
-    let eleVideoPlayerJsObj= document.getElementById("video_player");
     let eleDivCanvasBox=document.querySelector('.div_canvas_box')
+    let eleVideoPlayer = document.querySelector('#video_player');
     let mVideoUrl = null;
-
     let eleSelectStream = $("#select_stream");// select  选择视频流
     let eleInputVideoUrl= $("#input_video_url");// input
     let eleInputVideo = $("#input_video");// input
@@ -427,7 +423,6 @@
 
     let eleInputMinInterval = $("#min_interval");
     let eleInputOverlapThresh = $("#overlap_thresh");
-
 
     // 报警图片数量
     let eleInputAlarmImageCount= $("input[type=number][name='alarm_image_count']");
@@ -444,9 +439,13 @@
     let eleBtnDrawType4 = $("#btn_draw_type4");
 
     let eleCanvas=document.getElementById("canvas");
-    canvas.width= eleVideoPlayerJsObj.clientWidth
-    canvas.height = eleVideoPlayerJsObj.clientHeight
+    canvas.width= eleVideoPlayer.clientWidth
+    canvas.height = eleVideoPlayer.clientHeight
     let instance = new CanvasSelect("#canvas", canvas.toDataURL());
+
+    console.log("eleVideoPlayer.clientWidth:",eleVideoPlayer.clientWidth)
+    console.log("eleVideoPlayer.clientHeight:",eleVideoPlayer.clientHeight)
+
     let option = [];
     instance.labelMaxLen = 10;
     //   instance.setData(option);
@@ -531,7 +530,7 @@
                         alert("方向线交叉不合规c1-"+info_type);
                         option.pop()
                         instance.setData(option);
-                        
+
                     }
                 }else{
                     f_clearVideoCanvas();
@@ -547,7 +546,7 @@
                         alert("方向线交叉不合规c2-"+info_type);
                         option.pop()
                         instance.setData(option);
-                        
+
                     }
                 } else {
                     f_clearVideoCanvas();
@@ -575,23 +574,23 @@
 
     //清空绘制区域数据
     function f_clearVideoCanvas() {
-        console.log("f_clearVideoCanvas() 清空绘制区域数据");
-        console.log("instance->",instance)
+        console.log("f_clearVideoCanvas() 执行清空绘制区域数据");
+        console.log("instance:",instance)
+
         option = [];
         instance.setData(option);
-        
+
     }
-    //窗口对齐（对齐后需要清空绘制区域数据）
+    //窗口对齐
     function f_adjustVideoCanvas() {
-        console.log("f_adjustVideoCanvas() 窗口对齐（对齐后需要清空绘制区域数据）");
-        //执行窗口对齐以后，此前的绘制区域数据，可能不在对应，因此需要删除
-        let w = eleVideoPlayerJsObj.offsetWidth;
-        let h = eleVideoPlayerJsObj.offsetHeight;
-        //w = w - 1.8;
-        //h = h - 2.2;
+        console.log("f_adjustVideoCanvas() 执行canvas与播放器对齐");
+        //执行窗口对齐以后，此前的绘制区域数据，可能不在对应，因此需要刷新
+        let w = eleVideoPlayer.offsetWidth;
+        let h = eleVideoPlayer.offsetHeight;
+        //console.log("eleVideoPlayer.offsetWidth:",eleVideoPlayer.offsetWidth)
+        //console.log("eleVideoPlayer.offsetHeight:",eleVideoPlayer.offsetHeight)
         eleCanvas.style.width = String(w)+"px";
         eleCanvas.style.height = String(h)+"px";
-
         instance.setData(option);
         
     }
@@ -636,13 +635,14 @@
             let video_height = stream["video_height"];
             let app = stream["app"];
             let name = stream["name"];
+            let wsMp4Url = stream["wsMp4Url"];
             //let target_video_width = 1280;
             //let target_video_height = 720;
+            //let target_video_width = video_width;
+            //let target_video_height = video_height;
 
-            let target_video_width = video_width;
-            let target_video_height = video_height;
+            let video_url = wsMp4Url;
 
-            let video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height);
             mVideoUrl = video_url;
 
             eleInputVideoUrl.val(video_url)
@@ -667,32 +667,86 @@
        alarmDrawType = $(this).val();
     });
 
+    let ePlayer = null;
+    function f_createEPlayer() {
+        ePlayer = new EasyPlayerPro({
+            container: eleVideoPlayer,
+            videoBuffer: 0.1, // 缓存时长
+            videoBufferDelay: Number(3), // 1000s 达到延迟重播(s)
+            decoder: '/static/lib/easyPlayer/js/decoder-pro.js',
+            isResize: true,
+            text: "北小菜",
+            loadingText: "加载中",
+            debug: false,
+            debugLevel: "debug",
+            useMSE: true,
+            useSIMD: false,
+            useWCS: true,
+            hasAudio: true,
+            websocket1006ErrorReplay: true,
+            networkDelayTimeoutReplay: true,
+            useMThreading: true,
+            showBandwidth: false, // 显示网速
+            showPerformance: false, // 显示性能
+            operateBtns: {
+                fullscreen: false,
+                screenshot: false,
+                play: true,
+                audio: false,
+                ptz: false,
+                quality: false,
+                performance: false,
+            },
+            background: "/static/images/player_poster.jpg",
+            timeout: 10,
+            qualityConfig: ['普清', '高清', '超清'],
+            forceNoOffscreen: true,
+            isNotMute: false,
+            heartTimeout: Number(7),//超出时间无数据重连(s)
+            ptzClickType: 'mouseDownAndUp',
+            ptzZoomShow: true,
+            ptzMoreArrowShow: true,
+            ptzApertureShow: true,
+            ptzFocusShow: true,
+            pauseAndNextPlayUseLastFrameShow: true,
+            heartTimeoutReplayUseLastFrameShow: true,
+            replayUseLastFrameShow: true, // 重播使用上一帧显示
+            fullscreenWatermarkConfig: {
+                text: "", //水印
+            }
+        });
+    }
+
     function f_playStart(video_url){
-        
-        console.log("f_playStart()",video_url);
-        if(typeof video_url === "undefined" || !video_url.startsWith("ws://") || !video_url.endsWith(".mp4")){
+        if(video_url === "" || typeof video_url === "undefined"){
+            myAlert("请输入播放地址（支持ws-fmp4/http-fmp4）！","error");
+            return false;
+        }
+        if(!video_url.endsWith(".mp4")){
             myAlert("视频流地址格式不正确！","error");
             return false;
         }
-        if(mWsVideoPlayer){
-            try {
-                mWsVideoPlayer.close();
-            }catch (e) {
-                console.log("f_playStart() err:",e);
+        if(video_url.startsWith("ws://") || video_url.startsWith("http://")){
+            if (ePlayer) {
+                ePlayer.destroy().then(() => {
+                    f_createEPlayer();
+                    ePlayer.play(video_url);
+                });
+            } else {
+                f_createEPlayer();
+                ePlayer.play(video_url);
             }
+            f_resetPolygon()
+        }else{
+             myAlert("视频流地址格式不正确！","error");
+             return false;
         }
-	    mWsVideoPlayer = new wsPlayer("video_player", video_url);
-        mWsVideoPlayer.open();
 
-        f_initShowPolygon()
     }
     function f_playStop(){
-        if(mWsVideoPlayer){
-            mWsVideoPlayer.close();
-            mWsVideoPlayer = null;
-
-            eleVideoPlayerJqueryObj.removeAttr("src");
-            eleVideoPlayerJqueryObj.load();
+        if(ePlayer){
+            //ePlayer.pause();
+            ePlayer.destroy();
         }else{
             myAlert("播放器未启动！","error");
         }
@@ -957,9 +1011,10 @@
         let url= "{{ settings.docs.controlAdd }}";
         window.open(url);
     }
-    function f_initShowPolygon(){
+    function f_resetPolygon(){
         if (mPolygon !== "") {//编辑布控
             f_adjustVideoCanvas();
+            
             let canvas_box_width = eleDivCanvasBox.clientWidth;
             let canvas_box_height = eleDivCanvasBox.clientHeight
             let polygon_array = mPolygon.split('#')
@@ -1059,18 +1114,7 @@
             //let httpMp4Url = "{{ control_stream.httpMp4Url }}";
             //let rtspUrl = "{{ control_stream.rtspUrl }}";
 
-            let video_url;
-            if(is_online){
-                //let target_video_width = 1280;
-                //let target_video_height = 720;
-
-                let target_video_width = video_width;
-                let target_video_height = video_height;
-
-                video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height);
-            }else{
-                video_url  = wsMp4Url;//不在线，就用默认地址
-            }
+            let video_url = wsMp4Url;
             mVideoUrl = video_url;
             eleInputVideoUrl.val(video_url);
 
@@ -1080,7 +1124,7 @@
         }
 
         setTimeout( () =>{
-            f_initShowPolygon()
+            f_resetPolygon();
         }, 1200);
 
     });

@@ -8,57 +8,6 @@
 
 {% block content %}
 <style>
-    video{
-        width: 100%;
-        height: 100%;
-        max-height: 500px;
-        background-color: rgba(0,0,00,0.6);
-        /*object-fit: fill;*/
-        /*border-radius: 5px;*/
-        /*border: 1px solid #f0f0f0;*/
-    }
-    /*
-    video:focus {
-        outline: -webkit-focus-ring-color auto 0;
-    }
-    */
-
-    /*全屏按钮
-    video::-webkit-media-controls-fullscreen-button {
-        display: none;
-    }*/
-    /*播放按钮*/
-    video::-webkit-media-controls-play-button {
-        display: none;
-    }
-    /*进度条*/
-    video::-webkit-media-controls-timeline {
-        display: none;
-    }
-    /*观看的当前时间*/
-    video::-webkit-media-controls-current-time-display{
-        display: none;
-    }
-    /*剩余时间*/
-    video::-webkit-media-controls-time-remaining-display {
-        display: none;
-    }
-    /*音量按钮*/
-    video::-webkit-media-controls-mute-button {
-        display: none;
-    }
-    video::-webkit-media-controls-toggle-closed-captions-button {
-        display: none;
-    }
-    /*音量的控制条*/
-    video::-webkit-media-controls-volume-slider {
-        display: none;
-    }
-    /*所有控件
-    video::-webkit-media-controls-enclosure{
-        display: none;
-    }
-    */
 
     #grid_video_container {
         width: 100%;
@@ -180,74 +129,94 @@
 {% block javascripts %}
   {{ block.super }}
 
-<script src="/static/lib/wsPlayer/mp4box.all.min.js"></script>
-<script src="/static/lib/wsPlayer/wsPlayer.js"></script>
+<script src="/static/lib/easyPlayer/js/easyplayer-pro.js"></script>
 <script>
-
     let eleSelectStream = $("#select_stream");// select  选择视频流
     let eleGridVideoContainer = $("#grid_video_container");
     let mSelectedGridVideoCount;//当前选中的多屏数量
     let mSelectedGridItemClass;//当前选中的多屏class属性
     let mSelectedVideoId = null;
-    let mSelectedVideoJsObj = null;
     let mSelectedVideoPlayerMap = new Map;//播放器字典 {id:player,,,}
 
-    function f_playStart(video_id,video_url){
-        console.log("f_playStart() ",video_id,video_url);
-        try {
-            let player = mSelectedVideoPlayerMap.get(video_id);
-            if(typeof player === "undefined" || player === "undefined"){
-                //首次创建播放器
-                player = new wsPlayer(video_id, video_url);
-                player.open();
-                mSelectedVideoPlayerMap.set(video_id,player);
-            }else{
-                //已经存在播放器，先销毁再创建
-                player.close();
-                player = new wsPlayer(video_id, video_url);
-                player.open();
-                mSelectedVideoPlayerMap.set(video_id,player);
+    function f_createEPlayer(video_id) {
+        let eleVideoPlayer = document.querySelector('#video_player'+video_id);
+        let ePlayer = new EasyPlayerPro({
+            container:eleVideoPlayer,
+            videoBuffer: 0.1, // 缓存时长
+            videoBufferDelay: Number(3), // 1000s 达到延迟重播(s)
+            decoder: '/static/lib/easyPlayer/js/decoder-pro.js',
+            isResize: true,
+            loadingText: "加载中",
+            debug: false,
+            debugLevel: "debug",
+            useMSE: true,
+            useSIMD: false,
+            useWCS: true,
+            hasAudio: true,
+            websocket1006ErrorReplay: true,
+            networkDelayTimeoutReplay: true,
+            useMThreading: true,
+            showBandwidth: true, // 显示网速
+            showPerformance: false, // 显示性能
+            operateBtns: {
+                fullscreen: true,
+                screenshot: false,
+                play: true,
+                audio: true,
+                ptz: false,
+                quality: false,
+                performance: true,
+            },
+            background: "/static/images/player_poster.jpg",
+            timeout: 10,
+            qualityConfig: ['普清', '高清', '超清'],
+            forceNoOffscreen: true,
+            isNotMute: false,
+            heartTimeout: Number(7),//超出时间无数据重连(s)
+            ptzClickType: 'mouseDownAndUp',
+            ptzZoomShow: true,
+            ptzMoreArrowShow: true,
+            ptzApertureShow: true,
+            ptzFocusShow: true,
+            pauseAndNextPlayUseLastFrameShow: true,
+            heartTimeoutReplayUseLastFrameShow: true,
+            replayUseLastFrameShow: true, // 重播使用上一帧显示
+            fullscreenWatermarkConfig: {
+                text: "", //水印
             }
-        }catch (e) {
-            console.log("f_playStart() error:",e);
+        });
+        return ePlayer;
+    }
+
+    function f_playStart(video_id,video_url){
+        //参数示例:video9_0, ws://192.168.1.8:9002/live/cam25959636e0.live.mp4
+        console.log("f_playStart() ",video_id,video_url);
+
+        let player = mSelectedVideoPlayerMap.get(video_id);
+        if(typeof player === "undefined" || player === "undefined"){
+            //首次创建播放器
+            player = f_createEPlayer(video_id);
+            player.play(video_url);
+            mSelectedVideoPlayerMap.set(video_id,player);
+        }else{
+            //已经存在播放器，先销毁再创建
+            player.destroy().then(() => {
+                player = f_createEPlayer(video_id);
+                player.play(video_url);
+                mSelectedVideoPlayerMap.set(video_id,player);
+            });
         }
 
     }
     function f_playStop(video_id){
-        console.log("f_playStop() ",video_id);
-        try {
-            let player = mSelectedVideoPlayerMap.get(video_id);
-            if(typeof player === "undefined" || player === "undefined"){
-                //播放器已经停止播放
-            }else{
-                //播放器停止播放成功
-                mSelectedVideoPlayerMap.delete(video_id);
-                player.close();
-                player = null;
-                if(mSelectedVideoJsObj){
-                    mSelectedVideoJsObj.load();
-                }
-            }
-        }catch (e) {
-            console.log("f_playStop() error:",e);
-        }
-    }
-    function f_rePlay(video_id){
+        console.log("f_playStop()",video_id);
         let player = mSelectedVideoPlayerMap.get(video_id);
         if(typeof player === "undefined" || player === "undefined"){
-            console.log("播放器已经停止播放");
+            //播放器已经停止播放
         }else{
-            let video_url = player.wsUrl;
-            let index = video_url.search("/transcode_");
-            if(index !== -1){
-                //存在转码的播放地址
-                console.log("重启播放器",typeof player,player,video_url);
-                player.close();
-                player = null;
-                player = new wsPlayer(video_id, video_url);
-                player.open();
-            }
-
+            //播放器停止播放成功
+            player.destroy();
+            mSelectedVideoPlayerMap.delete(video_id);
         }
     }
 
@@ -290,9 +259,8 @@
                 video_class += " grid_item_active";
                 mSelectedVideoId = video_id;
             }
-            html += "<video id='"+video_id+"' class='"+video_class+"' poster='/static/images/player_poster.jpg' ";
-            html += " onclick='f_clickVideo(this)' ";
-            html += " disablePictureInPicture muted controls autoplay>Your browser is too old which doesn't support HTML5 video.</video>";
+            //html += "<div id='"+video_id+"' style='background-color: black;min-height: 200px;' class='"+video_class+"' onclick='f_clickVideo(this)'></div> ";
+            html += "<div id='"+video_id+"' class='"+video_class+"' onclick='f_clickVideo(this)'><div id='video_player"+video_id+"' style='background-color: black;aspect-ratio: 16 / 9;' ></div></div> ";
         }
         eleGridVideoContainer.html(html);
         if(mSelectedVideoId){
@@ -302,7 +270,6 @@
     }
     function f_clickVideo(obj) {
         console.log("f_clickVideo()",mSelectedGridVideoCount,mSelectedGridItemClass,mSelectedVideoId)
-        mSelectedVideoJsObj = obj;
 
         //console.log("obj_js=",obj_js)
         //let obj_jquery = $(obj_js);
@@ -324,7 +291,6 @@
             }
         }
     }
-
     function f_clickPlayStart() {
         console.log("f_clickPlayStart()",mSelectedGridVideoCount,mSelectedGridItemClass,mSelectedVideoId,mSelectedVideoPlayerMap)
         if(mSelectedVideoId===null){
@@ -340,41 +306,14 @@
             return false;
         }
         let stream = streamCodeDict[streamCode];
-        let app = stream["app"];
+        //let app = stream["app"];
+        //let wsHost = stream["wsHost"];
+        //let video_codec_name = stream["video_codec_name"];
+        //let video_width = stream["video_width"];
+        //let video_height = stream["video_height"];
+        //let name = stream["name"];
 
-        let video_url;
-        if(app === "analyzer"){
-            video_url = stream["wsMp4Url"]
-        }else{
-            let wsHost = stream["wsHost"];
-            let video_codec_name = stream["video_codec_name"];
-            let video_width = stream["video_width"];
-            let video_height = stream["video_height"];
-
-            let name = stream["name"];
-
-            /*
-            let target_video_width = 1280;
-            let target_video_height = 720;
-            if(mSelectedGridVideoCount===4){
-               target_video_width = 720;
-               target_video_height = 576;//576p
-            }else if(mSelectedGridVideoCount===9){
-               target_video_width = 640;
-               target_video_height = 480;//480p
-            }else if(mSelectedGridVideoCount===16){
-               target_video_width = 480;
-               target_video_height = 360;//360p
-            }
-            */
-
-            let target_video_width = video_width;
-            let target_video_height = video_height;
-            let target_video_codec_name = "h264";
-
-            video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height,target_video_codec_name);
-        }
-
+        let video_url = stream["wsMp4Url"];
         if(typeof video_url === "undefined" || !video_url.startsWith("ws://") || !video_url.endsWith(".mp4")){
             myAlert("视频流地址格式不正确！","error");
             return false;

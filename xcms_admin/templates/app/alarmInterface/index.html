@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
   {{ block.super }}
+<link rel="stylesheet" href="/static/lib/jquery/confirm/jquery-confirm.css" />
 {% endblock stylesheets %}
 
 {% block content %}
@@ -66,7 +67,7 @@
 
                                   <button onclick="f_edit('{{ d.code }}')" class="btn btn-sm btn-primary" type="button"><i class="fa fa-edit"></i> 编辑</button>
                                   <button onclick="f_del('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="删除"><i class="fa fa-remove"></i></button>
-                                  <button onclick="f_testAlarmInterface('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="测试上传"><i class="fa fa-check"></i></button>
+                                  <button onclick="f_test('{{ d.code }}')" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="测试上传"><i class="fa fa-check"></i></button>
 
                                 </div>
                         </td>
@@ -121,17 +122,19 @@
 
 {% block javascripts %}
   {{ block.super }}
-
+<script src="/static/lib/jquery/confirm/jquery-confirm.js"></script>
 <script>
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
-    function f_testAlarmInterface(code) {
+
+    function f_postTest(code,enable_base64) {
+
         ele_top_loading.show();
         $.ajax({
                url: '/alarmInterface/postTest',
                type: "post",
                async: true,
-               data: {"code":code},
+               data: {"code":code,"enable_base64":enable_base64},
                dataType: "json",
                timeout: 0,
                error: function () {
@@ -139,14 +142,43 @@
                    myAlert("网络异常，请确定网络正常！","error");
                },
                success: function (res) {
-                      ele_top_loading.hide();
+                   ele_top_loading.hide();
                    if(1000 === res.code){
                        myAlert(res.msg,"success");
                    }else{
-                        myAlert(res.msg,"error");
+                       myAlert(res.msg,"error");
                    }
                }
-            });
+        });
+
+    }
+    function f_test(code) {
+            // 使用示例
+        $.confirm({
+            title:"确认操作",
+            content:"上传测试数据到服务器吗？",
+            buttons:{
+                test1:{
+                    text:"支持BASE64",
+                    action:function(){
+                        let enable_base64 = 1;//支持图片或视频的base64
+                        f_postTest(code,enable_base64);
+
+                    }
+                },
+                test2:{
+                    text:"不支持BASE64",
+                    action:function(){
+                         let enable_base64 = 0 ;//不支持图片或视频的base64
+                         f_postTest(code,enable_base64);
+                    }
+
+                }
+
+            }
+
+        });
+
 
     }
     function f_edit(code) {

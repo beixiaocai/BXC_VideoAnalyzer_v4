@@ -3,25 +3,12 @@
 {% block title %} 单屏播放器 {% endblock title %}
 
 {% block stylesheets %}
-  {{ block.super }}
+{{ block.super }}
+
 {% endblock stylesheets %}
 
 {% block content %}
 <style>
-    video{
-        width: 100%;
-        height: 100%;
-        max-height: 500px;
-        background-color: rgba(0,0,00,1.0);
-        /*object-fit: fill;*/ /*伸缩*/
-        border-radius: 5px;
-        /*border: 1px solid #f0f0f0;*/
-    }
-
-    video:focus {
-        outline: -webkit-focus-ring-color auto 0;
-    }
-
       #input_address {
         -webkit-appearance: none;
         background-color: #fff;
@@ -42,7 +29,6 @@
       }
 </style>
 
-
   <div class="right_col" role="main">
     <div class="">
       <div class="row">
@@ -55,13 +41,14 @@
                   <button style="margin-left: 10px;"  type="button" class="btn btn-success btn-sm" onclick="f_clickPlayStart()">播放</button>
                   <button type="button" class="btn btn-default btn-sm" onclick="f_clickPlayStop()">停止</button>
 
-                <!--
+                 <!--
                   <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
                     <li><a class="close-link"><i class="fa fa-close"></i></a>
                     </li>
-                  </ul>-->
+                  </ul>
+                  -->
 
                     <div style="float: right; margin-top: 6px; margin-right: 50px;">
                         <button type="button" id="handle_snapshot"  class="btn btn-primary btn-sm">截图</button>
@@ -73,9 +60,7 @@
 
             <div class="x_content">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                   <video id="video_player" poster="/static/images/player_poster.jpg" muted controls autoplay>
-                        Your browser is too old which doesn't support HTML5 video.
-                    </video>
+                    <div id="video_player" style="background-color: black;min-height: 500px;"></div>
               </div>
 
               <div class="col-md-12 col-sm-12 col-xs-12">
@@ -103,69 +88,113 @@
 
 {% block javascripts %}
   {{ block.super }}
-
-<script src="/static/lib/wsPlayer/mp4box.all.min.js"></script>
-<script src="/static/lib/wsPlayer/wsPlayer.js"></script>
+<script src="/static/lib/easyPlayer/js/easyplayer-pro.js"></script>
 <script>
     let stream_app = "{{ stream.app }}";
     let stream_name = "{{ stream.name }}";
-
-    let eleVideoPlayerJqueryObj = $("#video_player");
     let eleInputAddress= $("#input_address");
     let eleHandleSnapshot = $("#handle_snapshot");
     let eleHandleRecord = $("#handle_record");
-    let mCurrentVideoPlayer = null;
-    let mCurrentVideoUrl = null;//当前视频流地址
     let mCurrentIsRecording = false;
-
+    let eleVideoPlayer = document.querySelector('#video_player');
+    let ePlayer = null;
+    function f_createEPlayer() {
+        ePlayer = new EasyPlayerPro({
+            container: eleVideoPlayer,
+            videoBuffer: 0.1, // 缓存时长
+            videoBufferDelay: Number(3), // 1000s 达到延迟重播(s)
+            decoder: '/static/lib/easyPlayer/js/decoder-pro.js',
+            isResize: true,
+            loadingText: "加载中",
+            debug: false,
+            debugLevel: "debug",
+            useMSE: true,
+            useSIMD: false,
+            useWCS: true,
+            hasAudio: true,
+            websocket1006ErrorReplay: true,
+            networkDelayTimeoutReplay: true,
+            useMThreading: true,
+            showBandwidth: true, // 显示网速
+            showPerformance: true, // 显示性能
+            operateBtns: {
+                fullscreen: true,
+                screenshot: true,
+                play: true,
+                audio: true,
+                ptz: false,
+                quality: false,
+                performance: true,
+                screenshotFn: f_screenshotFn,
+            },
+            background: "/static/images/player_poster.jpg",
+            timeout: 10,
+            qualityConfig: ['普清', '高清', '超清'],
+            forceNoOffscreen: true,
+            isNotMute: false,
+            heartTimeout: Number(7),//超出时间无数据重连(s)
+            ptzClickType: 'mouseDownAndUp',
+            ptzZoomShow: true,
+            ptzMoreArrowShow: true,
+            ptzApertureShow: true,
+            ptzFocusShow: true,
+            pauseAndNextPlayUseLastFrameShow: true,
+            heartTimeoutReplayUseLastFrameShow: true,
+            replayUseLastFrameShow: true, // 重播使用上一帧显示
+            fullscreenWatermarkConfig: {
+                text: "", //水印
+            }
+        });
+    }
+    const f_screenshotFn = () => {
+        if (ePlayer) {
+            ePlayer.screenshotWatermark({
+                text: {
+                    content: ``,//水印
+                    fontSize: '46',
+                    color: 'rgba(100,100,100,.6)',
+                },
+                opacity: 0.8,
+                right: 20,
+                top: 50,
+            });
+        }
+    };
     function f_playStart(video_url) {
-        mCurrentVideoUrl = video_url;
-        if(mCurrentVideoUrl.startsWith("ws://")){
-            if(mCurrentVideoPlayer){
-                try {
-                    mCurrentVideoPlayer.close();
-                }catch (e) {
-                    console.log("f_playStart() err:",e);
-                }
-            }
-            mCurrentVideoPlayer = new wsPlayer("video_player", mCurrentVideoUrl);
-            mCurrentVideoPlayer.open();
-        }else if(mCurrentVideoUrl.startsWith("http://")){
-            eleVideoPlayerJqueryObj.attr("src",mCurrentVideoUrl);
-        }
-    }
-    function f_playStop() {
-        if(mCurrentVideoUrl.startsWith("ws://")){
-            if(mCurrentVideoPlayer){
-                mCurrentVideoPlayer.close();
-                mCurrentVideoPlayer = null;
-                eleVideoPlayerJqueryObj.removeAttr("src");
-                eleVideoPlayerJqueryObj.load();
-            }
-        }else if(mCurrentVideoUrl.startsWith("http://")){
-            eleVideoPlayerJqueryObj.removeAttr("src");
-            eleVideoPlayerJqueryObj.load();
-        }
-    }
-    function f_clickPlayStart() {
-        let video_url = eleInputAddress.val().trim();
-
         if(video_url === "" || typeof video_url === "undefined"){
             myAlert("请输入播放地址（支持ws-fmp4/http-fmp4）！","error");
             return false;
         }
-
         if(!video_url.endsWith(".mp4")){
             myAlert("视频流地址格式不正确！","error");
             return false;
         }
         if(video_url.startsWith("ws://") || video_url.startsWith("http://")){
-            f_playStart(video_url);
+            if (ePlayer) {
+                ePlayer.destroy().then(() => {
+                    f_createEPlayer();
+                    ePlayer.play(video_url);
+                });
+            } else {
+                f_createEPlayer();
+                ePlayer.play(video_url);
+            }
         }else{
              myAlert("视频流地址格式不正确！","error");
              return false;
         }
+    }
 
+    function f_playStop() {
+        if(ePlayer){
+            //ePlayer.pause();
+            ePlayer.destroy();
+        }
+    }
+
+    function f_clickPlayStart() {
+        let video_url = eleInputAddress.val().trim();
+        f_playStart(video_url);
     }
 	function f_clickPlayStop() {
         f_playStop();
@@ -302,26 +331,10 @@
             let wsMp4Url = "{{ stream.wsMp4Url }}";
             //let httpMp4Url = "{{ stream.httpMp4Url }}";
             //let rtspUrl = "{{ stream.rtspUrl }}";
-
-            let video_url;
-            if(is_online){
-                //let target_video_width = 1280;
-                //let target_video_height = 720;
-
-                let target_video_width = video_width;
-                let target_video_height = video_height;
-
-                video_url = f_createTranscodeUrl(wsHost,video_codec_name,video_width,video_height,app,name,target_video_width,target_video_height);
-            }else{
-                video_url  = wsMp4Url;//不在线，就用默认地址
-            }
-
-            //let video_url = "http://127.0.0.1:9003/live/test.live.mp4";
-            //let video_url = "ws://127.0.0.1:9003/live/test.live.mp4";
+            let video_url = wsMp4Url
             eleInputAddress.val(video_url);
             f_playStart(video_url);
         }
-
         f_getVideoIsRecording();
     });
 </script>
