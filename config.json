@@ -17,10 +17,10 @@
     "storageDir": "xcms_admin\\static\\storage",
     "autoManagePatrolForward": false,
     "autoStart": false,
+	"logDebug": false,
     "autoSaveAlarmDay": 30,
     "autoClearAlarmLevel": 0,
     "checkStreamInterval": 15,
-    "transCodeStreamMaxCount": 16,
     "algorithmStreamMaxCount": 16,
     "analyzer": {
         "cacheModelMaxDuration": 120000,

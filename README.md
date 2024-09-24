@@ -1,4 +1,4 @@
-## 视频行为分析系统v4(xcms)
+## 视频行为分析系统v4
 * 作者：北小菜 
 * 官网：http://www.beixiaocai.com
 * 邮箱：bilibili_bxc@126.com
@@ -9,10 +9,8 @@
 * github地址：https://github.com/beixiaocai/BXC_VideoAnalyzer_v4
 
 ## 简介
-* C++开发的视频行为分析系统v4版本
-* 用户可以基于视频行为分析系统，在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，就可以轻松做出任何需要的视频行为分析算法，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等
-* 通过本开源平台直接克隆/下载的版本是x86-Windows-ov版 [下载其他版本](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e05dce83e5129785b9f316978a14b896)
-* 视频行为分析系统的简称 xcms
+* C++开发的视频行为分析系统v4版本，简称xcms，用户可以基于视频行为分析系统，在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，就可以轻松做出任何需要的视频行为分析算法，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等
+* 通过本开源平台直接克隆/下载的版本是x86-Windows-ov版 [下载更多版本](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e05dce83e5129785b9f316978a14b896)
 
 ## 更新记录
 * [更新记录](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/qchculv81t93orwh)
