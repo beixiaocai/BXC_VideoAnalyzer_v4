@@ -41,13 +41,6 @@
                   </div>
                 </div>
 
-                              <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >WINStartup <span class="required" style="color: red;">*</span>
-                  </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input type="text" name="winStartup" required="required" value="{{config.winStartup}}" class="form-control">
-                  </div>
-                </div>
 
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12" >主机IP <span class="required" style="color: red;">*</span>
@@ -81,7 +74,7 @@
                 </div>
 
                          <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >报警存储路径 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >数据存储路径 <span class="required" style="color: red;">*</span>
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="storageDir" required="required" value="{{config.storageDir}}" class="form-control">
@@ -89,18 +82,20 @@
                 </div>
 
                                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >报警数据保存天数<span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >存储报警最大容量(G)<span class="required" style="color: red;">*</span>
                   </label>
                    <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input type="number" name="autoSaveAlarmDay" value="{{config.autoSaveAlarmDay}}" required="required" class="form-control">
-                  </div>
+                    <input type="number" name="storageAlarmMaxSize" value="{{config.storageAlarmMaxSize}}" required="required" class="form-control">
+                    <span style="color: red;font-size: 12px;" id="alarmFolderSize"></span>
+                   </div>
                 </div>
 
                                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >报警数据清理类型<span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >存储录像最大容量(G)<span class="required" style="color: red;">*</span>
                   </label>
                    <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input type="number" name="autoClearAlarmLevel" value="{{config.autoClearAlarmLevel}}" required="required" class="form-control">
+                    <input type="number" name="storageRecordMaxSize" value="{{config.storageRecordMaxSize}}" required="required" class="form-control">
+                 <span style="color: red;font-size: 12px;" id="recordFolderSize"></span>
                   </div>
                 </div>
 
@@ -222,7 +217,7 @@
                 <div class="form-group">
                   <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <button type="button" onclick="f_handle()"  class="btn btn-success">保存</button>
-                    <button type="button" onclick="f_reboot()"  class="btn btn-danger">重启操作系统</button>
+                    <button type="button" onclick="f_restartOS()"  class="btn btn-danger">重启操作系统</button>
                   </div>
                 </div>
 
@@ -240,6 +235,8 @@
 <script>
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
+    let eleAlarmFolderSize = $("#alarmFolderSize")
+    let eleRecordFolderSize = $("#recordFolderSize")
 
     function f_docs() {
         let url= "{{ settings.docs.systemConfig }}";
@@ -247,14 +244,13 @@
     }
     function f_handle() {
         let ele_install = $("input[name='install']");
-        let ele_winStartup = $("input[name='winStartup']");
         let ele_storageDir = $("input[name='storageDir']");
         let ele_host = $("input[name='host']");
         let ele_autoManagePatrolForward = $("input[type=radio][name='autoManagePatrolForward']:checked");
         let ele_autoStart = $("input[type=radio][name='autoStart']:checked");
 
-        let ele_autoSaveAlarmDay = $("input[name='autoSaveAlarmDay']");
-        let ele_autoClearAlarmLevel = $("input[name='autoClearAlarmLevel']");
+        let eleStorageAlarmMaxSize = $("input[name='storageAlarmMaxSize']");
+        let eleStorageRecordMaxSize = $("input[name='storageRecordMaxSize']");
 
         let ele_cacheModelMaxDuration = $("input[name='cacheModelMaxDuration']");
         let ele_hardwareH264Decoder = $("input[name='hardwareH264Decoder']");
@@ -272,14 +268,13 @@
 
 
         let install = ele_install.val().trim();
-        let winStartup = ele_winStartup.val().trim();
         let storageDir = ele_storageDir.val().trim();
         let host = ele_host.val().trim();
         let autoManagePatrolForward = parseInt(ele_autoManagePatrolForward.val());
         let autoStart = parseInt(ele_autoStart.val());
 
-        let autoSaveAlarmDay = parseInt(ele_autoSaveAlarmDay.val());
-        let autoClearAlarmLevel = parseInt(ele_autoClearAlarmLevel.val());
+        let storageAlarmMaxSize = parseInt(eleStorageAlarmMaxSize.val());
+        let storageRecordMaxSize = parseInt(eleStorageRecordMaxSize.val());
 
         //分析器参数
         let cacheModelMaxDuration = parseInt(ele_cacheModelMaxDuration.val());
@@ -306,12 +301,11 @@
            data: {
                "install":install,
                "storageDir":storageDir,
-               "winStartup":winStartup,
                "host":host,
                "autoManagePatrolForward":autoManagePatrolForward,
                "autoStart":autoStart,
-               "autoSaveAlarmDay":autoSaveAlarmDay,
-               "autoClearAlarmLevel":autoClearAlarmLevel,
+               "storageAlarmMaxSize":storageAlarmMaxSize,
+               "storageRecordMaxSize":storageRecordMaxSize,
 
                "cacheModelMaxDuration":cacheModelMaxDuration,
                "hardwareH264Decoder":hardwareH264Decoder,
@@ -342,9 +336,37 @@
            }
         });
     }
-    function f_reboot() {
+    function f_getStorageInfo() {
         $.ajax({
-           url: "/system/reboot",
+           url: "/storage/info",
+           type: "get",
+           async: true,
+           data: {
+           },
+           dataType: "json",
+           timeout: 0,
+           error: function () {
+                myAlert("网络异常，请确定网络正常！","error");
+           },
+           success: function (res) {
+               if(1000 === res.code){
+                   try {
+                       let info = res["info"];
+                       eleAlarmFolderSize.html("已用 "+info["alarmFolderSize"].toString()+"G");
+                       eleRecordFolderSize.html("已用 "+info["recordFolderSize"].toString()+"G");
+                   }catch (e) {
+                       console.log(e)
+                   }
+
+               }else{
+                   myAlert(res.msg,"error");
+               }
+           }
+        });
+    }
+    function f_restartOS() {
+        $.ajax({
+           url: "/open/restartOS",
            type: "post",
            async: true,
            data: {
@@ -363,6 +385,11 @@
            }
         });
     }
+
+    $(function(){
+        f_getStorageInfo();
+    })
+
 
 </script>
 

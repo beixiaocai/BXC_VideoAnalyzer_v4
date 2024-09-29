@@ -31,11 +31,12 @@
                       <tr class="headings">
                         <th class="column-title">ID</th>
                         <th class="column-title">编号</th>
-                        <th class="column-title">关联摄像头</th>
+                        <th class="column-title">摄像头</th>
                         <!--<th class="column-title">快照</th>-->
                         <th class="column-title">录像天数</th>
-                        <th class="column-title">是否启动</th>
-                        <th class="column-title">更新时间</th>
+                        <th class="column-title">音频</th>
+                          <th class="column-title">状态</th>
+                        <th class="column-title">添加时间</th>
                         <th class="column-title no-link last"><span class="nobr">操作</span></th>
                       </tr>
                     </thead>
@@ -60,15 +61,22 @@
 
                         <!--<td></td>-->
                         <td>{{ d.record_day }}</td>
-                        <td>
-                                                          {% if d.is_record == 1 %}
+
+                          <td>
+                               {% for item in audio_types %}
+                                    {% if item.type == d.audio_type %} {{ item.name }} {% endif %}
+                               {% endfor %}
+
+                          </td>
+                                              <td>
+                                  {% if d.is_record == 1 %}
                                       <span class="sun-state-success">开启</span>
                                    {% else %}
                                       <span class="sun-state-error">关闭</span>
                                   {% endif %}
 
                         </td>
-                          <td>{{ d.last_update_time }}</td>
+                          <td>{{ d.create_time }}</td>
                           <td>
                               <div class="btn-group">
                                  <button onclick="f_timeplayer('{{ d.code }}')" class="btn btn-sm btn-primary" type="button"><i class="fa fa-file-movie-o"></i> 播放录像</button>
@@ -148,7 +156,7 @@
     function f_del(code){
         ele_top_loading.show();
         $.ajax({
-               url: '/streamRecord/postDel',
+               url: '/streamRecord/openDel',
                type: "post",
                async: true,
                data: {"code":code},

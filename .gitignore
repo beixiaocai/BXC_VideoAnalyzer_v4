@@ -1,11 +1,11 @@
 ﻿# clion
 .idea/
 log/*
-Admin/static/upload/alarm/*
-Admin/static/storage*
+xcms_admin/static/upload/alarm/*
+xcms_admin/static/storage*
 
-MediaServer/log
-MediaServer/www/*
+xcms_core/log
+xcms_core/www/*
 
 # vs
 .vs

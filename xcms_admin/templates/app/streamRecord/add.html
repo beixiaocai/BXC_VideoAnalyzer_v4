@@ -32,12 +32,12 @@
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">录像编号 </label>
                   <div class="col-md-6 col-sm-6 col-xs-12">
-                     <input type="text" disabled value="{{ streamRecord.code }}" class="form-control" >
+                     <input type="text" name="record_code" value="{{ streamRecord.code }}" {% if  "edit" == handle %} disabled {% endif %} class="form-control" >
                   </div>
                 </div>
 
                              <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">关联摄像头 <span class="required" style="color: red;">*</span></label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头 <span class="required" style="color: red;">*</span></label>
                  <div class="col-md-6 col-sm-6 col-xs-12">
                         <select name="stream_code" class="form-control" {% if "edit" == handle %}disabled{% endif %}>
                             <option value="0">请选择</option>
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >是否启动 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >状态 <span class="required" style="color: red;">*</span>
                   </label>
                   <div class="col-md-6 col-sm-6 col-xs-12">
                       <label class="my_radio_label">启动&nbsp;&nbsp;<input type="radio" name="is_record" value="1" class="flat"  {% if 1 == streamRecord.is_record %}checked="checked"{% endif %} >
@@ -110,9 +110,9 @@
 <script>
 
 let handle = "{{ handle }}";
-let record_code = "{{ streamRecord.code }}";
 
 function f_handle() {
+    let eleInputRecordCode = $("input[name='record_code']");
     let eleSelectStreamCode = $("select[name='stream_code']");
     let eleInputRecordDay = $("input[name='record_day']");
     let eleSelectAudioType = $("select[name='audio_type']");
@@ -120,6 +120,7 @@ function f_handle() {
     let ele_record_time_range= $("textarea[name='record_time_range']");
 
 
+    let record_code = eleInputRecordCode.val().trim()
     let stream_code = eleSelectStreamCode.val().trim()
     let record_day = parseInt(eleInputRecordDay.val());
     let audio_type = parseInt(eleSelectAudioType.val());
@@ -133,9 +134,9 @@ function f_handle() {
 
     let handle_url;
     if(handle === "add"){
-        handle_url = "/streamRecord/add";
+        handle_url = "/streamRecord/openAdd";
     } else if(handle === "edit"){
-        handle_url = "/streamRecord/edit";
+        handle_url = "/streamRecord/openEdit";
     }else{
          myAlert("操作不合法！","error");
          return false

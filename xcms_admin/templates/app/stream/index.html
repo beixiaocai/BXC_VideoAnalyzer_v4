@@ -53,6 +53,7 @@
                                     <th class="column-title">接入协议</th>
                                     <th class="column-title">名称</th>
                                     <th class="column-title">IP</th>
+                                     <th class="column-title">音频</th>
                                     <th class="column-title">状态</th>
                                     <th class="column-title">添加时间</th>
                                <th class="column-title no-link last"><span class="nobr">操作</span></th>
@@ -75,6 +76,11 @@
                                       </td>
                                   <td>{{ d.nickname }}</td>
                                     <td>{{ d.pull_stream_ip }}</td>
+                                    <td>
+                                         {% for item in audio_types %}
+                                            {% if item.type == d.is_audio %} {{ item.name }} {% endif %}
+                                       {% endfor %}
+                                    </td>
 
                                     <td>
 
