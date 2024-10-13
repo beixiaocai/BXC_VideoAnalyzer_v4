@@ -1,6 +1,6 @@
 {% extends "app/base_site.html" %}
 
-{% block title %} {% if  "add" == handle %}添加{% else %}编辑{% endif %}算法 {% endblock title %}
+{% block title %} {% if  "add" == handle %}添加{% else %}编辑{% endif %}业务算法 {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -33,7 +33,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="x_panel">
             <div class="x_title">
-              <h2>{% if  "add" == handle %}添加{% else %}编辑{% endif %}算法</h2>
+              <h2>{% if  "add" == handle %}添加{% else %}编辑{% endif %}业务算法</h2>
                 <button style="margin-left:5px;" onclick="f_docs()" class="btn btn-primary btn-sm">文档</button>
               <div class="clearfix"></div>
             </div>
@@ -54,7 +54,7 @@
                 </div>
 
                     <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择算法流程模式 <span class="required" style="color: red;">*</span></label></label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择算法模式 <span class="required" style="color: red;">*</span></label></label>
 
                          <div class="col-md-6 col-sm-6 col-xs-12">
 
