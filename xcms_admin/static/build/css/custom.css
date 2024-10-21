@@ -4257,19 +4257,19 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     /*font-weight: bold;*/
 }
 .sun-state-error{
-    color: #c00e09;
+    color: #c00e09!important;
     font-size: 12px;
     /*font-weight:bold;*/
 }
 .sun-state-info{
-    color:#4395ff;
+    color:#4395ff!important;
     font-size: 12px;
     /*font-weight:bold;*/
 }
 .sun-a-label{
     margin-left: 2px;
     font-size: 13px;
-    color:#23527c;
+    color:#23527c!important;
     /*text-decoration:underline;*/
 }
 #top_loading{

@@ -113,12 +113,12 @@
                       <span style="display: none;" id="top_msg"></span>
                   </h2>
 
-                <button style="margin-left: 10px;" onclick="f_handle('allDelete')" class="btn btn-default btn-sm"> 全部删除</button>
-                <button onclick="f_handle('clear')" class="btn btn-default btn-sm"> 清理缓存</button>
+                <button style="margin-left: 10px;" onclick="f_handle('allDelete')" class="btn btn-primary btn-sm"> 全部删除</button>
+                <button onclick="f_handle('clear')" class="btn btn-primary btn-sm"> 清理缓存</button>
                 <button id="top_open_audio" class="btn btn-default btn-sm"><i class="fa fa-bell-o"></i> 关闭报警声音</button>
                 <audio id="top_audio"  controls style="display: block;float: right; position: relative;height: 34px; "  >
                     浏览器不支持音频播放
-                  </audio>
+                </audio>
               <div class="clearfix"></div>
             </div>
 
@@ -132,8 +132,8 @@
                 <label style="padding-top:5px;">
                     <input type="checkbox" class="check_all">
                   </label>
-                    <button style="margin-left:5px;" onclick="f_handle('read')" class="btn btn-primary btn-sm"> 已读</button>
-                    <button onclick="f_handle('delete')" class="btn btn-primary btn-sm">删除</button>
+                    <button style="margin-left:5px;" onclick="f_handle('read')" class="btn btn-default btn-sm"> 已读</button>
+                    <button onclick="f_handle('delete')" class="btn btn-default btn-sm">删除</button>
                     </div>
                      <div style="float: left;margin-left: 10px;">
                                         <label style="text-align: left;">布控&nbsp;
@@ -159,20 +159,20 @@
                                     </div>
 
 
-                                <div style="float: left;margin-left: 10px;">
-                                        <label style="text-align: left;">算法&nbsp;
-                                          <select id="select_flow" class="input-sm">
-                                            <option value="0">选择全部</option>
-                                                {% for flow in flows %}
-                                                    <option value="{{ flow.code }}">{{ flow.name }}</option>
-                                                {% endfor %}
-                                           </select>
-                                        </label>
-                                    </div>
+                    <div style="float: left;margin-left: 10px;">
+                            <label style="text-align: left;">业务算法&nbsp;
+                              <select id="select_flow" class="input-sm">
+                                <option value="0">选择全部</option>
+                                    {% for flow in flows %}
+                                        <option value="{{ flow.code }}">{{ flow.name }}</option>
+                                    {% endfor %}
+                               </select>
+                            </label>
+                        </div>
 
-                                  <div style="float: left;margin-left: 10px;">
-                                    <input type="text" style="width: 200px;height: 30px;" id="input_dateRange" class="form-control" value="{{ startDate }} to {{ endDate }}">
-                                  </div>
+                      <div style="float: left;margin-left: 10px;">
+                        <input type="text" style="width: 200px;height: 30px;" id="input_dateRange" class="form-control" value="{{ startDate }} to {{ endDate }}">
+                      </div>
 
                     </div>
                 </div>
