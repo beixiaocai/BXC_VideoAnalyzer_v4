@@ -353,7 +353,7 @@
     function f_showInfos(infos){
         //console.log(infos)
         let infos_len = infos.length;
-        let html = "<code>";
+        let html = "";
         if (infos_len > 0){
             let info0 = infos[0];
             let info0_status = info0["status"]
@@ -367,23 +367,22 @@
                         controlCount += info.controlCount;
                     }
                  }
-                 html += "core("+infos_len+")  control("+controlCount+"/"+info0_authMaxControlCount+")";
+                 html += "<code>分析器("+infos_len+")</code>  <code>路数("+controlCount+"/"+info0_authMaxControlCount+")</code>";
                  for (let i = 0; i < infos_len; i++) {
                     let info = infos[i];
                     let info_status = info["status"]
                     if(info_status === 1){
-                        html += "  "+i+"("+info.controlCount+"/"+info.maxControlCount+")";
+                        html += "  <code>进程"+i+"("+info.controlCount+"/"+info.maxControlCount+")</code>";
                     }else{
-                        html += "  "+i+"(dead)";
+                        html += "  <code>进程"+i+"(未启动)</code>";
                     }
                  }
             }else{
-               html +="core dead";
+               html +="<code>分析器未启动</code>";
             }
         }else{
-            html +="core dead";
+            html +="<code>分析器未启动</code>";
         }
-        html += "</code>"
         eleInfos.html(html);
     }
     function f_show_pageData(pageData) {
