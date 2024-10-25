@@ -35,10 +35,18 @@
                     <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
                     <span id="top_msg">{{top_msg}}</span>
                  </h2>
-
-                    <button data-toggle="modal" data-target="#ImportFileDialog"  class="btn btn-primary btn-sm">批量导入</button>
-                    <button onclick="f_postHandleAllForward('add')" class="btn btn-default btn-sm">开启全部转发</button>
-                    <button onclick="f_postHandleAllForward('del')" class="btn btn-default btn-sm">关闭全部转发</button>
+                      <div style="margin-left:5px;"  class="btn-group">
+                           <button data-toggle="modal" data-target="#ImportFileDialog"  class="btn btn-primary">批量导入</button>
+                          <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false"> 更多 <span class="caret"></span> </button>
+                            <ul class="dropdown-menu">
+                              <li><a href="javascript:f_postHandleAllForward('add')">开启全部转发</a>
+                              </li>
+                              <li><a href="javascript:f_postHandleAllForward('del')">关闭全部转发</a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">

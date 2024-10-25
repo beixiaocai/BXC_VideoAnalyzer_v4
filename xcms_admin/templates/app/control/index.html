@@ -11,128 +11,144 @@
   <div class="right_col" role="main">
     <div class="">
       <div class="row">
-      <div class="col-md-12 col-sm-12 col-xs-12">
-      <div class="x_panel">
-        <div class="x_title">
-          <h2>布控管理
-             <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
-             <span id="top_msg">{{top_msg}}</span>
-          </h2>
-            <button style="margin-left:5px;" onclick="f_docs()" class="btn btn-primary btn-sm">文档</button>
-            <button onclick="f_reload()" class="btn btn-primary btn-sm"> 刷新</button>
-            <button onclick="f_postHandleAllControl('add')" class="btn btn-default btn-sm">执行全部</button>
-            <button onclick="f_postHandleAllControl('cancel')" class="btn btn-default btn-sm">取消全部</button>
-            <button onclick="f_postHandleAllControl('delete')" class="btn btn-default btn-sm">删除全部</button>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                  <div class="x_title">
 
-            <span id="top_info" style="float: right; font-size: 13px;color: #00A000;margin-top: 6px; margin-right: 50px;"></span>
-            <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-          <!--<p><code>msg</code></p>-->
-          <div class="table-responsive">
-           <table class="table table-bordered">
-              <thead>
-                <tr class="headings">
-                  <th class="column-title">ID </th>
-                  <th class="column-title">视频流 </th>
-                  <th class="column-title">算法流 <i class="bxc_introduce fa fa-info-circle" title="算法流在布控执行时才能查看"></i></th>
-                  <th class="column-title">业务算法 </th>
-                  <th class="column-title">计算频率 </th>
-                  <th class="column-title">状态 </th>
-                  <th class="column-title">时间 </th>
-                  <th class="column-title last"><span class="nobr">操作</span></th>
-                </tr>
-              </thead>
+                      <h2>布控管理
+                         <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
+                         <span id="top_msg">{{top_msg}}</span>
+                      </h2>
 
-              <tbody id="data">
-              </tbody>
-            </table>
-          </div>
-
-
-        </div>
-          <!--日志弹窗start -->
-          <div id="controlLogDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h4 class="modal-title" >布控日志</h4>
-                  </div>
-                  <div class="modal-body">
-                    <div style="padding: 5px 20px;">
-                      <table class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>日志内容</th>
-                            <th>时间</th>
-                          </tr>
-                        </thead>
-                        <tbody id="controlLogData">
-                        <!--
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>@mdo</td>
-                          </tr>
-                        -->
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-           </div>
-          <!--日志弹窗end -->
-
-           <!--复制弹窗start -->
-          <div id="copyDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h4 class="modal-title" >复制布控</h4>
-                  </div>
-
-                  <div class="modal-body">
-                    <div style="padding: 5px 20px;">
-                      <form class="form-horizontal calender" role="form">
-
-                       <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头 <span class="required">*</span></label>
-                            <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select id="copySelectStreams" style="height: 200px;"  class="select2_multiple form-control" required="required"  multiple="multiple" >
-                                <option value="0">---请选择摄像头(可多选)---</option>
-                            </select>
+                      <div style="margin-left:5px;"  class="btn-group">
+                          <button onclick="f_docs()" class="btn btn-primary" type="button">文档</button>
+                          <button onclick="f_reload()"  class="btn btn-default" type="button">刷新</button>
+                          <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false"> 更多 <span class="caret"></span> </button>
+                            <ul class="dropdown-menu">
+                              <li><a href="javascript:f_postHandleAllControl('add')">执行全部布控</a>
+                              </li>
+                              <li><a href="javascript:f_postHandleAllControl('cancel')">取消全部布控</a>
+                              </li>
+                              <li><a href="javascript:f_postHandleAllControl('delete')">删除全部布控</a>
+                              </li>
+                            </ul>
                           </div>
                         </div>
 
-                        <div class="form-group">
-                          <label class="col-sm-3 control-label">备注</label>
-                          <div class="col-sm-9">
-                            <textarea class="form-control" style="height:40px;" id="copyRemark"></textarea>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
+                        <div class="clearfix"></div>
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" onclick="f_postCopy()" class="btn btn-primary">提交</button>
-                  </div>
-                </div>
               </div>
-           </div>
-          <!--复制弹窗end -->
-
+        </div>
       </div>
-    </div>
+      <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                  <div class="x_content">
+                      <p id="infos"><code>...</code></p>
 
+                      <div class="table-responsive">
+                       <table class="table table-bordered">
+                          <thead>
+                            <tr class="headings">
+                              <th class="column-title">ID </th>
+                              <th class="column-title">视频流 </th>
+                              <th class="column-title">算法流 <i class="bxc_introduce fa fa-info-circle" title="算法流在布控执行时才能查看"></i></th>
+                              <th class="column-title">业务算法 </th>
+                              <th class="column-title">计算频率 </th>
+                              <th class="column-title">状态 </th>
+                              <th class="column-title">时间 </th>
+                              <th class="column-title last"><span class="nobr">操作</span></th>
+                            </tr>
+                          </thead>
+
+                          <tbody id="data">
+                          </tbody>
+                        </table>
+                      </div>
+                   </div>
+              </div>
+        </div>
       </div>
+
+
       <div class="row" id="pageData"></div>
+      <!--日志弹窗start -->
+      <div id="controlLogDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h4 class="modal-title" >布控日志</h4>
+              </div>
+              <div class="modal-body">
+                <div style="padding: 5px 20px;">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>日志内容</th>
+                        <th>时间</th>
+                      </tr>
+                    </thead>
+                    <tbody id="controlLogData">
+                    <!--
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>@mdo</td>
+                      </tr>
+                    -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+       </div>
+      <!--日志弹窗end -->
+
+       <!--复制弹窗start -->
+      <div id="copyDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h4 class="modal-title" >复制布控</h4>
+              </div>
+
+              <div class="modal-body">
+                <div style="padding: 5px 20px;">
+                  <form class="form-horizontal calender" role="form">
+
+                   <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">摄像头 <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select id="copySelectStreams" style="height: 200px;"  class="select2_multiple form-control" required="required"  multiple="multiple" >
+                            <option value="0">---请选择摄像头(可多选)---</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">备注</label>
+                      <div class="col-sm-9">
+                        <textarea class="form-control" style="height:40px;" id="copyRemark"></textarea>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" onclick="f_postCopy()" class="btn btn-primary">提交</button>
+              </div>
+            </div>
+          </div>
+       </div>
+      <!--复制弹窗end -->
 
     </div>
   </div>
@@ -148,7 +164,7 @@
     let elePageData = $("#pageData");
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
-    let ele_top_info= $("#top_info");
+    let eleInfos= $("#infos");
 
     let ele_div_control_log_dialog = $("#controlLogDialog");
     let ele_div_control_data = $("#controlLogData");
@@ -334,6 +350,42 @@
         let url = "/algorithmFlow/edit?code="+code;
         window.open(url);
     }
+    function f_showInfos(infos){
+        //console.log(infos)
+        let infos_len = infos.length;
+        let html = "<code>";
+        if (infos_len > 0){
+            let info0 = infos[0];
+            let info0_status = info0["status"]
+            if (info0_status === 1){
+                 let info0_authMaxControlCount = info0["authMaxControlCount"]
+                 let controlCount = 0;
+                 for (let i = 0; i < infos_len; i++) {
+                    let info = infos[i];
+                    let info_status = info["status"]
+                    if(info_status === 1){
+                        controlCount += info.controlCount;
+                    }
+                 }
+                 html += "core("+infos_len+")  control("+controlCount+"/"+info0_authMaxControlCount+")";
+                 for (let i = 0; i < infos_len; i++) {
+                    let info = infos[i];
+                    let info_status = info["status"]
+                    if(info_status === 1){
+                        html += "  "+i+"("+info.controlCount+"/"+info.maxControlCount+")";
+                    }else{
+                        html += "  "+i+"(dead)";
+                    }
+                 }
+            }else{
+               html +="core dead";
+            }
+        }else{
+            html +="core dead";
+        }
+        html += "</code>"
+        eleInfos.html(html);
+    }
     function f_show_pageData(pageData) {
         let page_size = pageData["page_size"];
         let html = "";
@@ -358,6 +410,7 @@
         temp_cur_page = page;
         temp_cur_page_size = page_size;
         ele_top_loading.show();
+        eleInfos.html("<code>...</code>");
         $.ajax({
                url: '/control/getIndex',
                type: "get",
@@ -371,16 +424,13 @@
                },
                success: function (res) {
                    ele_top_loading.hide();
-
-                   let info = res.info;
-                   //ele_top_info.html("在线视频流:"+info["online_stream_len"].toString()+" 实时布控中:"+info["online_control_len"].toString());
-                   ele_top_info.html("实时布控:"+info["online_control_len"].toString());
-
                    eleData.html("");
                    let item_html;
                    if(1000 === res.code){
                        let data = res.data;
                        let data_length = data.length;
+                       let infos = res.infos;
+                       f_showInfos(infos);
                        if(0===data_length){
                             item_html = "";
                             item_html += "<tr class=\"even pointer\">";
@@ -454,6 +504,7 @@
             });
 
     }
+
     function f_postHandleAllControl(handle) {
         //执行全部布控 或 取消全部布控
         ele_top_loading.show();
@@ -540,6 +591,7 @@
     }
     window.onload = function (){
         f_getIndex(temp_cur_page,temp_cur_page_size);
+
     };
 
 

@@ -55,9 +55,18 @@
                     <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
                     <span id="top_msg">{{top_msg}}</span>
                </h2>
-                 <button style="margin-left:5px;" onclick="f_docs()" class="btn btn-primary btn-sm">文档</button>
-                 <button onclick="f_reload()" class="btn btn-primary btn-sm"> 刷新</button>
-                <button id="btn_sync" class="btn btn-sm btn-default">全量更新人脸库</button>
+
+               <div style="margin-left:5px;"  class="btn-group">
+                  <button onclick="f_docs()" class="btn btn-primary" type="button">文档</button>
+                  <button onclick="f_reload()"  class="btn btn-default" type="button">刷新</button>
+                  <div class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false"> 更多 <span class="caret"></span> </button>
+                    <ul class="dropdown-menu">
+                      <li><a id="btn_sync" href="javascript:;">全量更新人脸库</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
                 <div class="clearfix"></div>
               </div>
             </div>
