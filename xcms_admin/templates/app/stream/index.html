@@ -40,9 +40,11 @@
                           <div class="btn-group">
                             <button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" type="button" aria-expanded="false"> 更多 <span class="caret"></span> </button>
                             <ul class="dropdown-menu">
-                              <li><a href="javascript:f_postHandleAllForward('add')">开启全部转发</a>
+                              <li><a href="javascript:f_postHandleAllForward('add')">全部开启转发</a>
                               </li>
-                              <li><a href="javascript:f_postHandleAllForward('del')">关闭全部转发</a>
+                              <li><a href="javascript:f_postHandleAllForward('del')">全部关闭转发</a>
+                              </li>
+                                <li><a href="javascript:f_delAll()">全部删除</a>
                               </li>
                             </ul>
                           </div>
@@ -205,32 +207,42 @@
         let url = "/stream/edit?code="+code;
         window.location.href = url;
     }
+    function f_delAll(){
+        let ret = confirm("确认全部删除吗？");
+        if (ret) {
+            f_postDel("all","");
+        }
+    }
     function f_del(code){
         let ret = confirm("确认删除吗？");
         if (ret) {
-            ele_top_loading.show();
-            $.ajax({
-                url: '/stream/postDel',
-                type: "post",
-                async: true,
-                data: {"code": code},
-                dataType: "json",
-                timeout: 0,
-                error: function () {
-                    ele_top_loading.hide();
-                    myAlert("网络异常，请确定网络正常！", "error");
-                },
-                success: function (res) {
-                    ele_top_loading.hide();
-                    if (1000 === res.code) {
-                        window.location.reload();
-                    } else {
-                        myAlert(res.msg, "error");
-                    }
-                }
-            });
+            f_postDel("one",code);
         }
     }
+    function f_postDel(handle,code) {
+        ele_top_loading.show();
+        $.ajax({
+            url: '/stream/postDel',
+            type: "post",
+            async: true,
+            data: {"handle":handle,"code": code},
+            dataType: "json",
+            timeout: 0,
+            error: function () {
+                ele_top_loading.hide();
+                myAlert("网络异常，请确定网络正常！", "error");
+            },
+            success: function (res) {
+                ele_top_loading.hide();
+                if (1000 === res.code) {
+                    window.location.reload();
+                } else {
+                    myAlert(res.msg, "error");
+                }
+            }
+        });
+    }
+
     function f_postImportFile() {
 
         if (eleFile[0].files.length > 0){
@@ -345,7 +357,7 @@
                    myAlert("网络异常，请确定网络正常！","error");
                },
                success: function (res) {
-                      ele_top_loading.hide();
+                   ele_top_loading.hide();
                     if(1000 === res.code){
                         myAlert(res.msg,"success");
                         setTimeout(function () {

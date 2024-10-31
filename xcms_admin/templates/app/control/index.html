@@ -26,11 +26,11 @@
                           <div class="btn-group">
                             <button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" type="button" aria-expanded="false"> 更多 <span class="caret"></span> </button>
                             <ul class="dropdown-menu">
-                              <li><a href="javascript:f_postHandleAllControl('add')">执行全部布控</a>
+                              <li><a href="javascript:f_postHandleAllControl('add')">全部执行布控</a>
                               </li>
-                              <li><a href="javascript:f_postHandleAllControl('cancel')">取消全部布控</a>
+                              <li><a href="javascript:f_postHandleAllControl('cancel')">全部取消布控</a>
                               </li>
-                              <li><a href="javascript:f_postHandleAllControl('delete')">删除全部布控</a>
+                              <li><a href="javascript:f_postHandleAllControl('delete')">全部删除</a>
                               </li>
                             </ul>
                           </div>
@@ -367,21 +367,21 @@
                         controlCount += info.controlCount;
                     }
                  }
-                 html += "<code>分析器("+infos_len+")</code>  <code>路数("+controlCount+"/"+info0_authMaxControlCount+")</code>";
+                 html += "<code>分析进程总数("+infos_len+")</code>  <code>"+controlCount+"/"+info0_authMaxControlCount+"</code>";
                  for (let i = 0; i < infos_len; i++) {
                     let info = infos[i];
                     let info_status = info["status"]
                     if(info_status === 1){
-                        html += "  <code>进程"+i+"("+info.controlCount+"/"+info.maxControlCount+")</code>";
+                        html += "  <code>"+i+":"+info.controlCount+"/"+info.maxControlCount+"</code>";
                     }else{
-                        html += "  <code>进程"+i+"(未启动)</code>";
+                        html += "  <code>"+i+":未启动</code>";
                     }
                  }
             }else{
-               html +="<code>分析器未启动</code>";
+               html +="<code>分析进程未启动</code>";
             }
         }else{
-            html +="<code>分析器未启动</code>";
+            html +="<code>分析进程未启动</code>";
         }
         eleInfos.html(html);
     }
@@ -456,7 +456,13 @@
                                 if(0===d["flow_nickname"]){//算法已被删除
                                     item_html += "<td><span class='sun-state-error'>已删除</span></td>";
                                 }else{
-                                    item_html += "<td><a class='sun-a-label' href=\"javascript:f_open_flow('"+d["flow_code"]+"')\" > "+d["flow_nickname"]+"</a>";
+                                    let flow_mode = d["flow_mode"];
+                                    let flow_deploy_process_index = d["flow_deploy_process_index"];
+                                    let flow_max_concurrency = d["flow_max_concurrency"];
+                                    let flow_concurrency_unit_length = d["flow_concurrency_unit_length"];
+                                    let base = flow_mode+"/"+flow_deploy_process_index+"/"+flow_max_concurrency+"/"+flow_concurrency_unit_length;
+
+                                    item_html += "<td><a class='sun-a-label' href=\"javascript:f_open_flow('"+d["flow_code"]+"')\" >("+base+") "+d["flow_nickname"]+"</a>";
                                 }
 
 
@@ -506,30 +512,44 @@
 
     function f_postHandleAllControl(handle) {
         //执行全部布控 或 取消全部布控
-        ele_top_loading.show();
-        $.ajax({
-               url: '/control/postHandleAllControl',
-               type: "post",
-               async: true,
-               data: {"handle":handle, "state":10},
-               dataType: "json",
-               timeout: 0,
-               error: function () {
-                   ele_top_loading.hide();
-                   myAlert("网络异常，请确定网络正常！","error");
-               },
-               success: function (res) {
-                      ele_top_loading.hide();
-                    if(1000 === res.code){
-                        myAlert(res.msg,"success",1000);
-                        setTimeout(function () {
-                            f_getIndex(temp_cur_page,temp_cur_page_size);
-                        }, 1000);
-                   }else{
-                        myAlert(res.msg,"error");
+        let msg = "";
+        if(handle === "add"){
+            msg = "确认全部执行布控吗？";
+        }else if(handle === "cancel"){
+            msg = "确认全部取消布控吗？";
+        }else if(handle === "delete"){
+            msg = "确认全部删除吗？";
+        }else{
+            return;
+        }
+        let ret = confirm(msg);
+        if (ret) {
+            ele_top_loading.show();
+            $.ajax({
+                   url: '/control/postHandleAllControl',
+                   type: "post",
+                   async: true,
+                   data: {"handle":handle, "state":10},
+                   dataType: "json",
+                   timeout: 0,
+                   error: function () {
+                       ele_top_loading.hide();
+                       myAlert("网络异常，请确定网络正常！","error");
+                   },
+                   success: function (res) {
+                          ele_top_loading.hide();
+                        if(1000 === res.code){
+                            myAlert(res.msg,"success",1000);
+                            setTimeout(function () {
+                                f_getIndex(temp_cur_page,temp_cur_page_size);
+                            }, 1000);
+                       }else{
+                            myAlert(res.msg,"error");
+                       }
                    }
-               }
-            });
+                });
+        }
+
     }
     function f_postHandleControl(obj) {
         //obj.getAttribute("data-handle"); // js 获取 data-handle属性

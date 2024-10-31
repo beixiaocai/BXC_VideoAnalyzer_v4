@@ -1,5 +1,5 @@
 {% extends "app/base_site.html" %}
-{% block title %} 添加}摄像头 {% endblock title %}
+{% block title %} 添加摄像头 {% endblock title %}
 {% block stylesheets %}
   {{ block.super }}
 {% endblock stylesheets %}
@@ -22,9 +22,9 @@
               <div class="form-horizontal form-label-left" >
 
                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">编号 </label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">编号<span class="required" style="color: red;">*</span> </label>
                   <div class="col-md-6 col-sm-6 col-xs-12">
-                       <input type="text" disabled  value="{{ stream.code }}" class="form-control">
+                       <input type="text" name="code" {% if  "edit" == handle %} disabled {% endif %}  value="{{ stream.code }}" class="form-control">
                   </div>
                 </div>
 
@@ -155,9 +155,9 @@
   {{ block.super }}
 <script>
     //let handle = "{{ handle }}";
-    let stream_code = "{{ stream.code }}";
     let stream_app = "{{ stream.app }}";
     let stream_name = "{{ stream.name }}";
+    let ele_input_code= $("input[name='code']");
     let ele_input_nickname= $("input[name='nickname']");
     let ele_select_pull_stream_type= $("select[name='pull_stream_type']");
 
@@ -267,6 +267,12 @@
 
     }
     function f_handle() {
+        let code = ele_input_code.val().trim();
+        if( code === ""){
+            myAlert("请输入编号","error");
+            return false;
+        }
+
         let nickname = ele_input_nickname.val().trim();
         if( nickname === ""){
             myAlert("请输入名称","error");
@@ -321,7 +327,7 @@
         let is_audio = parseInt(eleSelectIsAudio.val());
 
         let data = {
-            "code":stream_code,
+            "code":code,
             "app":stream_app,
             "name":stream_name,
             "nickname":nickname,
