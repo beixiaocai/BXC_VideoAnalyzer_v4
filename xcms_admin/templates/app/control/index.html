@@ -367,7 +367,7 @@
                         controlCount += info.controlCount;
                     }
                  }
-                 html += "<code>分析进程总数("+infos_len+")</code>  <code>"+controlCount+"/"+info0_authMaxControlCount+"</code>";
+                 html += "<code>进程总数("+infos_len+")</code>  <code>"+controlCount+"/"+info0_authMaxControlCount+"</code>";
                  for (let i = 0; i < infos_len; i++) {
                     let info = infos[i];
                     let info_status = info["status"]
@@ -460,7 +460,7 @@
                                     let flow_deploy_process_index = d["flow_deploy_process_index"];
                                     let flow_max_concurrency = d["flow_max_concurrency"];
                                     let flow_concurrency_unit_length = d["flow_concurrency_unit_length"];
-                                    let base = flow_mode+"/"+flow_deploy_process_index+"/"+flow_max_concurrency+"/"+flow_concurrency_unit_length;
+                                    let base = flow_deploy_process_index+"/"+flow_max_concurrency+"/"+flow_concurrency_unit_length;
 
                                     item_html += "<td><a class='sun-a-label' href=\"javascript:f_open_flow('"+d["flow_code"]+"')\" >("+base+") "+d["flow_nickname"]+"</a>";
                                 }
