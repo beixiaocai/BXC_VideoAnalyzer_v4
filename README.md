@@ -1,19 +1,25 @@
-## 视频行为分析系统v4
+## xcms（BXC_VideoAnalyzer_v4）
 * 作者：北小菜 
 * 官网：http://www.beixiaocai.com
 * 邮箱：bilibili_bxc@126.com
 * QQ：1402990689
 * 微信：bilibili_bxc
 * 哔哩哔哩主页：https://space.bilibili.com/487906612
-* gitee地址：https://gitee.com/Vanishi/BXC_VideoAnalyzer_v4
-* github地址：https://github.com/beixiaocai/BXC_VideoAnalyzer_v4
+* gitee地址：https://gitee.com/Vanishi/xcms
+* github地址：https://github.com/beixiaocai/xcms
 
 ## 简介
 * C++开发的视频行为分析系统v4版本，简称xcms，用户可以基于视频行为分析系统，在不用考虑音视频开发，编解码开发，界面开发等情况下， 只需要训练自己的模型，就可以轻松做出任何需要的视频行为分析算法，比如周界入侵，烟火检测，打架，斗殴，跌倒，人群聚集，电动车，垃圾箱，抽烟，攀爬，离岗睡岗，安全帽，充电桩，工作服， 疲劳检测，交通拥堵等等
 * 通过本开源平台直接克隆/下载的版本是x86-Windows-ov版 [下载更多版本](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e05dce83e5129785b9f316978a14b896)
 
-## 更新记录
+## xcms更新记录
 * [更新记录](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/qchculv81t93orwh)
+
+## 视频行为分析系统v1/v2/v3/v3相关地址
+* v1开源地址：https://gitee.com/Vanishi/BXC_VideoAnalyzer_v1
+* v2开源地址：https://gitee.com/Vanishi/BXC_VideoAnalyzer_v2
+* v3安装包下载地址：https://gitee.com/Vanishi/BXC_VideoAnalyzer_v3
+* v4安装包下载地址：https://gitee.com/Vanishi/xcms
 
 ## 软件支持的运行环境介绍
 | 架构 | 操作系统 | 硬件 | 推理引擎 | 下载地址 |
@@ -23,7 +29,7 @@
 | x86 | Ubuntu | intel,amd | openvino | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/944d5586badc8e93686afc522a4feece) |
 | x86 | Ubuntu | intel,amd+nvidia | openvino+tensorrt | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/2713611802e365950bc9c6fef5c6b118) |
 | arm | Ubuntu | rk3588 | rknpu | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/76dbf61f8b5f8ce67891dc3e3f36b686) |
-| arm | Ubuntu | 昇腾 | cann | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/644800c887eb14094e2154882b78e8fc) |
+| arm | 不限 | 昇腾 | cann | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/644800c887eb14094e2154882b78e8fc) |
 | x86 | Centos | 不限 |  | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e382620e4df52bd7628d3fd141a7112d) |
 | arm | 麒麟/欧拉/UOS | 不限 |  | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e382620e4df52bd7628d3fd141a7112d) |
 
