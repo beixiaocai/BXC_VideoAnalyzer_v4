@@ -18,8 +18,8 @@
     let algorithmClassifyDict = {};//基础分类算法字典
     let algorithmClassifyCode;//基础分类算法编号
 
-    let algorithmTrackDict = {};//追踪算法字典
-    let algorithmTrackCode;//追踪算法编号
+    let algorithmTrackDict = {};//特征算法字典
+    let algorithmTrackCode;//特征算法编号
 
     let behaviourDict = {}; //行为算法字典
     let behaviourCode;
@@ -161,7 +161,7 @@
                     </div>
 
                     <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择追踪算法</label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">选择特征算法</label>
                          <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="select_algorithm_track"  class="select2_single form-control" required="required" >
                                 <option value="0">请选择</option>
@@ -294,8 +294,8 @@
     //分类算法
     let eleSelectAlgorithmClassify = $("#select_algorithm_classify");// select 分类算法
     let eleSelectClassifyClassName = $("#select_classify_class_name");// select 分类算法目标
-    //追踪算法
-    let eleSelectAlgorithmTrack = $("#select_algorithm_track");// select 追踪算法
+    //特征算法
+    let eleSelectAlgorithmTrack = $("#select_algorithm_track");// select 特征算法
     //行为算法
     let eleSelectBehaviour = $("#select_behaviour");// select 行为算法
     let eleTextarea_extend_params = $("textarea[name='extend_params']");//扩展参数
@@ -439,7 +439,7 @@
                 break
             }
             case 2:{
-                //检测算法>>追踪算法>>行为算法，Detect_Track_Behaviour
+                //检测算法>>特征算法>>行为算法，Detect_Track_Behaviour
                 algorithmDetectCode_s = eleSelectAlgorithmDetect.val().trim();
                 if(algorithmDetectCode_s==="0"){
                     myAlert("请选择检测算法","error");
@@ -452,10 +452,10 @@
                     myAlert("请至少选择1个检测目标","error");
                     return;
                 }
-                //判断追踪算法
+                //判断特征算法
                 algorithmTrackCode_s = eleSelectAlgorithmTrack.val().trim();
                 if(algorithmTrackCode_s==="0"){
-                    myAlert("请选择追踪算法","error");
+                    myAlert("请选择特征算法","error");
                     return;
                 }
 

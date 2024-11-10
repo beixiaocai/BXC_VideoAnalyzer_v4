@@ -7,7 +7,7 @@
     "mediaRtspPort": 9554,
     "videoAnalyzerPort": 9555,
     "mediaSecret": "aqxY9ps21fyhyKNRyYpGvJCTp1JBeGOM",
-    "install": "D:\\BXC_VideoAnalyzer_v4",
+    "install": "D:\\xcms",
 	"winStartup": "Microsoft\\Windows\\Start Menu\\Programs\\Startup",
     "trtexec": "xcms_core\\trtexec.exe",
     "ffmpeg": "xcms_core\\ffmpeg.exe",

@@ -59,14 +59,10 @@
                <div style="margin-left:5px;"  class="btn-group">
                   <button onclick="f_docs()" class="btn btn-primary btn-sm" type="button">文档</button>
                   <button onclick="f_reload()"  class="btn btn-default btn-sm" type="button">刷新</button>
-                  <div class="btn-group">
-                    <button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" type="button" aria-expanded="false"> 更多 <span class="caret"></span> </button>
-                    <ul class="dropdown-menu">
-                      <li><a id="btn_sync" href="javascript:;">全量更新人脸库</a>
-                      </li>
-                    </ul>
-                  </div>
                 </div>
+      <div style="margin-left:5px;"  class="btn-group">
+                  <button id="btn_sync"  class="btn btn-default btn-sm" type="button">全量更新人脸库</button>
+      </div>
                 <div class="clearfix"></div>
               </div>
             </div>
@@ -91,9 +87,6 @@
                                     {% endfor %}
                                    </select>
                          </div>
-                         <div id="fs_urls_div" style="float: left;margin-left: 10px; display: none;">
-                                <input name="fs_urls" type="text">
-                        </div>
                          <div style="float: left;margin-left: 10px;">
                              <button onclick="f_openAlgorithmInit()" class="btn btn-sm btn-default">开启</button>
                              <button onclick="f_openAlgorithmRelease()" class="btn btn-sm btn-default">关闭</button>
@@ -208,18 +201,11 @@
     let ele_top_loading = $("#top_loading");
     let ele_top_msg= $("#top_msg");
     let eleSelectFlowCode= $("#select_flow_code");
-    let eleFsUrlsDiv= $("#fs_urls_div");
-    let eleInputFsUrls = $('input[type=text][name=fs_urls]');
     let eleBtnSync = $("#btn_sync");
     let eleAlgorithmState= $("#algorithm_state");
 
     eleSelectFlowCode.change(function () {
         let flow_code = $(this).val();
-        if(flow_code === "FaceServer"){
-            eleFsUrlsDiv.show();
-        }else{
-            eleFsUrlsDiv.hide();
-        }
     });
 
     eleBtnSync.click(function () {
@@ -274,18 +260,13 @@
             }
        }
        eleSelectFlowCode.html(html);
-        if(flow_code === "FaceServer"){
-            eleFsUrlsDiv.show();
-        }else{
-            eleFsUrlsDiv.hide();
-        }
     }
     function f_showAlgorithm(algorithmState,faceCount=0) {
             if(algorithmState){
             eleAlgorithmState.attr("class","sun-state-success")
             eleAlgorithmState.html("已开启");
 
-            eleBtnSync.text("全量更新人脸库（"+faceCount.toString()+"）")
+            eleBtnSync.text("全量更新人脸库("+faceCount.toString()+")")
        }else{
             eleAlgorithmState.attr("class","sun-state-error")
             eleAlgorithmState.html("未开启");
@@ -310,13 +291,12 @@
                         let state = info["state"];
                        if(state){
                            let flowCode = info["flowCode"];
-                           let fsUrls = info["fsUrls"];
                            let faceCount = info["faceCount"];
                            //let startTimestamp = data[0]["startTimestamp"];
 
                             f_showFlowCode(flowCode);
                             f_showAlgorithm(true,faceCount);
-                            eleInputFsUrls.val(fsUrls);
+
                        }else{
                           f_showAlgorithm(false);
                        }
@@ -329,16 +309,10 @@
     }
     function f_openAlgorithmInit(){
         let flow_code = eleSelectFlowCode.val().trim();
-        let fs_urls = eleInputFsUrls.val().trim();
 
         if(flow_code === "0"){
             myAlert("请选择算法","error");
             return;
-        }else if(flow_code === "FaceServer"){
-            if(!fs_urls.startsWith("http")){
-                myAlert("地址格式不正确","error");
-                return;
-            }
         }
 
         ele_top_loading.show();
@@ -346,7 +320,7 @@
                url: '/face/openAlgorithmInit',
                type: "post",
                async: true,
-               data: {"flow_code":flow_code,"fs_urls":fs_urls},
+               data: {"flow_code":flow_code},
                dataType: "json",
                timeout: 0,
                error: function () {
@@ -410,6 +384,7 @@
                if(1000 === res.code){
                    let faceCount = res.info["faceCount"];
                    f_showAlgorithm(true,faceCount);
+                   myAlert(res.msg,"success",1000);
                }else{
                    myAlert(res.msg,"error");
                }
