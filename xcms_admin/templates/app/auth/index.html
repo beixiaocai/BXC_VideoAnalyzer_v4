@@ -13,21 +13,12 @@
                   <span id="top_loading" ><img class="top_loading_img" src="/static/images/load.gif" alt="loading">加载中</span>
                   <span id="top_msg">{{top_msg}}</span>
               </h2>
+
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
 
               <form class="form-horizontal form-label-left"  method="post"  data-parsley-validate >
-
-                  <div class="form-group">
-                      <div class="col-md-6 col-sm-6 col-md-offset-3">
-                          <h3>系统授权有两种方式</h3>
-                        <p style="margin-top: 20px;">（1）第一种 {% if settings.auth_online_link != "" %} <button type="button" class="btn btn-primary btn-sm" onclick="f_link('{{ settings.auth_online_link }}')" style="margin-left: 5px; " >免费申请授权码</button>{% endif %}</p>
-                        <p style="margin-top: 20px;">（2）第二种 {% if settings.auth_buy_link != "" %} <button type="button" class="btn btn-primary btn-sm"  onclick="f_link('{{ settings.auth_buy_link }}')" style="margin-left: 5px; ">购买授权加密锁</button>{% endif %}</p>
-                      </div>
-                </div>
-               <div class="ln_solid"></div>
-
 
                 <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-md-offset-3">
@@ -42,7 +33,7 @@
                   <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">机器授权码 <span class="required">*</span>
                   </label>
                   <div class="col-md-6 col-sm-6 col-xs-12">
-                      <textarea id="active_code" name="active_code" class="form-control" rows="5" placeholder="请输入机器授权码"></textarea>
+                      <textarea id="active_code" name="active_code" class="form-control" rows="6" placeholder="请输入机器授权码"></textarea>
                   </div>
                 </div>
 
@@ -91,8 +82,14 @@
 
                   <div class="form-group">
                   <div class="col-md-6 col-md-offset-3">
-                    <button type="button" onclick="history.back()" class="btn btn-primary">取消</button>
-                    <button type="submit" class="btn btn-success">提交</button>
+                    {% if settings.auth_online_link != "" %}
+                          <button type="button" onclick="f_link('{{ settings.auth_online_link }}')" class="btn btn-primary">申请免费授权码</button>
+                    {% endif %}
+                    {% if settings.auth_buy_link != "" %}
+                          <button type="button" onclick="f_link('{{ settings.auth_buy_link }}')" class="btn btn-primary">购买授权</button>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-success">激活授权码</button>
                   </div>
                 </div>
 

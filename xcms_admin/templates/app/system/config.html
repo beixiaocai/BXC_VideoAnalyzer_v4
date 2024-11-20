@@ -32,9 +32,25 @@
             </div>
             <div class="x_content">
               <div class="form-horizontal form-label-left">
+                              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件名称 
+                  </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="name" required="required" value="{{config.name}}" class="form-control">
+                  </div>
+                </div>
+
+                  <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件描述
+                  </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="describe" required="required" value="{{config.describe}}" class="form-control">
+                  </div>
+                </div>
+
 
                               <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件安装路径 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件安装路径 
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="install" required="required" value="{{config.install}}" class="form-control">
@@ -43,7 +59,7 @@
 
 
                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >主机IP <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >主机IP 
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="host" required="required" value="{{config.host}}" class="form-control">
@@ -51,7 +67,7 @@
                 </div>
 
                               <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >轮巡自动管理转发 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >轮巡自动管理转发 
                   </label>
                   <div class="col-md-6 col-sm-6 col-xs-12">
                     <label class="my_radio_label">开启&nbsp;&nbsp;<input type="radio" name="autoManagePatrolForward" value="1" class="flat"  {% if 1 == config.autoManagePatrolForward %}checked="checked"{% endif %} >
@@ -62,7 +78,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件自启动 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件自启动 
                   </label>
                   <div class="col-md-6 col-sm-6 col-xs-12">
                       <label class="my_radio_label">开启&nbsp;&nbsp;<input type="radio" name="autoStart" value="1" class="flat"  {% if 1 == config.autoStart %}checked="checked"{% endif %} >
@@ -74,7 +90,7 @@
                 </div>
 
                          <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >数据存储路径 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >数据存储路径 
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="storageDir" required="required" value="{{config.storageDir}}" class="form-control">
@@ -82,7 +98,7 @@
                 </div>
 
                                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >存储报警最大容量(G)<span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >存储报警最大容量(G)
                   </label>
                    <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="number" name="storageAlarmMaxSize" value="{{config.storageAlarmMaxSize}}" required="required" class="form-control">
@@ -91,7 +107,7 @@
                 </div>
 
                                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >存储录像最大容量(G)<span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >存储录像最大容量(G)
                   </label>
                    <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="number" name="storageRecordMaxSize" value="{{config.storageRecordMaxSize}}" required="required" class="form-control">
@@ -99,45 +115,86 @@
                   </div>
                 </div>
 
-              <!-- analyzer -->
+                                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >算法实例缓存时长(s)
+                  </label>
+                   <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="number" name="flowInstanceMaxDuration" value="{{config.flowInstanceMaxDuration}}" required="required" class="form-control">
+                  </div>
+                </div>
+
+
+              <!-- nvsServer -->
 
 <div class="ln_solid"></div>
+
                   <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >模型缓存时长<span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >nvs服务器IP
                   </label>
                    <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input type="number" name="cacheModelMaxDuration" value="{{config.analyzer.cacheModelMaxDuration}}" required="required" class="form-control">
+                    <input type="text" name="nvsServerIp" value="{{config.nvsServer.nvsServerIp}}" required="required" class="form-control">
                   </div>
                 </div>
 
                   <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >H264解码器 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >服务器端口
                   </label>
                    <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input type="text" name="hardwareH264Decoder" value="{{config.analyzer.hardwareH264Decoder}}" required="required" class="form-control">
+                    <input type="text" name="nvsServerPort" value="{{config.nvsServer.nvsServerPort}}" required="required" class="form-control">
                   </div>
                 </div>
 
                   <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >H265解码器 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">服务器序列号
                   </label>
                    <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input type="text" name="hardwareH265Decoder" value="{{config.analyzer.hardwareH265Decoder}}" required="required" class="form-control">
+                    <input type="text" name="nvsServerKey" value="{{config.nvsServer.nvsServerKey}}" class="form-control">
                   </div>
                 </div>
 
-                  <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">H264编码器 <span class="required" style="color: red;">*</span>
+                                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">服务器密钥
                   </label>
                    <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input type="text" name="hardwareEncoder" value="{{config.analyzer.hardwareEncoder}}" class="form-control">
+                    <input type="text" name="nvsServerSecret" value="{{config.nvsServer.nvsServerSecret}}" class="form-control">
                   </div>
                 </div>
+
+                                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">心跳间隔(s)
+                  </label>
+                   <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="heartInterval" value="{{config.nvsServer.heartInterval}}" class="form-control">
+                  </div>
+                </div>
+                                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">重连间隔(s)
+                  </label>
+                   <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" name="reConnectInterval" value="{{config.nvsServer.reConnectInterval}}" class="form-control">
+                  </div>
+                </div>
+
+                                              <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >是否开启 
+                  </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+                        <label class="my_radio_label">开启&nbsp;&nbsp;<input type="radio" name="nvsServer_enable" value="1" class="flat"  {% if 1 == config.nvsServer.enable %}checked="checked"{% endif %} >
+                        </label>
+                        <label  class="my_radio_label">关闭&nbsp;&nbsp;<input type="radio" name="nvsServer_enable" value="0" class="flat"  {% if 0 == config.nvsServer.enable %}checked="checked"{% endif %} >
+                        </label>
+
+                  </div>
+                </div>
+
 
               <div class="ln_solid"></div>
+              <!-- GB28181 -->
+
 
                   <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >SIP服务器IP <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >gb28181服务器IP
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="sipServerIp" required="required" value="{{config.sipServer.sipServerIp}}" class="form-control">
@@ -145,7 +202,7 @@
                 </div>
 
                   <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >SIP服务器端口 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >服务器端口 
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="number" name="sipServerPort" required="required" value="{{config.sipServer.sipServerPort}}" class="form-control">
@@ -153,7 +210,7 @@
                 </div>
 
                                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >SIP传输协议 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >信令传输协议 
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
 
@@ -166,14 +223,14 @@
                 </div>
 
                   <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >SIP服务器ID <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >服务器ID 
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="sipServerId" required="required" value="{{config.sipServer.sipServerId}}" class="form-control">
                   </div>
                 </div>
                   <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >SIP服务器域 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >服务器域 
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="sipServerRealm" required="required" value="{{config.sipServer.sipServerRealm}}" class="form-control">
@@ -181,7 +238,7 @@
                 </div>
 
                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >SIP服务器密码 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >服务器密码 
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" name="sipServerPass" required="required" value="{{config.sipServer.sipServerPass}}" class="form-control">
@@ -189,7 +246,7 @@
                 </div>
 
                       <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >RTP传输协议 <span class="required" style="color: red;">*</span>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" >数据传输协议 
                   </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
 
@@ -242,20 +299,47 @@
         window.open(url);
     }
     function f_handle() {
+        //基础参数
+        let eleName = $("input[name='name']");
+        let eleDescribe = $("input[name='describe']");
         let ele_install = $("input[name='install']");
         let ele_storageDir = $("input[name='storageDir']");
         let ele_host = $("input[name='host']");
         let ele_autoManagePatrolForward = $("input[type=radio][name='autoManagePatrolForward']:checked");
         let ele_autoStart = $("input[type=radio][name='autoStart']:checked");
-
         let eleStorageAlarmMaxSize = $("input[name='storageAlarmMaxSize']");
         let eleStorageRecordMaxSize = $("input[name='storageRecordMaxSize']");
+        let eleFlowInstanceMaxDuration = $("input[name='flowInstanceMaxDuration']");
 
-        let ele_cacheModelMaxDuration = $("input[name='cacheModelMaxDuration']");
-        let ele_hardwareH264Decoder = $("input[name='hardwareH264Decoder']");
-        let ele_hardwareH265Decoder = $("input[name='hardwareH265Decoder']");
-        let ele_hardwareEncoder = $("input[name='hardwareEncoder']");
+        let name = eleName.val().trim();
+        let describe = eleDescribe.val().trim();
+        let install = ele_install.val().trim();
+        let storageDir = ele_storageDir.val().trim();
+        let host = ele_host.val().trim();
+        let autoManagePatrolForward = parseInt(ele_autoManagePatrolForward.val());
+        let autoStart = parseInt(ele_autoStart.val());
+        let storageAlarmMaxSize = parseInt(eleStorageAlarmMaxSize.val());
+        let storageRecordMaxSize = parseInt(eleStorageRecordMaxSize.val());
+        let flowInstanceMaxDuration = parseInt(eleFlowInstanceMaxDuration.val());
 
+        //xcnvs
+        let eleNvsServerIp = $("input[name='nvsServerIp']");
+        let eleNvsServerPort = $("input[name='nvsServerPort']");
+        let eleNvsServerKey= $("input[name='nvsServerKey']");
+        let eleNvsServerSecret= $("input[name='nvsServerSecret']");
+        let eleHeartInterval= $("input[name='heartInterval']");
+        let eleReConnectInterval= $("input[name='reConnectInterval']");
+        let eleNvsServer_enable = $("input[type=radio][name='nvsServer_enable']:checked"); //开启或关闭
+
+        let nvsServerIp = eleNvsServerIp.val().trim();
+        let nvsServerPort = parseInt(eleNvsServerPort.val());
+        let nvsServerKey = eleNvsServerKey.val().trim();
+        let nvsServerSecret = eleNvsServerSecret.val().trim();
+        let heartInterval = parseInt(eleHeartInterval.val());
+        let reConnectInterval = parseInt(eleReConnectInterval.val());
+        let nvsServer_enable = parseInt(eleNvsServer_enable.val());
+
+        //gb28181
         let ele_sipServerIp = $("input[name='sipServerIp']");
         let ele_sipServerPort = $("input[name='sipServerPort']");
         let ele_sipTransferMode = $("input[type=radio][name='sipTransferMode']:checked");
@@ -263,25 +347,7 @@
         let ele_sipServerRealm = $("input[name='sipServerRealm']");
         let ele_sipServerPass = $("input[name='sipServerPass']");
         let ele_rtpTransferMode = $("input[type=radio][name='rtpTransferMode']:checked");
-        let ele_mapping= $("textarea[name='mapping']");
 
-
-        let install = ele_install.val().trim();
-        let storageDir = ele_storageDir.val().trim();
-        let host = ele_host.val().trim();
-        let autoManagePatrolForward = parseInt(ele_autoManagePatrolForward.val());
-        let autoStart = parseInt(ele_autoStart.val());
-
-        let storageAlarmMaxSize = parseInt(eleStorageAlarmMaxSize.val());
-        let storageRecordMaxSize = parseInt(eleStorageRecordMaxSize.val());
-
-        //分析器参数
-        let cacheModelMaxDuration = parseInt(ele_cacheModelMaxDuration.val());
-        let hardwareH264Decoder = ele_hardwareH264Decoder.val().trim();
-        let hardwareH265Decoder = ele_hardwareH265Decoder.val().trim();
-        let hardwareEncoder = ele_hardwareEncoder.val().trim();
-
-        //SIP服务器参数
         let sipServerIp = ele_sipServerIp.val();
         let sipServerPort = parseInt(ele_sipServerPort.val());
         let sipTransferMode = parseInt(ele_sipTransferMode.val());
@@ -291,35 +357,43 @@
         let rtpTransferMode = parseInt(ele_rtpTransferMode.val());
 
         //mapping参数
-        let mapping = ele_mapping.val().trim();
+        let eleMapping= $("textarea[name='mapping']");
+        let mapping = eleMapping.val().trim();
+
 
         $.ajax({
            url: "/system/config",
            type: "post",
            async: true,
            data: {
+               "name":name,
+               "describe":describe,
                "install":install,
-               "storageDir":storageDir,
                "host":host,
+               "storageDir":storageDir,
                "autoManagePatrolForward":autoManagePatrolForward,
                "autoStart":autoStart,
                "storageAlarmMaxSize":storageAlarmMaxSize,
                "storageRecordMaxSize":storageRecordMaxSize,
+               "flowInstanceMaxDuration":flowInstanceMaxDuration,
+               "mapping": mapping,
+                //xcnvs
+               "nvsServerIp":nvsServerIp,
+               "nvsServerPort":nvsServerPort,
+               "nvsServerKey":nvsServerKey,
+               "nvsServerSecret":nvsServerSecret,
+               "heartInterval":heartInterval,
+               "reConnectInterval":reConnectInterval,
+               "enable":nvsServer_enable,
 
-               "cacheModelMaxDuration":cacheModelMaxDuration,
-               "hardwareH264Decoder":hardwareH264Decoder,
-               "hardwareH265Decoder":hardwareH265Decoder,
-               "hardwareEncoder":hardwareEncoder,
-
+                //gb28181
                "sipServerIp":sipServerIp,
                "sipServerPort":sipServerPort,
                "sipTransferMode":sipTransferMode,
                "sipServerId":sipServerId,
                "sipServerRealm":sipServerRealm,
                "sipServerPass":sipServerPass,
-               "rtpTransferMode":rtpTransferMode,
-
-               "mapping": mapping
+               "rtpTransferMode":rtpTransferMode
            },
            dataType: "json",
            timeout: 0,

@@ -21,11 +21,18 @@
     "autoStart": false,
     "logDebug": false,
     "algorithmStreamMaxCount": 16,
-    "analyzer": {
-        "cacheModelMaxDuration": 120000,
-        "hardwareH264Decoder": "h264_cuvid",
-        "hardwareH265Decoder": "hevc_cuvid",
-        "hardwareEncoder": "h264_nvenc"
+    "flowInstanceMaxDuration": 120000,
+    "x86HardwareH264Decoder": "h264_cuvid",
+    "x86HardwareH265Decoder": "hevc_cuvid",
+    "x86HardwareEncoder": "h264_nvenc",
+    "nvsServer": {
+        "nvsServerIp": "127.0.0.1",
+        "nvsServerPort": 9824,
+        "nvsServerKey": "xcnvs",
+        "nvsServerSecret": "xcnvs",
+        "heartInterval": 60,
+        "reConnectInterval": 30,
+        "enable": false
     },
     "sipServer": {
         "sipServerIp": "127.0.0.1",
