@@ -1,4 +1,6 @@
 {
+	"name": "xcms",
+    "describe": "describe",
     "host": "127.0.0.1",
     "adminPort": 9001,
     "mediaHttpPort": 9002,
