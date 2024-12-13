@@ -30,7 +30,7 @@
 | x86 | Linux（gcc>=9.4）| intel,amd+nvidia | openvino+tensorrt | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/2713611802e365950bc9c6fef5c6b118) |
 | arm | Linux（基于docker）| 昇腾 | cann | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/644800c887eb14094e2154882b78e8fc) |
 | arm | Linux（gcc>=9.4）| rk3588/rk3576 | rknpu | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/76dbf61f8b5f8ce67891dc3e3f36b686) |
-| x86/arm | Linux（基于docker）| 不限 |  | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e382620e4df52bd7628d3fd141a7112d) |
+| arm/x86 | Linux | 不限 |  | [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e382620e4df52bd7628d3fd141a7112d) |
 
 * [下载x86-Windows-ov版](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/333803623628302fe6f578cd3485e4be)
 * [下载x86-Windows-ovtrt版](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/gyvtvcndflyppuhw)
@@ -38,7 +38,7 @@
 * [下载x86-Ubuntu-ovtrt版](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/2713611802e365950bc9c6fef5c6b118)
 * [下载arm-昇腾版](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/644800c887eb14094e2154882b78e8fc)
 * [下载arm-rk版](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/76dbf61f8b5f8ce67891dc3e3f36b686)
-* [下载x86/arm其他版本](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e382620e4df52bd7628d3fd141a7112d)
+* [下载arm/x86其他版本](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e382620e4df52bd7628d3fd141a7112d)
 
 ## 使用手册
 * [下载](https://beixiaocai.yuque.com/org-wiki-beixiaocai-vo72oa/xcms/e05dce83e5129785b9f316978a14b896)
